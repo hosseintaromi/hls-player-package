@@ -57,11 +57,8 @@ export const useSubTitle = () => {
     }
 
     if (preTrack) {
-      preTrack.oncuechange = () => {};
+      preTrack.oncuechange = () => { };
       const subEl: HTMLDivElement = videoRef.nextSibling as any;
-      if (subEl) {
-        subEl.style.display = "none";
-      }
       preTrack.mode = "disabled";
     }
 
@@ -90,7 +87,6 @@ export const useSubTitle = () => {
         let idx = 0;
         const subEl: HTMLDivElement = videoRef.nextSibling as any;
         if (cue && subEl) {
-          subEl.style.display = "block";
           if (idx >= 0) {
             subEl.classList.remove("on");
             subEl.children[0].innerHTML = "";
