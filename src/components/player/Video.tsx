@@ -16,6 +16,7 @@ const SubtitleTag = styled.div({
   textAlign: "center",
   width: "100%",
   padding: "5px",
+  display: 'none',
   "&.on": {
     display: "block",
   },

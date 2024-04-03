@@ -96,7 +96,7 @@ const TouchContainer = ({
       onTouchStart={hideIfIdle}
       onMouseDown={hideIfIdle}
       onTouchMove={hideIfIdle}
-      style={{ width: "100%", height: "100%" }}
+      style={{ width: "100%", height: "100%", position: "relative" }}
     >
       {children}
     </div>
