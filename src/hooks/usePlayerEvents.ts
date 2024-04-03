@@ -21,7 +21,7 @@ export const usePlayerEvents = (events?: HlsVideoEventType) => {
   const context = useContext(VideoPlayerContext);
 
   const loadVideo = useCallback((src: string) => {
-    if (type === "HLS" && Hls.isSupported()) {
+    if (type === "HLS" && isSupportedPlatform) {
       loadHlsVideo(src);
     } else {
       loadMP4Video(src);

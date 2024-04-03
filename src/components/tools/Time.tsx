@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { usePlayerContext } from '../../hooks/usePlayerContext';
 import { OnUpdateTimeType } from '../../@types/player.model';
-import { calculatePlayerTime } from '../../utils/global-filter';
 import { TimeCounter } from '../toolbar/ToolbarStyle';
+import { formatDuration } from '../../utils/player-utils';
 
 const Time = ({ type }: { type: 'Current' | 'Total' | 'Remain' }) => {
 
@@ -11,15 +11,15 @@ const Time = ({ type }: { type: 'Current' | 'Total' | 'Remain' }) => {
     const { getDuration } = usePlayerContext({
         onReady: () => {
             if (type === 'Total')
-                setTime(calculatePlayerTime(getDuration() || 0))
+                setTime(formatDuration(getDuration() || 0))
         },
         onUpdateTime: (e: OnUpdateTimeType) => {
             switch (type) {
                 case "Current":
-                    setTime(calculatePlayerTime(e.time))
+                    setTime(formatDuration(e.time))
                     break;
                 case "Remain":
-                    setTime(calculatePlayerTime(e.duration - e.time))
+                    setTime(formatDuration(e.duration - e.time))
                     break;
             }
         },

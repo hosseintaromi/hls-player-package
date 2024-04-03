@@ -4,7 +4,7 @@ import { usePlayerContext } from "../../hooks/usePlayerContext";
 import { OnUpdateTimeType } from "../../@types/player.model";
 import { Bubble, BufferSize, GeneralStyleForRange, ThumbCursor } from "./MediaTimeLineStyle"
 import Snapshot, { SnapshotModel } from "../tools/Snapshot";
-import { calculatePlayerTime } from "../../utils/global-filter";
+import { formatDuration } from "../../utils/player-utils";
 
 type ChangeRangeSelectType = {
     calcInputVal: (e: number, updateParent: boolean) => void
@@ -182,7 +182,7 @@ const TimeLine = () => {
                     <Bubble ref={snapShotBox} className="bubble">
                         <Snapshot snapshots={snapshots.current} time={hoverValue} />
                         <div style={{ marginTop: '5px' }}>
-                            {hoverValue && calculatePlayerTime(+hoverValue)}
+                            {formatDuration(hoverValue)}
                         </div>
                     </Bubble>
                     <ThumbCursor ref={snapShotBoxCursor} />
