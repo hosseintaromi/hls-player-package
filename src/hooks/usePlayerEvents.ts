@@ -127,9 +127,6 @@ export const usePlayerEvents = (events?: HlsVideoEventType) => {
 
 	useEffect(() => {
 		if (events?.onLoaded) listenOnLoad.push(events?.onLoaded);
-		return () => {
-			context.hls?.destroy();
-		};
 	}, []);
 
 	return {
