@@ -6,9 +6,8 @@ const Play = ({ children }: { children?: ReactNode }) => {
 
   const [isPlay, setIsPlay] = useState<boolean>(false);
 
-  const { changePlayPause, autoPlay, getIsPlay } = usePlayerContext({
+  const { changePlayPause, getIsPlay } = usePlayerContext({
     onPlayPause: (play: boolean) => {
-      console.log('play', play)
       setIsPlay(play);
     },
   })
