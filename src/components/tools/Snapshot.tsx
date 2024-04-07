@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { formatDuration } from "../../utils/player-utils";
 
 export interface SnapshotModel {
   img: string;
@@ -50,15 +51,20 @@ const Snapshot = ({ snapshots, time }: SnapshotPropsType) => {
   return (
     <>
       {snapshot && (
-        <div
-          id="snapshot"
-          style={{
-            backgroundImage: `url("${snapshot.img}")`,
-            width: `${snapshot.location[2]}px`,
-            height: `${snapshot.location[3]}px`,
-            backgroundPosition: `-${snapshot.location[0]}px -${snapshot.location[1]}px `,
-          }}
-        />
+        <>
+          <div
+            id="snapshot"
+            style={{
+              backgroundImage: `url("${snapshot.img}")`,
+              width: `${snapshot.location[2]}px`,
+              height: `${snapshot.location[3]}px`,
+              backgroundPosition: `-${snapshot.location[0]}px -${snapshot.location[1]}px `,
+            }}
+          />
+          <div style={{ marginTop: '5px' }}>
+            {formatDuration(time)}
+          </div>
+        </>
       )}
     </>
   );

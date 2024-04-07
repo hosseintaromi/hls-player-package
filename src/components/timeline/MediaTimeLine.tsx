@@ -181,9 +181,7 @@ const TimeLine = () => {
                 <>
                     <Bubble ref={snapShotBox} className="bubble">
                         <Snapshot snapshots={snapshots.current} time={hoverValue} />
-                        <div style={{ marginTop: '5px' }}>
-                            {formatDuration(hoverValue)}
-                        </div>
+
                     </Bubble>
                     <ThumbCursor ref={snapShotBoxCursor} />
                 </>

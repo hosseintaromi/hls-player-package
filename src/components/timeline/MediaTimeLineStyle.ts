@@ -5,7 +5,8 @@ export const ThumbCursor = styled.div({
   width: "4px",
   height: "4px",
   background: "rgba(33, 33, 33, 0.6)",
-  bottom: "12px",
+  top: "50%",
+  transform: "translateY(-50%)",
   zIndex: "3",
   display: "none",
 
@@ -30,8 +31,8 @@ export const BufferSize = styled.span(({ theme }) => ({
 export const Bubble = styled.output({
   color: "white",
   padding: "4px",
-  position: "absolute",
   background: "rgba(33, 33, 33, 0.6)",
+  position: "absolute",
   borderRadius: "8px",
   left: "300px",
   zIndex: "5",
