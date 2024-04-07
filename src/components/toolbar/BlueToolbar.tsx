@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import {
-  SettingItemWrapper,
-  SettingLeftSection,
-  SettingRightSection,
-  TimeCounter,
-  TimeDivider,
-  ToolbarWrapper,
+	SettingItemWrapper,
+	SettingLeftSection,
+	SettingRightSection,
+	TimeCounter,
+	TimeDivider,
+	ToolbarWrapper,
 } from "../toolbar/ToolbarStyle";
 import { ToolBarPlayIcon } from "../player/VideoPlayerStyle";
 import Setting from "../setting/red/Setting";
@@ -22,48 +22,50 @@ import Quality from "../setting/blue/Quality";
 import Mute from "../tools/Mute";
 import { usePlayerEvents } from "../../hooks/usePlayerEvents";
 import SensitiveArea from "../player/SensitiveArea";
+import Skip from "../tools/ads/Skip";
 
 const BlueToolbar = ({ isFaded }: { isFaded: boolean }) => {
-  const [isShowQ, setIsShowQ] = useState<any>();
-  const [isShowS, setIsShowS] = useState<any>();
-  const [isShowA, setIsShowA] = useState<any>();
-  const loadLevels = () => {
-    setIsShowQ(getLevels() !== undefined);
-    setIsShowS(getSubtitle() !== undefined);
-    setIsShowA(getAudioTracks() !== undefined);
-  };
-  const { getAudioTracks, getLevels, getSubtitle } = usePlayerEvents({
-    onLoaded: loadLevels,
-  });
+	const [isShowQ, setIsShowQ] = useState<any>();
+	const [isShowS, setIsShowS] = useState<any>();
+	const [isShowA, setIsShowA] = useState<any>();
+	const loadLevels = () => {
+		setIsShowQ(getLevels() !== undefined);
+		setIsShowS(getSubtitle() !== undefined);
+		setIsShowA(getAudioTracks() !== undefined);
+	};
+	const { getAudioTracks, getLevels, getSubtitle } = usePlayerEvents({
+		onLoaded: loadLevels,
+	});
 
-  return (
-    <SensitiveArea>
-      <ToolbarWrapper isFaded={isFaded}>
-        <TimeCounter className="blue-counter">
-          <Time type="Current" />
-          <Time type="Total" />
-        </TimeCounter>
-        <MediaTimeLine />
-        <SettingItemWrapper className="blue-setting-wrapper">
-          <SettingLeftSection>
-            <ToolBarPlayIcon>
-              <Play />
-            </ToolBarPlayIcon>
-            <Mute />
-          </SettingLeftSection>
-          <SettingRightSection>
-            {isShowA && <Mic />}
-            {isShowS && <Subtitle />}
-            <Speed />
-            {isShowQ && <Quality />}
+	return (
+		<SensitiveArea>
+			<Skip />
+			<ToolbarWrapper isFaded={isFaded}>
+				<TimeCounter className="blue-counter">
+					<Time type="Current" />
+					<Time type="Total" />
+				</TimeCounter>
+				<MediaTimeLine />
+				<SettingItemWrapper className="blue-setting-wrapper">
+					<SettingLeftSection>
+						<ToolBarPlayIcon>
+							<Play />
+						</ToolBarPlayIcon>
+						<Mute />
+					</SettingLeftSection>
+					<SettingRightSection>
+						{isShowA && <Mic />}
+						{isShowS && <Subtitle />}
+						<Speed />
+						{isShowQ && <Quality />}
 
-            <PictureInPicture />
-            <Fullscreen />
-          </SettingRightSection>
-        </SettingItemWrapper>
-      </ToolbarWrapper>
-    </SensitiveArea>
-  );
+						<PictureInPicture />
+						<Fullscreen />
+					</SettingRightSection>
+				</SettingItemWrapper>
+			</ToolbarWrapper>
+		</SensitiveArea>
+	);
 };
 
 export default BlueToolbar;

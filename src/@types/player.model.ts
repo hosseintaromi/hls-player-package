@@ -107,6 +107,7 @@ export type IconsType = {
 	jumpBack: ReactNode;
 	jumpForward: ReactNode;
 	mic: ReactNode;
+	playArrow: ReactNode;
 };
 
 export type PlayerLocaleType = {
@@ -117,6 +118,8 @@ export type PlayerLocaleType = {
 	setting_menu_change_audio_track_title?: string;
 	setting_menu_change_subtitle?: string;
 	setting_menu_subtitle_off?: string;
+	can_skip_text?: string;
+	skip_text?: string;
 };
 
 export type KeyValue = {

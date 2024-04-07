@@ -35,6 +35,8 @@ const Demo = ({ length }: DemoProps) => {
 			setting_menu_change_audio_track_title: "انتخاب صدا",
 			setting_menu_change_subtitle: "انتخاب زیرنویس",
 			setting_menu_subtitle_off: "خاموش",
+			can_skip_text: "رد کردن تبلیغ پس از ",
+			skip_text: "رد کردن تبلیغ",
 		},
 		thumbnail:
 			"https://cdn.bitmovin.com/content/assets/art-of-motion-dash-hls-progressive/thumbnails/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.vtt",
