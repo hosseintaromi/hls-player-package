@@ -62,11 +62,10 @@ export const useAds = () => {
 		}
 	};
 
-	const initAds = async () => {};
-
 	return {
-		initAds,
-		isPlayingAd: isPlayingAd.current,
+		isPlayingAd: () => isPlayingAd.current,
+		showToolbar: () =>
+			config.showToolbarOnAd ? true : !isPlayingAd.current,
 		ads: adsConfig,
 		currentAd: () => currentAd.current,
 		skipCurrentAd,

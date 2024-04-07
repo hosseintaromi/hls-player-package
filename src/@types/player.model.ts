@@ -50,6 +50,7 @@ export interface PlayerConfigType {
 	defaultQuality?: string;
 	thumbnail: string;
 	ads?: AdType[];
+	showToolbarOnAd?: boolean;
 	onUpdateTime?: (e: OnUpdateTimeType) => void;
 	// FIXME: we should fix this types
 	onEnd?: (e: OnUpdateTimeType) => void;

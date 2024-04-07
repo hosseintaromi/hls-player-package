@@ -46,6 +46,7 @@ const Demo = ({ length }: DemoProps) => {
 				startTime: 5,
 			},
 		],
+		showToolbarOnAd: false,
 		// style: {
 		//   bufferBg: 'blue',
 		//   dir: 'rtl',

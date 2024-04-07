@@ -42,7 +42,7 @@ const Skip = ({ children }: { children?: ReactNode }) => {
 		},
 	});
 
-	if (!isPlayingAd) return null;
+	if (!isPlayingAd()) return null;
 
 	return (
 		<SkipStyle canSkip={currentAd()?.canSkip} onClick={skipCurrentAd}>
