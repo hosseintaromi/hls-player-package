@@ -29,16 +29,18 @@ export const formatDuration = (duration: any, milisecond?: boolean) => {
 	let minutes = Math.floor((timeSeconds % 3600) / 60);
 	let seconds = timeSeconds % 60;
 
-	let result = (hours ? hours + ":" : "") + minutes + ":" + seconds;
+	let result = (hours ? hours + ":" : "00:") + minutes + ":" + seconds;
 
 	return result.replace(
 		/(?:(\d{1,2}):)?(\d{1,2}):(\d{1,2})/g,
 		function (match, hour, minute, second) {
 			var formattedTime =
-				("0" + minute).slice(-2) + ":" + ("0" + second).slice(-2);
-			if (hour) {
-				formattedTime = ("0" + hour).slice(-2) + ":" + formattedTime;
-			}
+				("0" + hour).slice(-2) +
+				":" +
+				("0" + minute).slice(-2) +
+				":" +
+				("0" + second).slice(-2);
+
 			return formattedTime;
 		}
 	);
