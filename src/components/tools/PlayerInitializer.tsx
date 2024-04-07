@@ -5,24 +5,27 @@ import { useLocale } from "../../hooks/useLocale";
 import { useSubTitle } from "../../hooks/useSubTitle";
 
 const PlayerInitializer = () => {
-  const context = useContext(VideoPlayerContext);
+	const context = useContext(VideoPlayerContext);
 
-  const { loadVideo } = usePlayerEvents();
-  const { changeLocale } = useLocale({});
-  const { initSubtitle } = useSubTitle();
+	const { loadVideo } = usePlayerEvents();
+	const { changeLocale } = useLocale({});
+	const { initSubtitle } = useSubTitle();
 
-  useEffect(() => {
-    context.loadVideo = loadVideo;
-    context.config.loadVideo = loadVideo;
-    if (context.config.src) {
-      context.loadVideo(context.config.src);
-    }
-    context.config.changeLocale = changeLocale;
-    
-    initSubtitle();
-  }, []);
+	useEffect(() => {
+		context.loadVideo = loadVideo;
+		context.config.loadVideo = loadVideo;
+		if (context.config.src) {
+			context.loadVideo(context.config.src);
+		}
+		context.config.changeLocale = changeLocale;
 
-  return <></>;
+		initSubtitle();
+		return () => {
+			context.hls?.destroy();
+		};
+	}, []);
+
+	return <></>;
 };
 
 export default PlayerInitializer;
