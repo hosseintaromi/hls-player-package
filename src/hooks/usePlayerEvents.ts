@@ -34,6 +34,7 @@ export const usePlayerEvents = (events?: HlsVideoEventType) => {
 		videoEl.src = src;
 		videoEl.load();
 		videoEl.onloadeddata = () => {
+			videoEl.currentTime = context.config.startTime || 0;
 			listenOnLoad.forEach((listener) => {
 				listener();
 			});
@@ -46,6 +47,7 @@ export const usePlayerEvents = (events?: HlsVideoEventType) => {
 
 		const hls = (context.hls = new Hls({
 			enableWorker: false,
+			startPosition: context.config.startTime || 0,
 		}));
 		hls.attachMedia(videoEl);
 
