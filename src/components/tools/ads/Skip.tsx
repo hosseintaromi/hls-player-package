@@ -48,7 +48,7 @@ const Skip = ({ children }: { children?: ReactNode }) => {
 		<SkipStyle canSkip={currentAd()?.canSkip} onClick={skipCurrentAd}>
 			{remainDuration !== 0 ? (
 				<>
-					{formatDuration(remainDuration)}
+					{formatDuration(remainDuration).slice(3)}
 					{currentAd()?.canSkip && (
 						<>
 							<span>

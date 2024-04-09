@@ -43,7 +43,6 @@ const TouchContainer = ({
 	};
 
 	const hideIfIdle = () => {
-		console.log(showToolbar());
 		if (!showToolbar()) {
 			setIsShow(false);
 			return;
