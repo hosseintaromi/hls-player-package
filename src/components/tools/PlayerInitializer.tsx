@@ -3,7 +3,6 @@ import { usePlayerEvents } from "../../hooks/usePlayerEvents";
 import VideoPlayerContext from "../../contexts/VideoPlayerContext";
 import { useLocale } from "../../hooks/useLocale";
 import { useSubTitle } from "../../hooks/useSubTitle";
-import { useAds } from "../../hooks/useAds";
 
 const PlayerInitializer = () => {
 	const context = useContext(VideoPlayerContext);
@@ -11,7 +10,6 @@ const PlayerInitializer = () => {
 	const { loadVideo } = usePlayerEvents();
 	const { changeLocale } = useLocale({});
 	const { initSubtitle } = useSubTitle();
-	useAds();
 
 	useEffect(() => {
 		context.loadVideo = loadVideo;
