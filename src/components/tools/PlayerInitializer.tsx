@@ -22,6 +22,9 @@ const PlayerInitializer = () => {
 		context.config.changeLocale = changeLocale;
 
 		initSubtitle();
+		return () => {
+			context.hls?.destroy();
+		};
 	}, []);
 
 	return <></>;

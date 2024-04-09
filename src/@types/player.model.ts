@@ -51,6 +51,7 @@ export interface PlayerConfigType {
 	thumbnail: string;
 	ads?: AdType[];
 	showToolbarOnAd?: boolean;
+	startTime?: number;
 	onUpdateTime?: (e: OnUpdateTimeType) => void;
 	// FIXME: we should fix this types
 	onEnd?: (e: OnUpdateTimeType) => void;
