@@ -11,7 +11,6 @@ interface AdTypeWithDuration extends AdType {
 export const useAds = () => {
 	const { config } = useContext(VideoPlayerContext);
 	const { loadMP4Video, loadVideo } = usePlayerEvents();
-	const { changeTime } = usePlayerContext();
 	const isPlayingAd = useRef(false);
 	const avoidAds = useRef(false);
 	const currentAd = useRef<AdTypeWithDuration>();
@@ -35,7 +34,7 @@ export const useAds = () => {
 			let adToShow = currentAd.current;
 			if (adToShow) {
 				loadMP4Video?.(adToShow.src);
-				changeTime(0);
+				config.startTime = 0;
 				isPlayingAd.current = true;
 			}
 		},
@@ -43,11 +42,12 @@ export const useAds = () => {
 			loadOriginalVideo();
 		},
 	});
+	const { getVideoRef } = usePlayerContext();
 
 	const loadOriginalVideo = () => {
 		if (!isPlayingAd.current || !config.src || !currentAd.current) return;
 		loadVideo?.(config.src);
-		changeTime(currentAd.current.startTime);
+		config.startTime = currentAd.current.startTime;
 		avoidAds.current = true;
 		isPlayingAd.current = false;
 	};
@@ -64,8 +64,10 @@ export const useAds = () => {
 
 	return {
 		isPlayingAd: () => isPlayingAd.current,
-		showToolbar: () =>
-			config.showToolbarOnAd ? true : !isPlayingAd.current,
+		showToolbar: () => {
+			console.log("isPlayingAd", isPlayingAd.current);
+			return config.showToolbarOnAd ? true : !isPlayingAd.current;
+		},
 		ads: adsConfig,
 		currentAd: () => currentAd.current,
 		skipCurrentAd,

@@ -43,10 +43,13 @@ const Demo = ({ length }: DemoProps) => {
 		ads: [
 			{
 				src: "https://quickframe.com/wp-content/uploads/2022/09/Aveeno_eCom-Example_Max-Glow-SerumPrimer.mp4",
-				startTime: 5,
+				startTime: 7,
+				canSkip: true,
+				skipTime: 2,
 			},
 		],
 		showToolbarOnAd: false,
+		startTime: 4,
 		// style: {
 		//   bufferBg: 'blue',
 		//   dir: 'rtl',
