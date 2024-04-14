@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef } from "react";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { GenericEvents, PlayerEventsType } from "../@types/player.model";
 import { useContextEvents } from "./useContextEvents";
-import { findBufferIndex } from "../utils/player-utils";
+import { useBuffer } from "./useBuffer";
 
 export const usePlayerContext = (events?: GenericEvents<PlayerEventsType>) => {
 	const {
@@ -13,8 +13,8 @@ export const usePlayerContext = (events?: GenericEvents<PlayerEventsType>) => {
 		hls,
 	} = useContext(VideoPlayerContext);
 	const timeRef = useRef<number>(0);
-	const currentBuffer = useRef<{ index: number; length: number }>();
 
+	const { checkBuffer } = useBuffer();
 	const { listen, call } =
 		useContextEvents<PlayerEventsType>(VideoPlayerContext);
 
@@ -29,29 +29,6 @@ export const usePlayerContext = (events?: GenericEvents<PlayerEventsType>) => {
 		if (videoRef) {
 			return !videoRef.paused;
 		}
-	};
-
-	const checkBuffer = (forceUpdate?: boolean) => {
-		const videoEl = getVideoRef();
-		if (!videoEl) return;
-		const buffer = getCurrentBuffer(videoEl, forceUpdate);
-		if (!buffer) debugger;
-		const bufferSize =
-			buffer.index >= 0
-				? (videoEl.buffered.end(buffer.index) / videoEl.duration) * 100
-				: 0;
-		call.onUpdateBuffer?.(bufferSize);
-	};
-
-	const getCurrentBuffer = (el: HTMLVideoElement, forceUpdate?: boolean) => {
-		const bufferLength = el.buffered.length;
-		if (bufferLength === 0) return { length: 0, index: -1 };
-		const oldBuffer = currentBuffer.current;
-		if (oldBuffer && bufferLength === oldBuffer.length && !forceUpdate) {
-			return oldBuffer;
-		}
-		currentBuffer.current = findBufferIndex(el);
-		return currentBuffer.current;
 	};
 
 	const setVideoRef = (el?: HTMLVideoElement) => {
@@ -100,7 +77,6 @@ export const usePlayerContext = (events?: GenericEvents<PlayerEventsType>) => {
 		getVideoRef,
 		changePlayPause,
 		getIsPlay,
-		checkBuffer,
 		listenOnLoad,
 		...config,
 	};

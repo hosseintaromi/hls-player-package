@@ -142,6 +142,7 @@ export type PlayerState = {
 	currentSpeed?: KeyValue;
 	currentSubtitle?: SubTitle;
 	subTitles: SubTitle[];
+	currentBuffer?: { index: number; length: number };
 };
 
 export type AdType = {
