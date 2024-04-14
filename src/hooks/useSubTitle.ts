@@ -1,10 +1,10 @@
-import { useContext, useRef } from "react";
+import { useContext } from "react";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { SubTitle } from "../@types/player.model";
 import toWebVTT from "../utils/srt-to-vtt";
 
 export const useSubTitle = () => {
-	const { getVideoRef, state } = useContext(VideoPlayerContext);
+	const { getVideoRef, state, config } = useContext(VideoPlayerContext);
 
 	const getSubtitles = () => {
 		return state.subTitles;
@@ -106,6 +106,10 @@ export const useSubTitle = () => {
 	};
 
 	const initSubtitle = async () => {
+		if (!config || !config.subTitle) {
+			return;
+		}
+		state.subTitles = config.subTitle || [];
 		const titles = getSubtitles();
 		const selectedIndex = titles.findIndex((x) => x.is_selected);
 		if (selectedIndex >= 0) {

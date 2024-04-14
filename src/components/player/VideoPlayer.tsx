@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import PlayerTemplate from "../templates/red/PlayerTemplate";
 import {
 	KeyValue,
@@ -68,17 +68,8 @@ const VideoPlayer = ({
 		}
 	};
 
-	const initSubtitles = () => {
-		if (!config || !config.subTitle) {
-			return;
-		}
-		const state = playerStateRef.current;
-		state.subTitles = config.subTitle || [];
-	};
-
 	const initConfig = () => {
 		initSpeeds();
-		initSubtitles();
 	};
 
 	initConfig();

@@ -97,7 +97,7 @@ const TouchContainer = ({
 
 	return (
 		<div
-			id="touchkontanier"
+			id="touch-container"
 			onMouseMove={hideIfIdle}
 			onTouchStart={hideIfIdle}
 			onMouseDown={hideIfIdle}
