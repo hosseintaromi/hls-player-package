@@ -4,6 +4,7 @@ import VideoPlayerContext from "../../contexts/VideoPlayerContext";
 import { PlayerEventsType } from "../../@types/player.model";
 import useContextEvents from "../../hooks/useContextEvents";
 import { useAds } from "../../hooks/useAds";
+import { useTime } from "../../hooks/useTime";
 
 const TouchContainer = ({
 	children,
@@ -22,13 +23,8 @@ const TouchContainer = ({
 	const { listen } = useContextEvents<PlayerEventsType>(VideoPlayerContext);
 	const { showToolbar } = useAds();
 
-	const {
-		timeForHideEl,
-		changePlayPause,
-		increaseTime,
-		decreaseTime,
-		keyControl,
-	} = usePlayerContext({
+	const { increaseTime, decreaseTime } = useTime();
+	const { timeForHideEl, changePlayPause, keyControl } = usePlayerContext({
 		onPlayPause: (play: boolean) => {
 			isPlayRef.current = play;
 			hideIfIdle();

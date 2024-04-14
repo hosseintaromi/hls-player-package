@@ -18,52 +18,6 @@ export const usePlayerContext = (events?: GenericEvents<PlayerEventsType>) => {
 	const { listen, call } =
 		useContextEvents<PlayerEventsType>(VideoPlayerContext);
 
-	// const getVolume = () => {
-	// 	const videoRef = getVideoRef();
-	// 	if (videoRef)
-	// 		return { volume: videoRef.volume, isMuted: videoRef.muted };
-	// };
-
-	// const changeMute = (e: boolean) => {
-	// 	const videoRef = getVideoRef();
-	// 	if (videoRef) videoRef.muted = e;
-	// 	call.onChangeMute?.(e);
-	// };
-
-	// const changeVolume = (newVolume: number) => {
-	// 	const videoRef = getVideoRef();
-	// 	if (videoRef) {
-	// 		call.onChangeVolume?.(newVolume);
-	// 		if (videoRef.muted) {
-	// 			call.onChangeMute?.(false);
-	// 			videoRef.muted = false;
-	// 		}
-	// 		videoRef.volume = newVolume;
-	// 	}
-	// };
-
-	const changeTime = (time: number) => {
-		const el = getVideoRef();
-		if (el) el.currentTime = time;
-		checkBuffer(true);
-	};
-
-	const increaseTime = (time: number) => {
-		const el = getVideoRef();
-		if (el) el.currentTime = el.currentTime + time;
-		checkBuffer(true);
-	};
-	const decreaseTime = (time: number) => {
-		const el = getVideoRef();
-		if (el) el.currentTime = el.currentTime - time;
-		checkBuffer(true);
-	};
-
-	const getDuration = () => {
-		const el = getVideoRef();
-		return el?.duration;
-	};
-
 	const changePlayPause = (play: boolean) => {
 		const videoRef = getVideoRef();
 		if (videoRef) {
@@ -146,13 +100,7 @@ export const usePlayerContext = (events?: GenericEvents<PlayerEventsType>) => {
 		getVideoRef,
 		changePlayPause,
 		getIsPlay,
-		changeTime,
-		increaseTime,
-		decreaseTime,
-		// getVolume,
-		// changeMute,
-		// changeVolume,
-		getDuration,
+		checkBuffer,
 		listenOnLoad,
 		...config,
 	};
