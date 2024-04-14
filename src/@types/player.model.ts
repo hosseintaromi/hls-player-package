@@ -1,5 +1,13 @@
 import Hls from "hls.js";
 import { ReactNode } from "react";
+
+export type AdsStateType = {
+	isPlayingAd: boolean;
+	avoidAds: boolean;
+	currentAd?: AdType;
+	currentTime: number;
+	currentSubtitle?: number;
+};
 export interface PlayerContextType {
 	setVideoRef: (ref: HTMLVideoElement) => void;
 	getVideoRef: () => HTMLVideoElement | undefined;
@@ -10,6 +18,7 @@ export interface PlayerContextType {
 	hls?: Hls;
 	listenOnLoad: (() => void)[];
 	state: PlayerState;
+	adsState: AdsStateType;
 }
 
 export type OnUpdateTimeType = {

@@ -1,12 +1,15 @@
 import React, { useRef } from "react";
 import PlayerTemplate from "../templates/red/PlayerTemplate";
-import { PlayerInstance, PlayerState } from "../../@types/player.model";
+import {
+	AdsStateType,
+	PlayerInstance,
+	PlayerState,
+} from "../../@types/player.model";
 import VideoPlayerContext from "../../contexts/VideoPlayerContext";
 import PlayerInitializer from "../tools/PlayerInitializer";
 import MobilePlayerTemplate from "../templates/red/MobilePlayerTemplate";
 import BlueTemeplate from "../templates/blue/BlueTemplate";
 import CustomPlayer from "../templates/custom/CustomPlayer";
-import AdsContextProvider from "../../contexts/AdsContextProvider";
 
 const PlayerTemplateSelector = ({
 	config,
@@ -34,6 +37,11 @@ const VideoPlayer = ({
 	src?: string;
 }) => {
 	const playerStateRef = useRef<PlayerState>({} as any);
+	const AdsStateRef = useRef<AdsStateType>({
+		isPlayingAd: false,
+		avoidAds: false,
+		currentTime: 0,
+	});
 	const configRef = useRef<PlayerInstance>(config || ({ src } as any));
 	const listenOnLoad = useRef<(() => void)[]>([]);
 	const playListeners = useRef<((play: boolean) => void)[]>([]);
@@ -72,15 +80,14 @@ const VideoPlayer = ({
 				config: configRef.current,
 				listenOnLoad: listenOnLoad.current,
 				state: playerStateRef.current,
+				adsState: AdsStateRef.current,
 			}}
 		>
-			<AdsContextProvider>
-				{children ? (
-					<CustomPlayer>{children}</CustomPlayer>
-				) : (
-					<PlayerTemplateSelector config={config} />
-				)}
-			</AdsContextProvider>
+			{children ? (
+				<CustomPlayer>{children}</CustomPlayer>
+			) : (
+				<PlayerTemplateSelector config={config} />
+			)}
 			<PlayerInitializer />
 		</VideoPlayerContext.Provider>
 	);
