@@ -43,37 +43,6 @@ const VideoPlayer = ({
 	const playListeners = useRef<((play: boolean) => void)[]>([]);
 	const videoRef = useRef<HTMLVideoElement>();
 
-	const initSpeeds = () => {
-		if (!config || !config.speeds) {
-			return;
-		}
-		const state = playerStateRef.current;
-		let speeds: any = config.speeds;
-
-		if (Array.isArray(speeds)) {
-			speeds = speeds.map((speed) => ({ key: speed + "", value: speed }));
-		} else {
-			const speedsArr = [];
-			for (let key in speeds as any) {
-				speedsArr.push({ key, value: speeds[key] });
-			}
-			speeds = speedsArr;
-		}
-		state.speeds = [];
-		if (speeds) {
-			state.speeds = speeds;
-			state.currentSpeed = speeds.find(
-				(x: KeyValue) => x.value === videoRef.current?.playbackRate
-			);
-		}
-	};
-
-	const initConfig = () => {
-		initSpeeds();
-	};
-
-	initConfig();
-
 	const setVideoRef = (ref: HTMLVideoElement) => {
 		videoRef.current = ref;
 		const state = playerStateRef.current;

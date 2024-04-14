@@ -3,6 +3,7 @@ import { usePlayerEvents } from "../../hooks/usePlayerEvents";
 import VideoPlayerContext from "../../contexts/VideoPlayerContext";
 import { useLocale } from "../../hooks/useLocale";
 import { useSubTitle } from "../../hooks/useSubTitle";
+import { useSpeed } from "../../hooks/useSpeed";
 
 const PlayerInitializer = () => {
 	const context = useContext(VideoPlayerContext);
@@ -10,6 +11,7 @@ const PlayerInitializer = () => {
 	const { loadVideo } = usePlayerEvents();
 	const { changeLocale } = useLocale({});
 	const { initSubtitle } = useSubTitle();
+	const { initSpeeds } = useSpeed();
 
 	useEffect(() => {
 		context.loadVideo = loadVideo;
@@ -19,6 +21,7 @@ const PlayerInitializer = () => {
 		}
 		context.config.changeLocale = changeLocale;
 
+		initSpeeds();
 		initSubtitle();
 		return () => {
 			context.hls?.destroy();
