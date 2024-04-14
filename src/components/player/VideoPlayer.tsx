@@ -1,10 +1,6 @@
 import React, { useRef } from "react";
 import PlayerTemplate from "../templates/red/PlayerTemplate";
-import {
-	KeyValue,
-	PlayerInstance,
-	PlayerState,
-} from "../../@types/player.model";
+import { PlayerInstance, PlayerState } from "../../@types/player.model";
 import VideoPlayerContext from "../../contexts/VideoPlayerContext";
 import PlayerInitializer from "../tools/PlayerInitializer";
 import MobilePlayerTemplate from "../templates/red/MobilePlayerTemplate";

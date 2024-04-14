@@ -13,6 +13,11 @@ const PlayerInitializer = () => {
 	const { initSubtitle } = useSubTitle();
 	const { initSpeeds } = useSpeed();
 
+	const initConfig = () => {
+		initSpeeds();
+		initSubtitle();
+	};
+
 	useEffect(() => {
 		context.loadVideo = loadVideo;
 		context.config.loadVideo = loadVideo;
@@ -21,8 +26,7 @@ const PlayerInitializer = () => {
 		}
 		context.config.changeLocale = changeLocale;
 
-		initSpeeds();
-		initSubtitle();
+		initConfig();
 		return () => {
 			context.hls?.destroy();
 		};

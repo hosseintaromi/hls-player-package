@@ -1,10 +1,6 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef } from "react";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
-import {
-	GenericEvents,
-	KeyValue,
-	PlayerEventsType,
-} from "../@types/player.model";
+import { GenericEvents, PlayerEventsType } from "../@types/player.model";
 import { useContextEvents } from "./useContextEvents";
 import { findBufferIndex } from "../utils/player-utils";
 
@@ -14,7 +10,6 @@ export const usePlayerContext = (events?: GenericEvents<PlayerEventsType>) => {
 		setVideoRef: videoRefSetter,
 		getVideoRef,
 		listenOnLoad,
-		state,
 		hls,
 	} = useContext(VideoPlayerContext);
 	const timeRef = useRef<number>(0);
@@ -23,29 +18,29 @@ export const usePlayerContext = (events?: GenericEvents<PlayerEventsType>) => {
 	const { listen, call } =
 		useContextEvents<PlayerEventsType>(VideoPlayerContext);
 
-	const getVolume = () => {
-		const videoRef = getVideoRef();
-		if (videoRef)
-			return { volume: videoRef.volume, isMuted: videoRef.muted };
-	};
+	// const getVolume = () => {
+	// 	const videoRef = getVideoRef();
+	// 	if (videoRef)
+	// 		return { volume: videoRef.volume, isMuted: videoRef.muted };
+	// };
 
-	const changeMute = (e: boolean) => {
-		const videoRef = getVideoRef();
-		if (videoRef) videoRef.muted = e;
-		call.onChangeMute?.(e);
-	};
+	// const changeMute = (e: boolean) => {
+	// 	const videoRef = getVideoRef();
+	// 	if (videoRef) videoRef.muted = e;
+	// 	call.onChangeMute?.(e);
+	// };
 
-	const changeVolume = (newVolume: number) => {
-		const videoRef = getVideoRef();
-		if (videoRef) {
-			call.onChangeVolume?.(newVolume);
-			if (videoRef.muted) {
-				call.onChangeMute?.(false);
-				videoRef.muted = false;
-			}
-			videoRef.volume = newVolume;
-		}
-	};
+	// const changeVolume = (newVolume: number) => {
+	// 	const videoRef = getVideoRef();
+	// 	if (videoRef) {
+	// 		call.onChangeVolume?.(newVolume);
+	// 		if (videoRef.muted) {
+	// 			call.onChangeMute?.(false);
+	// 			videoRef.muted = false;
+	// 		}
+	// 		videoRef.volume = newVolume;
+	// 	}
+	// };
 
 	const changeTime = (time: number) => {
 		const el = getVideoRef();
@@ -154,9 +149,9 @@ export const usePlayerContext = (events?: GenericEvents<PlayerEventsType>) => {
 		changeTime,
 		increaseTime,
 		decreaseTime,
-		getVolume,
-		changeMute,
-		changeVolume,
+		// getVolume,
+		// changeMute,
+		// changeVolume,
 		getDuration,
 		listenOnLoad,
 		...config,
