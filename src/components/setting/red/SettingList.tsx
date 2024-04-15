@@ -13,6 +13,7 @@ import { pageName, pageDir } from "../../../@types/setting.model";
 import { useSpeed } from "../../../hooks/useSpeed";
 import { useLevel } from "../../../hooks/useLevel";
 import { useSubTitle } from "../../../hooks";
+import { useAudio } from "../../../hooks/useAudio";
 
 type SettingListType = {
 	changePage: (newPageName: pageName, dir: pageDir) => void;
@@ -64,7 +65,8 @@ const SettingList = ({ changePage, myRef, currentPage }: SettingListType) => {
 
 	const { getCurrentLevel, getLevels } = useLevel();
 	const { getCurrentSubtitle, getSubtitle } = useSubTitle();
-	const { getAudioTrack, getAudioTracks } = usePlayerEvents({
+	const { getAudioTrack, getAudioTracks } = useAudio();
+	usePlayerEvents({
 		onLoaded: loadLevels,
 	});
 
