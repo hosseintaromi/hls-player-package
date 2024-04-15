@@ -4,7 +4,6 @@ import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { useVideo } from "./useVideo";
 import { useSubTitle } from "./useSubTitle";
 import { useSpeed } from "./useSpeed";
-import { usePlayerContext, usePlayerEvents } from ".";
 
 export const useAds = () => {
 	const { config, adsState, state } = useContext(VideoPlayerContext);
@@ -14,7 +13,6 @@ export const useAds = () => {
 
 	let adsConfig = config.ads as AdType[];
 
-	console.log(state.currentSubtitle);
 	useVideo({
 		onUpdateTime: (e: OnUpdateTimeType) => {
 			adsState.currentTime = e.time;

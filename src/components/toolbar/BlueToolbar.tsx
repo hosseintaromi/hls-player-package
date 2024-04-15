@@ -23,6 +23,7 @@ import Mute from "../tools/Mute";
 import { usePlayerEvents } from "../../hooks/usePlayerEvents";
 import SensitiveArea from "../player/SensitiveArea";
 import Skip from "../tools/ads/Skip";
+import { useLevel } from "../../hooks/useLevel";
 
 const BlueToolbar = ({ isFaded }: { isFaded: boolean }) => {
 	const [isShowQ, setIsShowQ] = useState<any>();
@@ -33,7 +34,8 @@ const BlueToolbar = ({ isFaded }: { isFaded: boolean }) => {
 		setIsShowS(getSubtitle() !== undefined);
 		setIsShowA(getAudioTracks() !== undefined);
 	};
-	const { getAudioTracks, getLevels, getSubtitle } = usePlayerEvents({
+	const { getLevels } = useLevel();
+	const { getAudioTracks, getSubtitle } = usePlayerEvents({
 		onLoaded: loadLevels,
 	});
 

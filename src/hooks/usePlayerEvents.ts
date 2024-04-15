@@ -6,32 +6,8 @@ export interface HlsVideoEventType {
 	onLoaded?: () => void;
 }
 export const usePlayerEvents = (events?: HlsVideoEventType) => {
-	const {
-		type,
-		getVideoRef,
-		listenOnLoad,
-		hls,
-		qualities,
-		subTitle,
-		audioTracks,
-	} = useVideo();
+	const { listenOnLoad, subTitle, audioTracks } = useVideo();
 	const context = useContext(VideoPlayerContext);
-
-	const getLevels = () => {
-		return context.hls?.levels.filter((item) =>
-			qualities.length ? qualities.includes(item.height) : true
-		);
-	};
-	const getCurrentLevel = () => {
-		return {
-			currentLevel: context.hls?.currentLevel,
-			isAuto: context.hls?.autoLevelEnabled,
-			defaultQuality: context?.config?.defaultQuality || null,
-		};
-	};
-	const changeLevel = (index: number) => {
-		if (context.hls) context.hls.currentLevel = index;
-	};
 
 	const getSubtitle = () => {
 		return context.hls?.subtitleTracks.filter((item) =>
@@ -62,9 +38,6 @@ export const usePlayerEvents = (events?: HlsVideoEventType) => {
 	}, []);
 
 	return {
-		getLevels,
-		getCurrentLevel,
-		changeLevel,
 		getSubtitle,
 		getCurrentSubtitle,
 		getAudioTracks,

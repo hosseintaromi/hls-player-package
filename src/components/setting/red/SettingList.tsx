@@ -12,6 +12,7 @@ import Icon from "../../icons/Icon";
 import { SettingItemArrowSpan } from "./SettingStyle";
 import { pageName, pageDir } from "../../../@types/setting.model";
 import { useSpeed } from "../../../hooks/useSpeed";
+import { useLevel } from "../../../hooks/useLevel";
 
 type SettingListType = {
 	changePage: (newPageName: pageName, dir: pageDir) => void;
@@ -61,14 +62,10 @@ const SettingList = ({ changePage, myRef, currentPage }: SettingListType) => {
 	};
 	const { speed } = useSpeed();
 
-	const {
-		getCurrentLevel,
-		getAudioTrack,
-		getCurrentSubtitle,
-		getLevels,
-		getSubtitle,
-		getAudioTracks,
-	} = usePlayerEvents({ onLoaded: loadLevels });
+	const { getCurrentLevel, getLevels } = useLevel();
+
+	const { getAudioTrack, getCurrentSubtitle, getSubtitle, getAudioTracks } =
+		usePlayerEvents({ onLoaded: loadLevels });
 
 	useEffect(() => {
 		loadLevels();
