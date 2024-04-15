@@ -4,11 +4,14 @@ import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { usePlayerEvents } from "./usePlayerEvents";
 import { usePlayerContext } from "./usePlayerContext";
 import { useSubTitle } from "./useSubTitle";
+import { useSpeed } from "./useSpeed";
 
 export const useAds = () => {
-	const { config, adsState } = useContext(VideoPlayerContext);
+	const { config, adsState, state } = useContext(VideoPlayerContext);
 	const { loadMP4Video, loadVideo } = usePlayerEvents();
 	const { changeSubtitle, getSubtitles } = useSubTitle();
+	const { changeSpeed, getSpeeds } = useSpeed();
+
 	let adsConfig = config.ads as AdType[];
 
 	usePlayerContext({
@@ -30,6 +33,10 @@ export const useAds = () => {
 				adsState.currentSubtitle = getSubtitles().findIndex(
 					(x) => x.is_selected
 				);
+				if (getSpeeds())
+					adsState.speed = getSpeeds()?.findIndex(
+						(s) => s.key === state.currentSpeed?.key
+					);
 				loadMP4Video?.(adToShow.src);
 				config.startTime = 0;
 				// changeSubtitle(-1);
@@ -45,9 +52,9 @@ export const useAds = () => {
 		if (!adsState.isPlayingAd || !config.src || !adsState.currentAd) return;
 		loadVideo?.(config.src);
 		config.startTime = adsState.currentAd.startTime;
-		console.log(adsState.currentSubtitle);
 		// adsState.currentSubtitle !== undefined &&
 		// 	changeSubtitle(adsState.currentSubtitle);
+		if (adsState.speed !== undefined) changeSpeed(adsState.speed);
 		adsState.avoidAds = true;
 		adsState.isPlayingAd = false;
 	};

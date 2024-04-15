@@ -7,6 +7,7 @@ export type AdsStateType = {
 	currentAd?: AdType;
 	currentTime: number;
 	currentSubtitle?: number;
+	speed?: number;
 };
 export interface PlayerContextType {
 	setVideoRef: (ref: HTMLVideoElement) => void;

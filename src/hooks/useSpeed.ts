@@ -3,9 +3,11 @@ import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { KeyValue } from "../@types";
 
 export const useSpeed = () => {
-	const [speed, setSpeed] = useState<KeyValue | undefined>();
-
 	const { config, state, getVideoRef } = useContext(VideoPlayerContext);
+
+	const [speed, setSpeed] = useState<KeyValue | undefined>(
+		state.currentSpeed
+	);
 
 	const getSpeeds = () => {
 		return state.speeds;
