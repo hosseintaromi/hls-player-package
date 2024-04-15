@@ -2,9 +2,26 @@ import { useContext } from "react";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { SubTitle } from "../@types/player.model";
 import toWebVTT from "../utils/srt-to-vtt";
+import { useVideo } from "./useVideo";
 
 export const useSubTitle = () => {
+	const { subTitle } = useVideo();
 	const { getVideoRef, state, config } = useContext(VideoPlayerContext);
+	const context = useContext(VideoPlayerContext);
+
+	const getSubtitle = () => {
+		return context.hls?.subtitleTracks.filter((item) =>
+			subTitle.length ? subTitle.includes(item.name) : true
+		);
+	};
+
+	const getCurrentSubtitle = () => {
+		return context.hls?.subtitleTrack;
+	};
+
+	// const changeSubtitle = (index: number) => {
+	// 	if (context.hls) context.hls.subtitleTrack = index;
+	// };
 
 	const getSubtitles = () => {
 		return state.subTitles;
@@ -121,5 +138,7 @@ export const useSubTitle = () => {
 		getSubtitles,
 		changeSubtitle,
 		initSubtitle,
+		getSubtitle,
+		getCurrentSubtitle,
 	};
 };

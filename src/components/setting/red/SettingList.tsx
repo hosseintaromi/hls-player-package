@@ -3,7 +3,6 @@ import SettingItem from "./SettingItem";
 import { SettingMenu } from "../../general/FlexCenter";
 import { usePlayerEvents } from "../../../hooks/usePlayerEvents";
 import Locale from "../../locale/Locale";
-import { useVideo } from "../../../hooks/useVideo";
 import {
 	LevelType,
 	MediaPlaylistType,
@@ -13,6 +12,7 @@ import { SettingItemArrowSpan } from "./SettingStyle";
 import { pageName, pageDir } from "../../../@types/setting.model";
 import { useSpeed } from "../../../hooks/useSpeed";
 import { useLevel } from "../../../hooks/useLevel";
+import { useSubTitle } from "../../../hooks";
 
 type SettingListType = {
 	changePage: (newPageName: pageName, dir: pageDir) => void;
@@ -63,9 +63,10 @@ const SettingList = ({ changePage, myRef, currentPage }: SettingListType) => {
 	const { speed } = useSpeed();
 
 	const { getCurrentLevel, getLevels } = useLevel();
-
-	const { getAudioTrack, getCurrentSubtitle, getSubtitle, getAudioTracks } =
-		usePlayerEvents({ onLoaded: loadLevels });
+	const { getCurrentSubtitle, getSubtitle } = useSubTitle();
+	const { getAudioTrack, getAudioTracks } = usePlayerEvents({
+		onLoaded: loadLevels,
+	});
 
 	useEffect(() => {
 		loadLevels();

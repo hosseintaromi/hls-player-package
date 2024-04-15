@@ -8,9 +8,7 @@ import {
 	ToolbarWrapper,
 } from "../toolbar/ToolbarStyle";
 import { ToolBarPlayIcon } from "../player/VideoPlayerStyle";
-import Setting from "../setting/red/Setting";
 import Play from "../tools/Play";
-import Volume from "../tools/Volume";
 import Time from "../tools/Time";
 import PictureInPicture from "../tools/PictureInPicture";
 import Fullscreen from "../tools/Fullscreen";
@@ -24,6 +22,7 @@ import { usePlayerEvents } from "../../hooks/usePlayerEvents";
 import SensitiveArea from "../player/SensitiveArea";
 import Skip from "../tools/ads/Skip";
 import { useLevel } from "../../hooks/useLevel";
+import { useSubTitle } from "../../hooks";
 
 const BlueToolbar = ({ isFaded }: { isFaded: boolean }) => {
 	const [isShowQ, setIsShowQ] = useState<any>();
@@ -35,7 +34,8 @@ const BlueToolbar = ({ isFaded }: { isFaded: boolean }) => {
 		setIsShowA(getAudioTracks() !== undefined);
 	};
 	const { getLevels } = useLevel();
-	const { getAudioTracks, getSubtitle } = usePlayerEvents({
+	const { getSubtitle } = useSubTitle();
+	const { getAudioTracks } = usePlayerEvents({
 		onLoaded: loadLevels,
 	});
 
