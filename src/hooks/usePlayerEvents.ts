@@ -6,20 +6,8 @@ export interface HlsVideoEventType {
 	onLoaded?: () => void;
 }
 export const usePlayerEvents = (events?: HlsVideoEventType) => {
-	const { listenOnLoad, subTitle, audioTracks } = useVideo();
+	const { listenOnLoad, audioTracks } = useVideo();
 	const context = useContext(VideoPlayerContext);
-
-	const getSubtitle = () => {
-		return context.hls?.subtitleTracks.filter((item) =>
-			subTitle.length ? subTitle.includes(item.name) : true
-		);
-	};
-	const getCurrentSubtitle = () => {
-		return context.hls?.subtitleTrack;
-	};
-	const changeSubtitle = (index: number) => {
-		if (context.hls) context.hls.subtitleTrack = index;
-	};
 
 	const getAudioTracks = () => {
 		return context.hls?.audioTracks.filter((item) =>
@@ -38,8 +26,6 @@ export const usePlayerEvents = (events?: HlsVideoEventType) => {
 	}, []);
 
 	return {
-		getSubtitle,
-		getCurrentSubtitle,
 		getAudioTracks,
 		getAudioTrack,
 		changeAudioTrack,
