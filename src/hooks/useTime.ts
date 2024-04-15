@@ -1,9 +1,9 @@
 import { useBuffer } from "./useBuffer";
-import { usePlayerContext } from "./usePlayerContext";
+import { useVideo } from "./useVideo";
 
 export const useTime = () => {
 	const { checkBuffer } = useBuffer();
-	const { getVideoRef } = usePlayerContext();
+	const { getVideoRef } = useVideo();
 
 	const changeTime = (time: number) => {
 		const el = getVideoRef();

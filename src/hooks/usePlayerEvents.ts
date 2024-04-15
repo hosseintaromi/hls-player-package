@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect } from "react";
 import Hls from "hls.js";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
-import { usePlayerContext } from "./usePlayerContext";
+import { useVideo } from "./useVideo";
 
 const isSupportedPlatform = Hls.isSupported();
 
@@ -17,7 +17,7 @@ export const usePlayerEvents = (events?: HlsVideoEventType) => {
 		qualities,
 		subTitle,
 		audioTracks,
-	} = usePlayerContext();
+	} = useVideo();
 	const context = useContext(VideoPlayerContext);
 
 	const loadVideo = useCallback((src: string) => {

@@ -1,10 +1,10 @@
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { PlayerEventsType } from "../@types";
-import { usePlayerContext } from "./usePlayerContext";
+import { useVideo } from "./useVideo";
 import useContextEvents from "./useContextEvents";
 
 export const useVolume = () => {
-	const { getVideoRef } = usePlayerContext();
+	const { getVideoRef } = useVideo();
 	const { call } = useContextEvents<PlayerEventsType>(VideoPlayerContext);
 
 	const getVolume = () => {

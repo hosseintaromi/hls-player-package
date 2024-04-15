@@ -3,7 +3,7 @@ import SettingItem from "./SettingItem";
 import { SettingMenu } from "../../general/FlexCenter";
 import { usePlayerEvents } from "../../../hooks/usePlayerEvents";
 import Locale from "../../locale/Locale";
-import { usePlayerContext } from "../../../hooks/usePlayerContext";
+import { useVideo } from "../../../hooks/useVideo";
 import {
 	LevelType,
 	MediaPlaylistType,

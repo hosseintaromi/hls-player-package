@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useRef } from "react";
-import { usePlayerContext } from "../../hooks/usePlayerContext";
+import { useVideo } from "../../hooks/useVideo";
 import VideoPlayerContext from "../../contexts/VideoPlayerContext";
 import { PlayerEventsType } from "../../@types/player.model";
 import useContextEvents from "../../hooks/useContextEvents";
@@ -24,7 +24,7 @@ const TouchContainer = ({
 	const { showToolbar } = useAds();
 
 	const { increaseTime, decreaseTime } = useTime();
-	const { timeForHideEl, changePlayPause, keyControl } = usePlayerContext({
+	const { timeForHideEl, changePlayPause, keyControl } = useVideo({
 		onPlayPause: (play: boolean) => {
 			isPlayRef.current = play;
 			hideIfIdle();

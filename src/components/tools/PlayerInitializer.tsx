@@ -1,9 +1,10 @@
 import React, { useContext, useEffect } from "react";
-import { usePlayerEvents } from "../../hooks/usePlayerEvents";
 import VideoPlayerContext from "../../contexts/VideoPlayerContext";
 import { useLocale } from "../../hooks/useLocale";
 import { useSubTitle } from "../../hooks/useSubTitle";
 import { useSpeed } from "../../hooks/useSpeed";
+import { useVideo } from "../../hooks/useVideo";
+import { usePlayerEvents } from "../../hooks";
 
 const PlayerInitializer = () => {
 	const context = useContext(VideoPlayerContext);

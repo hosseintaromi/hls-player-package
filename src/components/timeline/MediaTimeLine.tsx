@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import RangeSelect from "../general/range-select/RangeSelect";
-import { usePlayerContext } from "../../hooks/usePlayerContext";
+import { useVideo } from "../../hooks/useVideo";
 import { OnUpdateTimeType } from "../../@types/player.model";
 import {
 	Bubble,
@@ -37,7 +37,7 @@ const TimeLine = () => {
 	var timeOut: ReturnType<typeof setTimeout>;
 
 	const { changeTime } = useTime();
-	const { getIsPlay, changePlayPause, thumbnail } = usePlayerContext({
+	const { getIsPlay, changePlayPause, thumbnail } = useVideo({
 		onReady: (e) => {
 			duration.current = e.duration;
 		},

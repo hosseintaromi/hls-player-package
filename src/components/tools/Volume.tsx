@@ -2,7 +2,7 @@ import { memo, useRef, useState } from "react";
 import RangeSelect from "../general/range-select/RangeSelect";
 import { VolumeWrapper } from "../toolbar/ToolbarStyle";
 import Icon from "../icons/Icon";
-import { usePlayerContext } from "../../hooks/usePlayerContext";
+import { useVideo } from "../../hooks/useVideo";
 import React from "react";
 import styled from "@emotion/styled";
 import { useVolume } from "../../hooks/useVolume";
@@ -23,7 +23,7 @@ const RangeSelectWrapper = styled.div(
 );
 const Volume = memo(() => {
 	const { changeVolume, changeMute } = useVolume();
-	usePlayerContext({
+	useVideo({
 		onChangeVolume: (e) => {
 			setVolume(e * 100);
 		},

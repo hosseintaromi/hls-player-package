@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import SettingItem from "./SettingItem";
 import { SettingMenu } from "../../general/FlexCenter";
 import SettingHeader from "./SettingHeader";
-import { usePlayerContext } from "../../../hooks/usePlayerContext";
+import { useVideo } from "../../../hooks/useVideo";
 import Locale from "../../locale/Locale";
 import Icon from "../../icons/Icon";
 import { pageName, pageDir } from "../../../@types/setting.model";

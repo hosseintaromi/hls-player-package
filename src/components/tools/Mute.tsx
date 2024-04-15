@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Icon from "../icons/Icon";
-import { usePlayerContext } from "../../hooks/usePlayerContext";
+import { useVideo } from "../../hooks/useVideo";
 import { useVolume } from "../../hooks/useVolume";
 
 const Mute = () => {
@@ -39,7 +39,7 @@ const Mute = () => {
 		changeMute(!isMute);
 	};
 
-	usePlayerContext({
+	useVideo({
 		onChangeVolume: (e) => {
 			setVolume(e * 100);
 		},

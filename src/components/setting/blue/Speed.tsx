@@ -1,6 +1,6 @@
 import React, { HTMLAttributes, useState } from "react";
 import Icon from "../../icons/Icon";
-import { usePlayerContext } from "../../../hooks/usePlayerContext";
+import { useVideo } from "../../../hooks/useVideo";
 import Dialog from "../../general/Dialog";
 import { DialogTitle } from "../../general/DialogStyle";
 import {

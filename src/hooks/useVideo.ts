@@ -4,7 +4,7 @@ import { GenericEvents, PlayerEventsType } from "../@types/player.model";
 import { useContextEvents } from "./useContextEvents";
 import { useBuffer } from "./useBuffer";
 
-export const usePlayerContext = (events?: GenericEvents<PlayerEventsType>) => {
+export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
 	const {
 		config,
 		setVideoRef: videoRefSetter,
