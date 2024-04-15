@@ -9,7 +9,7 @@ import { usePlayerEvents } from "../../hooks";
 const PlayerInitializer = () => {
 	const context = useContext(VideoPlayerContext);
 
-	const { loadVideo } = usePlayerEvents();
+	const { loadVideo } = useVideo();
 	const { changeLocale } = useLocale({});
 	const { initSubtitle } = useSubTitle();
 	const { initSpeeds } = useSpeed();

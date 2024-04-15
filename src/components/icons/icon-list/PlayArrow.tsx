@@ -9,11 +9,11 @@ const PlayArrow = () => {
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 		>
-			<g clip-path="url(#clip0_35_366)">
+			<g clipPath="url(#clip0_35_366)">
 				<path
 					d="M8.36328 5.53847V18.4615L19.6133 12L8.36328 5.53847Z"
 					fill="#FAFAFA"
-					fill-opacity="0.6"
+					fillOpacity="0.6"
 				/>
 			</g>
 			<defs>

@@ -8,7 +8,7 @@ import { usePlayerContext, usePlayerEvents } from ".";
 
 export const useAds = () => {
 	const { config, adsState, state } = useContext(VideoPlayerContext);
-	const { loadMP4Video, loadVideo } = usePlayerEvents();
+	const { loadMP4Video, loadVideo } = useVideo();
 	const { changeSubtitle, getSubtitles } = useSubTitle();
 	const { changeSpeed, getSpeeds } = useSpeed();
 
