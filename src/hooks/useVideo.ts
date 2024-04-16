@@ -20,7 +20,6 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
 	const { checkBuffer } = useBuffer();
 	const { listen, call } =
 		useContextEvents<PlayerEventsType>(VideoPlayerContext);
-
 	const context = useContext(VideoPlayerContext);
 
 	const loadVideo = useCallback((src: string) => {
@@ -142,6 +141,7 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
 
 	useEffect(() => {
 		listen(events);
+		if (events?.onLoaded) listenOnLoad.push(events?.onLoaded);
 	}, []);
 
 	config.loadVideo = loadVideo;

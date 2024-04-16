@@ -40,6 +40,7 @@ export type PlayerEventsType = {
 	onReady: "onReady";
 	onChangeSetting: "onChangeSetting";
 	onActivateControls: "onActivateControls";
+	onLoaded: "OnLoaded";
 };
 
 export interface PlayerConfigType {

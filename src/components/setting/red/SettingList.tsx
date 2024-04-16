@@ -1,7 +1,6 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import SettingItem from "./SettingItem";
 import { SettingMenu } from "../../general/FlexCenter";
-import { usePlayerEvents } from "../../../hooks/usePlayerEvents";
 import Locale from "../../locale/Locale";
 import {
 	LevelType,
@@ -14,6 +13,7 @@ import { useSpeed } from "../../../hooks/useSpeed";
 import { useLevel } from "../../../hooks/useLevel";
 import { useSubTitle } from "../../../hooks";
 import { useAudio } from "../../../hooks/useAudio";
+import { useVideo } from "../../../hooks/useVideo";
 
 type SettingListType = {
 	changePage: (newPageName: pageName, dir: pageDir) => void;
@@ -66,7 +66,7 @@ const SettingList = ({ changePage, myRef, currentPage }: SettingListType) => {
 	const { getCurrentLevel, getLevels } = useLevel();
 	const { getCurrentSubtitle, getSubtitle } = useSubTitle();
 	const { getAudioTrack, getAudioTracks } = useAudio();
-	usePlayerEvents({
+	useVideo({
 		onLoaded: loadLevels,
 	});
 

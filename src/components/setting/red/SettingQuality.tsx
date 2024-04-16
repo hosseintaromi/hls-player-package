@@ -3,11 +3,11 @@ import SettingItem from "./SettingItem";
 import { SettingMenu } from "../../general/FlexCenter";
 import SettingHeader from "./SettingHeader";
 import CheckMark from "../../icons/icon-list/CheckMark";
-import { usePlayerEvents } from "../../../hooks/usePlayerEvents";
 import { LevelType } from "../../../@types/UseVideoHlsType.model";
 import Locale from "../../locale/Locale";
 import { pageName, pageDir } from "../../../@types/setting.model";
 import { useLevel } from "../../../hooks/useLevel";
+import { useVideo } from "../../../hooks/useVideo";
 
 type SettingQualityType = {
 	changePage: (newPageName: pageName, dir: pageDir) => void;
@@ -25,7 +25,7 @@ const SettingQuality = ({ changePage, myRef }: SettingQualityType) => {
 		setCurrentLevel(curlvl === undefined ? -1 : curlvl);
 	};
 	const { getLevels, changeLevel, getCurrentLevel } = useLevel();
-	usePlayerEvents({
+	useVideo({
 		onLoaded: loadLevels,
 	});
 	useEffect(() => {

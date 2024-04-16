@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Icon from "../../icons/Icon";
-import { usePlayerEvents } from "../../../hooks/usePlayerEvents";
 import { LevelType } from "../../../@types/UseVideoHlsType.model";
 import Dialog from "../../general/Dialog";
 import { DialogTitle } from "../../general/DialogStyle";
@@ -12,8 +11,8 @@ import {
 } from "../red/SettingStyle";
 import { CenterBox } from "../../general/FlexCenter";
 import { IconButton } from "../../toolbar/ToolbarStyle";
-import Badge from "../../general/Badge";
 import { useLevel } from "../../../hooks/useLevel";
+import { useVideo } from "../../../hooks/useVideo";
 
 const Quality = () => {
 	const [levels, setLevels] = useState<LevelType>();
@@ -27,7 +26,7 @@ const Quality = () => {
 	};
 	const { getLevels, changeLevel, getCurrentLevel } = useLevel();
 
-	usePlayerEvents({
+	useVideo({
 		onLoaded: loadLevels,
 	});
 

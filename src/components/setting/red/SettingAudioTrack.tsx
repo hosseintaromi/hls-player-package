@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import SettingItem from "./SettingItem";
 import { SettingMenu } from "../../general/FlexCenter";
 import SettingHeader from "./SettingHeader";
-import { usePlayerEvents } from "../../../hooks/usePlayerEvents";
 import { MediaPlaylistType } from "../../../@types/UseVideoHlsType.model";
 import Locale from "../../locale/Locale";
 import Icon from "../../icons/Icon";
 import { pageDir, pageName } from "../../../@types/setting.model";
 import { useAudio } from "../../../hooks/useAudio";
+import { useVideo } from "../../../hooks/useVideo";
 
 type SettingAudioTrackType = {
 	changePage: (newPageName: pageName, dir: pageDir) => void;
@@ -24,7 +24,7 @@ const SettingAudioTrack = ({ changePage, myRef }: SettingAudioTrackType) => {
 		setAudioTracks(getAudioTracks() || []);
 	};
 	const { getAudioTrack, getAudioTracks, changeAudioTrack } = useAudio();
-	usePlayerEvents({ onLoaded: loadLevels });
+	useVideo({ onLoaded: loadLevels });
 
 	useEffect(() => {
 		loadLevels();

@@ -4,7 +4,6 @@ import {
 	SettingLeftSection,
 	SettingRightSection,
 	TimeCounter,
-	TimeDivider,
 	ToolbarWrapper,
 } from "../toolbar/ToolbarStyle";
 import { ToolBarPlayIcon } from "../player/VideoPlayerStyle";
@@ -18,12 +17,12 @@ import Subtitle from "../setting/blue/SubTitle";
 import Mic from "../setting/blue/Mic";
 import Quality from "../setting/blue/Quality";
 import Mute from "../tools/Mute";
-import { usePlayerEvents } from "../../hooks/usePlayerEvents";
 import SensitiveArea from "../player/SensitiveArea";
 import Skip from "../tools/ads/Skip";
 import { useLevel } from "../../hooks/useLevel";
 import { useSubTitle } from "../../hooks";
 import { useAudio } from "../../hooks/useAudio";
+import { useVideo } from "../../hooks/useVideo";
 
 const BlueToolbar = ({ isFaded }: { isFaded: boolean }) => {
 	const [isShowQ, setIsShowQ] = useState<any>();
@@ -37,7 +36,7 @@ const BlueToolbar = ({ isFaded }: { isFaded: boolean }) => {
 	const { getLevels } = useLevel();
 	const { getSubtitle } = useSubTitle();
 	const { getAudioTracks } = useAudio();
-	usePlayerEvents({
+	useVideo({
 		onLoaded: loadLevels,
 	});
 

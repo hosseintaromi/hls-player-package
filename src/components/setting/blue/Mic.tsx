@@ -1,10 +1,8 @@
 import React, { HTMLAttributes, useEffect, useState } from "react";
 import Icon from "../../icons/Icon";
-import { usePlayerEvents } from "../../../hooks/usePlayerEvents";
 import { MediaPlaylistType } from "../../../@types/UseVideoHlsType.model";
 import Dialog from "../../general/Dialog";
 import { DialogTitle } from "../../general/DialogStyle";
-import Locale from "../../locale/Locale";
 import {
 	SettingItemIcon,
 	SettingItemSpan,
@@ -12,6 +10,7 @@ import {
 } from "../red/SettingStyle";
 import { CenterBox } from "../../general/FlexCenter";
 import { useAudio } from "../../../hooks/useAudio";
+import { useVideo } from "../../../hooks/useVideo";
 
 const Mic = ({ onClick }: HTMLAttributes<HTMLElement>) => {
 	const [currentAudioTrack, setCurrentAudioTrack] = useState<
@@ -25,7 +24,8 @@ const Mic = ({ onClick }: HTMLAttributes<HTMLElement>) => {
 		setAudioTracks(getAudioTracks() || []);
 	};
 	const { getAudioTrack, getAudioTracks, changeAudioTrack } = useAudio();
-	usePlayerEvents({ onLoaded: loadLevels });
+	useVideo({ onLoaded: loadLevels });
+
 	useEffect(() => {
 		loadLevels();
 	}, []);
