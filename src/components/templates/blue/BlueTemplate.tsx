@@ -19,7 +19,7 @@ export const cache = createCache({
 	stylisPlugins: [],
 });
 
-const BlueTemeplate = () => {
+const BlueTemplate = () => {
 	const { style } = useVideo();
 	const [isFadeOut, setIsFadeOut] = useState<boolean>(false);
 
@@ -46,7 +46,7 @@ const BlueTemeplate = () => {
 		</CacheProvider>
 	);
 };
-export default BlueTemeplate;
+export default BlueTemplate;
 
 // var source = {
 //     dash: 'https://cdn.bitmovin.com/content/assets/art-of-motion-dash-hls-progressive/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd',

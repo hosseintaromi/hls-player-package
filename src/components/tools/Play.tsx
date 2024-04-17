@@ -5,7 +5,7 @@ import Icon from "../icons/Icon";
 const Play = ({ children }: { children?: ReactNode }) => {
 	const [isPlay, setIsPlay] = useState<boolean>(false);
 
-	const { changePlayPause, autoPlay, getIsPlay } = useVideo({
+	const { changePlayPause, getIsPlay } = useVideo({
 		onPlayPause: (play: boolean) => {
 			console.log("play", play);
 			setIsPlay(play);

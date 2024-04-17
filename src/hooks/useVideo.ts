@@ -8,19 +8,19 @@ import Hls from "hls.js";
 const isSupportedPlatform = Hls.isSupported();
 
 export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
-	const {
+	let {
 		config,
 		setVideoRef: videoRefSetter,
 		getVideoRef,
 		listenOnLoad,
-		hls,
+		hls: contextHls,
 	} = useContext(VideoPlayerContext);
+
 	const timeRef = useRef<number>(0);
 
 	const { checkBuffer } = useBuffer();
 	const { listen, call } =
 		useContextEvents<PlayerEventsType>(VideoPlayerContext);
-	const context = useContext(VideoPlayerContext);
 
 	const loadVideo = useCallback((src: string) => {
 		if (config.type === "HLS" && isSupportedPlatform) {
@@ -31,13 +31,13 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
 	}, []);
 
 	const loadMP4Video = useCallback((src: string) => {
-		context.hls?.destroy();
+		contextHls?.destroy();
 		const videoEl = getVideoRef();
 		if (!videoEl) return;
 		videoEl.src = src;
 		videoEl.load();
 		videoEl.onloadeddata = () => {
-			videoEl.currentTime = context.config.startTime || 0;
+			videoEl.currentTime = config.startTime || 0;
 			listenOnLoad.forEach((listener) => {
 				listener();
 			});
@@ -48,9 +48,9 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
 		const videoEl = getVideoRef();
 		if (!videoEl) return;
 
-		const hls = (context.hls = new Hls({
+		const hls = (contextHls = new Hls({
 			enableWorker: false,
-			startPosition: context.config.startTime || 0,
+			startPosition: config.startTime || 0,
 		}));
 		hls.attachMedia(videoEl);
 
@@ -147,7 +147,7 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
 	config.loadVideo = loadVideo;
 
 	return {
-		hls,
+		hls: contextHls,
 		setVideoRef,
 		getVideoRef,
 		changePlayPause,

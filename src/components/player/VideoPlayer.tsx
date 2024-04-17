@@ -8,7 +8,7 @@ import {
 import VideoPlayerContext from "../../contexts/VideoPlayerContext";
 import PlayerInitializer from "../tools/PlayerInitializer";
 import MobilePlayerTemplate from "../templates/red/MobilePlayerTemplate";
-import BlueTemeplate from "../templates/blue/BlueTemplate";
+import BlueTemplate from "../templates/blue/BlueTemplate";
 import CustomPlayer from "../templates/custom/CustomPlayer";
 
 const PlayerTemplateSelector = ({
@@ -17,7 +17,7 @@ const PlayerTemplateSelector = ({
 	config: PlayerInstance | undefined;
 }) => {
 	if (config?.theme === "Blue") {
-		return <BlueTemeplate />;
+		return <BlueTemplate />;
 	}
 
 	return window.innerWidth < 768 ? (
@@ -49,21 +49,9 @@ const VideoPlayer = ({
 
 	const setVideoRef = (ref: HTMLVideoElement) => {
 		videoRef.current = ref;
-		const state = playerStateRef.current;
-		if (state.speeds) {
-			state.currentSpeed = state.speeds.find(
-				(x) => x.value === ref.playbackRate
-			);
-		}
 	};
 	const getVideoRef = () => {
 		return videoRef.current;
-	};
-	const togglePlay = () => {
-		playListeners.current.forEach((listener) => listener?.(true));
-	};
-	const listenPlayPause = (listener: (play: boolean) => void) => {
-		playListeners.current.push(listener);
 	};
 
 	if (config && src) {
@@ -75,8 +63,6 @@ const VideoPlayer = ({
 			value={{
 				getVideoRef,
 				setVideoRef,
-				togglePlay,
-				listenPlayPause,
 				config: configRef.current,
 				listenOnLoad: listenOnLoad.current,
 				state: playerStateRef.current,

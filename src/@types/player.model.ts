@@ -12,8 +12,6 @@ export type AdsStateType = {
 export interface PlayerContextType {
 	setVideoRef: (ref: HTMLVideoElement) => void;
 	getVideoRef: () => HTMLVideoElement | undefined;
-	togglePlay?: () => void;
-	listenPlayPause?: (listener: (play: boolean) => void) => void;
 	loadVideo?: (src: string) => void;
 	config: PlayerInstance;
 	hls?: Hls;

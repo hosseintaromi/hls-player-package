@@ -1,9 +1,5 @@
 import { useRef } from "react";
-import {
-	PlayerConfigType,
-	PlayerInstance,
-	PlayerLocaleType,
-} from "../@types/player.model";
+import { PlayerConfigType, PlayerInstance } from "../@types/player.model";
 import { useVideo } from "./useVideo";
 import { defaultConfig } from "../config/defaultConfig";
 

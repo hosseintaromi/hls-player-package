@@ -1,20 +1,22 @@
 import { useContext, useEffect } from "react";
-import { AdType, GenericEvents, OnUpdateTimeType } from "../@types";
+import { AdType, OnUpdateTimeType } from "../@types";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { useVideo } from "./useVideo";
 import { useSubTitle } from "./useSubTitle";
 import { useSpeed } from "./useSpeed";
-import useContextEvents from "./useContextEvents";
-import { AdsEventType } from "../@types/ads.model";
+import { useAds } from "./useAds";
 
-export const useAds = (events?: GenericEvents<AdsEventType>) => {
+export const useAds2 = () => {
 	const { config, adsState, state } = useContext(VideoPlayerContext);
 	const { loadMP4Video, loadVideo } = useVideo();
 	const { changeSubtitle, getSubtitles } = useSubTitle();
 	const { changeSpeed, getSpeeds } = useSpeed();
-	const { call, listen } = useContextEvents<AdsEventType>(VideoPlayerContext);
 
 	let adsConfig = config.ads as AdType[];
+
+	useAds({
+		onStartAd: (data) => {},
+	});
 
 	useVideo({
 		onUpdateTime: (e: OnUpdateTimeType) => {
@@ -32,29 +34,26 @@ export const useAds = (events?: GenericEvents<AdsEventType>) => {
 			);
 			let adToShow = adsState.currentAd;
 			if (adToShow) {
-				call.onStartAd?.(adToShow);
-				// adsState.currentSubtitle = getSubtitles().findIndex(
-				// 	(x) => x.is_selected
-				// );
-				// if (getSpeeds())
-				// 	adsState.speed = getSpeeds()?.findIndex(
-				// 		(s) => s.key === state.currentSpeed?.key
-				// 	);
-				// loadMP4Video?.(adToShow.src);
-				// config.startTime = 0;
-				// changeSubtitle(-1);
+				adsState.currentSubtitle = getSubtitles().findIndex(
+					(x) => x.is_selected
+				);
+				if (getSpeeds())
+					adsState.speed = getSpeeds()?.findIndex(
+						(s) => s.key === state.currentSpeed?.key
+					);
+				loadMP4Video?.(adToShow.src);
+				config.startTime = 0;
+				changeSubtitle(-1);
 				adsState.isPlayingAd = true;
 			}
 		},
 		onEnd: () => {
 			loadOriginalVideo();
-			call.onEndAd?.();
 		},
 	});
 
 	const loadOriginalVideo = () => {
 		if (!adsState.isPlayingAd || !config.src || !adsState.currentAd) return;
-
 		loadVideo?.(config.src);
 		config.startTime = adsState.currentAd.startTime;
 		if (adsState.speed !== undefined) changeSpeed(adsState.speed);
@@ -71,14 +70,9 @@ export const useAds = (events?: GenericEvents<AdsEventType>) => {
 			adsState.currentAd?.skipTime &&
 			adsState.currentAd?.skipTime <= adsState.currentTime
 		) {
-			call.onSkipAd?.();
 			loadOriginalVideo();
 		}
 	};
-
-	useEffect(() => {
-		listen(events);
-	}, []);
 
 	return {
 		isPlayingAd: () => adsState.isPlayingAd,
