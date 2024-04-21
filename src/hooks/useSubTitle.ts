@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { SubTitle } from "../@types/player.model";
 import toWebVTT from "../utils/srt-to-vtt";
@@ -6,22 +6,16 @@ import { useVideo } from "./useVideo";
 
 export const useSubTitle = () => {
   const { getVideoRef, state, config } = useVideo();
-  // const { getVideoRef, state, config } = useContext(VideoPlayerContext);
   const context = useContext(VideoPlayerContext);
 
-  const getSubtitle = () => {
-    return context.hls?.subtitleTracks.filter((item) =>
+  const getSubtitle = () =>
+    context.hls?.subtitleTracks.filter((item) =>
       config.subTitle.length ? config.subTitle.includes(item.name) : true,
     );
-  };
 
-  const getCurrentSubtitle = () => {
-    return context.hls?.subtitleTrack;
-  };
+  const getCurrentSubtitle = () => context.hls?.subtitleTrack;
 
-  const getSubtitles = () => {
-    return state.subTitles;
-  };
+  const getSubtitles = () => state.subTitles;
 
   const getTrackById = (trackId: string, tracks: TextTrackList) => {
     for (let i = 0; i < tracks.length; i++) {

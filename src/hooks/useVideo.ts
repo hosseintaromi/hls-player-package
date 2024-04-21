@@ -1,9 +1,9 @@
 import { useCallback, useContext, useEffect, useRef } from "react";
+import Hls from "hls.js";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { GenericEvents, PlayerEventsType } from "../@types/player.model";
 import { useContextEvents } from "./useContextEvents";
 import { useBuffer } from "./useBuffer";
-import Hls from "hls.js";
 
 const isSupportedPlatform = Hls.isSupported();
 
@@ -16,24 +16,12 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     state,
   } = useContext(VideoPlayerContext);
   const context = useContext(VideoPlayerContext);
+  const { checkBuffer } = useBuffer();
 
   const timeRef = useRef<number>(0);
 
-  const { checkBuffer } = useBuffer();
   const { listen, call } =
     useContextEvents<PlayerEventsType>(VideoPlayerContext);
-
-  const loadVideo = useCallback(
-    (src: string, type?: string, startTime?: number) => {
-      const currentType = type || config.type;
-      if (currentType === "HLS" && isSupportedPlatform) {
-        loadHlsVideo(src, startTime);
-      } else {
-        loadMP4Video(src, startTime);
-      }
-    },
-    [],
-  );
 
   const loadMP4Video = useCallback((src: string, startTime?: number) => {
     const currentStartTime = startTime || config.startTime || 0;
@@ -51,6 +39,7 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
         listener();
       });
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadHlsVideo = useCallback((src: string, startTime?: number) => {
@@ -74,7 +63,7 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
         videoEl.src = src;
       }
     });
-    hls.on(Hls.Events.ERROR, function (event, data) {
+    hls.on(Hls.Events.ERROR, (event, data) => {
       if (data) console.log(JSON.stringify(data));
       if (data.fatal) {
         switch (data.type) {
@@ -101,14 +90,33 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
         listener();
       });
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const loadVideo = useCallback(
+    (src: string, type?: string, startTime?: number) => {
+      const currentType = type || config.type;
+      if (currentType === "HLS" && isSupportedPlatform) {
+        loadHlsVideo(src, startTime);
+      } else {
+        loadMP4Video(src, startTime);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
   const changePlayPause = (play: boolean) => {
     const videoRef = getVideoRef();
     if (videoRef) {
-      play ? videoRef.play() : videoRef.pause();
+      if (play) {
+        videoRef.play();
+      } else {
+        videoRef.pause();
+      }
     }
   };
+
   const getIsPlay = () => {
     const videoRef = getVideoRef();
     if (videoRef) {
@@ -139,7 +147,7 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     };
     el.ontimeupdate = () => {
       const currentTime = el.currentTime;
-      if (currentTime != timeRef.current) {
+      if (currentTime !== timeRef.current) {
         timeRef.current = currentTime;
         const percentage = (currentTime / el.duration) * 100;
         checkBuffer();
@@ -157,6 +165,7 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     if (events?.onLoaded) {
       listenOnLoad.push(events?.onLoaded);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   config.loadVideo = loadVideo;
@@ -169,6 +178,7 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     getIsPlay,
     listenOnLoad,
     state,
+    loadVideo,
     config,
   };
 };

@@ -33,8 +33,8 @@ const TimeLine = () => {
   const snapShotBox = useRef<HTMLOutputElement>(null);
 
   const duration = useRef(0);
-  var percentage = 0;
-  var timeOut: ReturnType<typeof setTimeout>;
+  let percentage = 0;
+  let timeOut: ReturnType<typeof setTimeout>;
 
   const { changeTime } = useTime();
   const {
@@ -86,7 +86,7 @@ const TimeLine = () => {
 
     setHoverPercent((offsetX / event.target.clientWidth) * 100);
 
-    const val = hoverPercent ? hoverPercent : 0;
+    const val = hoverPercent || 0;
 
     setHoverValue((val * duration.current) / 100);
   };
@@ -122,10 +122,9 @@ const TimeLine = () => {
           let node: SnapshotModel | undefined;
           text.split("\n").forEach((line: string) => {
             if (node) {
-              node.img =
-                thumbnail.split("/").slice(0, -1).join("/") +
-                "/" +
-                line.split("#xywh=")[0];
+              node.img = `${thumbnail.split("/").slice(0, -1).join("/")}/${
+                line.split("#xywh=")[0]
+              }`;
               const noArr = line.split("#xywh=")[1].split(",");
               node.location = [
                 toInt(noArr[0]),
