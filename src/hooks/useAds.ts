@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { AdType, GenericEvents, OnUpdateTimeType } from "../@types";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { useVideo } from "./useVideo";
@@ -9,10 +9,10 @@ import { AdsEventType } from "../@types/ads.model";
 
 export const useAds = (events?: GenericEvents<AdsEventType>) => {
 	const { config, adsState, state } = useContext(VideoPlayerContext);
-	const { loadMP4Video, loadVideo } = useVideo();
-	const { changeSubtitle, getSubtitles } = useSubTitle();
+	const { changeSubtitle } = useSubTitle();
 	const { changeSpeed, getSpeeds } = useSpeed();
 	const { call, listen } = useContextEvents<AdsEventType>(VideoPlayerContext);
+	const currentAd = useRef<AdType>();
 
 	let adsConfig = config.ads as AdType[];
 
@@ -32,47 +32,22 @@ export const useAds = (events?: GenericEvents<AdsEventType>) => {
 			);
 			let adToShow = adsState.currentAd;
 			if (adToShow) {
-				call.onStartAd?.(adToShow);
-				// adsState.currentSubtitle = getSubtitles().findIndex(
-				// 	(x) => x.is_selected
-				// );
-				// if (getSpeeds())
-				// 	adsState.speed = getSpeeds()?.findIndex(
-				// 		(s) => s.key === state.currentSpeed?.key
-				// 	);
-				// loadMP4Video?.(adToShow.src);
-				// config.startTime = 0;
-				// changeSubtitle(-1);
+				currentAd.current = adToShow;
 				adsState.isPlayingAd = true;
+				call.onStartAd?.(adToShow);
 			}
 		},
 		onEnd: () => {
-			loadOriginalVideo();
-			call.onEndAd?.();
+			call.onEndAd?.(adsState.currentAd?.startTime);
 		},
 	});
-
-	const loadOriginalVideo = () => {
-		if (!adsState.isPlayingAd || !config.src || !adsState.currentAd) return;
-
-		loadVideo?.(config.src);
-		config.startTime = adsState.currentAd.startTime;
-		if (adsState.speed !== undefined) changeSpeed(adsState.speed);
-		changeSubtitle(0);
-
-		// adsState.currentSubtitle !== undefined &&
-		// 	changeSubtitle(adsState.currentSubtitle);
-		adsState.avoidAds = true;
-		adsState.isPlayingAd = false;
-	};
 
 	const skipCurrentAd = () => {
 		if (
 			adsState.currentAd?.skipTime &&
 			adsState.currentAd?.skipTime <= adsState.currentTime
 		) {
-			call.onSkipAd?.();
-			loadOriginalVideo();
+			call.onSkipAd?.(adsState.currentAd?.startTime);
 		}
 	};
 

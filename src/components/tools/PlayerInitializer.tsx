@@ -4,6 +4,7 @@ import { useLocale } from "../../hooks/useLocale";
 import { useSubTitle } from "../../hooks/useSubTitle";
 import { useSpeed } from "../../hooks/useSpeed";
 import { useVideo } from "../../hooks/useVideo";
+import { AdsInitializer } from "./AdsInitializer";
 
 const PlayerInitializer = () => {
 	const context = useContext(VideoPlayerContext);
@@ -32,7 +33,11 @@ const PlayerInitializer = () => {
 		};
 	}, []);
 
-	return <></>;
+	return (
+		<>
+			<AdsInitializer />
+		</>
+	);
 };
 
 export default PlayerInitializer;

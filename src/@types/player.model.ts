@@ -73,7 +73,7 @@ export interface PlayerConfigType {
 }
 
 export interface PlayerInstance extends PlayerConfigType {
-	loadVideo: (src: string) => void;
+	loadVideo: (src: string, type?: string, startTime?: number) => void;
 	changeLocale: (locale: PlayerLocaleType) => void;
 	src?: string;
 }
@@ -152,6 +152,7 @@ export type PlayerState = {
 	currentSubtitle?: SubTitle;
 	subTitles: SubTitle[];
 	currentBuffer?: { index: number; length: number };
+	prevSubtitle?: number;
 };
 
 export type AdType = {

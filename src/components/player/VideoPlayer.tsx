@@ -44,7 +44,6 @@ const VideoPlayer = ({
 	});
 	const configRef = useRef<PlayerInstance>(config || ({ src } as any));
 	const listenOnLoad = useRef<(() => void)[]>([]);
-	const playListeners = useRef<((play: boolean) => void)[]>([]);
 	const videoRef = useRef<HTMLVideoElement>();
 
 	const setVideoRef = (ref: HTMLVideoElement) => {

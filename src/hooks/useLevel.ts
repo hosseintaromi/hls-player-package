@@ -1,7 +1,5 @@
 import { useContext } from "react";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
-import { SubTitle } from "../@types/player.model";
-import toWebVTT from "../utils/srt-to-vtt";
 import { useVideo } from "./useVideo";
 
 export const useLevel = () => {

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { SubTitle } from "../@types/player.model";
 import toWebVTT from "../utils/srt-to-vtt";
@@ -76,7 +76,6 @@ export const useSubTitle = () => {
 
 		if (preTrack) {
 			preTrack.oncuechange = () => {};
-			const subEl: HTMLDivElement = videoRef.nextSibling as any;
 			preTrack.mode = "disabled";
 		}
 
@@ -122,6 +121,12 @@ export const useSubTitle = () => {
 		}
 	};
 
+	const removeSubtitle = () => {
+		changeSubtitle(-1);
+		const videoRef = getVideoRef();
+		if (videoRef) videoRef.innerHTML = "";
+	};
+
 	const initSubtitle = async () => {
 		if (!config || !config.subTitle) {
 			return;
@@ -140,5 +145,6 @@ export const useSubTitle = () => {
 		initSubtitle,
 		getSubtitle,
 		getCurrentSubtitle,
+		removeSubtitle,
 	};
 };
