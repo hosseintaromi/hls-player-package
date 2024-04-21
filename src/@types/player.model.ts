@@ -4,7 +4,6 @@ import { ReactNode } from "react";
 export interface PlayerContextType {
 	setVideoRef: (ref: HTMLVideoElement) => void;
 	getVideoRef: () => HTMLVideoElement | undefined;
-	loadVideo?: LoadVideoFuncType;
 	config: PlayerInstance;
 	hls?: Hls;
 	listenOnLoad: (() => void)[];

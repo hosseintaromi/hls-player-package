@@ -17,7 +17,11 @@ export const defaultConfig: PlayerInstance = {
 	audioTracks: [],
 	subTitle: [],
 	keyControl: true,
-	loadVideo: function (src: string): void {},
+	loadVideo: function (
+		src: string,
+		type?: string,
+		startTime?: number
+	): void {},
 	changeLocale: function (locale: PlayerLocaleType): void {},
 	thumbnail: "",
 	muted: false,

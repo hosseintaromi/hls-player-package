@@ -20,10 +20,8 @@ const PlayerInitializer = () => {
 	};
 
 	useEffect(() => {
-		context.loadVideo = loadVideo;
-		context.config.loadVideo = loadVideo;
 		if (context.config.src) {
-			context.loadVideo(context.config.src);
+			loadVideo(context.config.src);
 		}
 		context.config.changeLocale = changeLocale;
 

@@ -8,11 +8,6 @@ const VideoPlayerContext = createContext<PlayerContextType>({
 	getVideoRef: () => undefined,
 	listenOnLoad: [],
 	state: {} as any,
-	adsState: {
-		isPlayingAd: false,
-		avoidAds: false,
-		currentTime: 0,
-	},
 });
 
 export default VideoPlayerContext;
