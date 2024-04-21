@@ -36,7 +36,10 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
 
 	const loadMP4Video = useCallback((src: string, startTime?: number) => {
 		const currentStartTime = startTime || config.startTime || 0;
+
+		// Clear the onloadeddata event listener if a hls has played before
 		context.hls?.destroy();
+
 		const videoEl = getVideoRef();
 		if (!videoEl) return;
 		videoEl.src = src;
@@ -53,6 +56,10 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
 		const currentStartTime = startTime || config.startTime || 0;
 		const videoEl = getVideoRef();
 		if (!videoEl) return;
+
+		// Clear the onloadeddata event listener if a mp4 has played before
+		videoEl.onloadeddata = null;
+
 		const hls = (context.hls = new Hls({
 			enableWorker: false,
 			startPosition: currentStartTime,

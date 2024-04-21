@@ -1,23 +1,14 @@
 import Hls from "hls.js";
 import { ReactNode } from "react";
 
-export type AdsStateType = {
-	isPlayingAd: boolean;
-	avoidAds: boolean;
-	currentAd?: AdType;
-	currentTime: number;
-	currentSubtitle?: number;
-	speed?: number;
-};
 export interface PlayerContextType {
 	setVideoRef: (ref: HTMLVideoElement) => void;
 	getVideoRef: () => HTMLVideoElement | undefined;
-	loadVideo?: (src: string) => void;
+	loadVideo?: LoadVideoFuncType;
 	config: PlayerInstance;
 	hls?: Hls;
 	listenOnLoad: (() => void)[];
 	state: PlayerState;
-	adsState: AdsStateType;
 }
 
 export type OnUpdateTimeType = {
@@ -60,6 +51,7 @@ export interface PlayerConfigType {
 	thumbnail: string;
 	ads?: AdType[];
 	showToolbarOnAd?: boolean;
+	showAdsAgain?: boolean;
 	startTime?: number;
 	onUpdateTime?: (e: OnUpdateTimeType) => void;
 	// FIXME: we should fix this types
@@ -72,8 +64,14 @@ export interface PlayerConfigType {
 	onReady?: () => void;
 }
 
+export type LoadVideoFuncType = (
+	src: string,
+	type?: string,
+	startTime?: number
+) => void;
+
 export interface PlayerInstance extends PlayerConfigType {
-	loadVideo: (src: string, type?: string, startTime?: number) => void;
+	loadVideo: LoadVideoFuncType;
 	changeLocale: (locale: PlayerLocaleType) => void;
 	src?: string;
 }
@@ -153,6 +151,8 @@ export type PlayerState = {
 	subTitles: SubTitle[];
 	currentBuffer?: { index: number; length: number };
 	prevSubtitle?: number;
+	prevSpeed?: number;
+	currentPlayingAd?: AdType;
 };
 
 export type AdType = {
@@ -160,4 +160,5 @@ export type AdType = {
 	startTime: number;
 	canSkip?: boolean;
 	skipTime?: number;
+	hasPlayed?: boolean;
 };

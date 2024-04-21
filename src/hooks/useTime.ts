@@ -27,10 +27,16 @@ export const useTime = () => {
 		return el?.duration;
 	};
 
+	const getCurrentTime = () => {
+		const el = getVideoRef();
+		return el?.currentTime;
+	};
+
 	return {
 		changeTime,
 		increaseTime,
 		decreaseTime,
 		getDuration,
+		getCurrentTime,
 	};
 };

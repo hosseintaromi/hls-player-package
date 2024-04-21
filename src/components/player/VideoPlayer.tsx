@@ -1,10 +1,6 @@
 import React, { useRef } from "react";
 import PlayerTemplate from "../templates/red/PlayerTemplate";
-import {
-	AdsStateType,
-	PlayerInstance,
-	PlayerState,
-} from "../../@types/player.model";
+import { PlayerInstance, PlayerState } from "../../@types/player.model";
 import VideoPlayerContext from "../../contexts/VideoPlayerContext";
 import PlayerInitializer from "../tools/PlayerInitializer";
 import MobilePlayerTemplate from "../templates/red/MobilePlayerTemplate";
@@ -37,11 +33,6 @@ const VideoPlayer = ({
 	src?: string;
 }) => {
 	const playerStateRef = useRef<PlayerState>({} as any);
-	const AdsStateRef = useRef<AdsStateType>({
-		isPlayingAd: false,
-		avoidAds: false,
-		currentTime: 0,
-	});
 	const configRef = useRef<PlayerInstance>(config || ({ src } as any));
 	const listenOnLoad = useRef<(() => void)[]>([]);
 	const videoRef = useRef<HTMLVideoElement>();
@@ -65,7 +56,6 @@ const VideoPlayer = ({
 				config: configRef.current,
 				listenOnLoad: listenOnLoad.current,
 				state: playerStateRef.current,
-				adsState: AdsStateRef.current,
 			}}
 		>
 			{children ? (
