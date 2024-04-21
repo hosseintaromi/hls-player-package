@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { GenericEvents } from "../@types/player.model";
 
 export const useContextEvents = <Y extends Record<string, string>, T = any>(
-  context: React.Context<T>
+  context: React.Context<T>,
 ) => {
   const listenersRef = useRef<{
     [key: string]: ((data?: any) => void)[];
@@ -12,6 +12,15 @@ export const useContextEvents = <Y extends Record<string, string>, T = any>(
     eventContext.__listeners = {};
     eventContext.__events = {};
   }
+
+  const bindCall = (event: Extract<keyof Y, string>) => {
+    const __listeners = eventContext.__listeners;
+    eventContext.__events[event] = (data?: any) => {
+      (__listeners[event] || []).forEach((listener: any) => {
+        listener?.(data);
+      });
+    };
+  };
 
   const listen = (events?: GenericEvents<Y>) => {
     if (!events) {
@@ -32,17 +41,8 @@ export const useContextEvents = <Y extends Record<string, string>, T = any>(
     }
   };
 
-  const bindCall = (event: Extract<keyof Y, string>) => {
-    const __listeners = eventContext.__listeners;
-    eventContext.__events[event] = (data?: any) => {
-      (__listeners[event] || []).forEach((listener: any) => {
-        listener?.(data);
-      });
-    };
-  };
-
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       const __listeners = eventContext.__listeners;
       const localListeners = listenersRef.current;
       for (let key in localListeners) {
@@ -52,8 +52,10 @@ export const useContextEvents = <Y extends Record<string, string>, T = any>(
           __listeners[key].splice(index, 1);
         });
       }
-    };
-  }, []);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
   return {
     listen,

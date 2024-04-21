@@ -47,6 +47,7 @@ export const useSpeed = () => {
 
   useEffect(() => {
     setSpeed(state.currentSpeed);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return { initSpeeds, changeSpeed, getSpeeds, speed };

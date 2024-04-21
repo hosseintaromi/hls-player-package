@@ -1,8 +1,8 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { AdType, GenericEvents, OnUpdateTimeType } from "../@types";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { useVideo } from "./useVideo";
-import useContextEvents from "./useContextEvents";
+import { useContextEvents } from "./useContextEvents";
 import { AdsEventType } from "../@types/ads.model";
 import { useTime } from "./useTime";
 
@@ -59,6 +59,7 @@ export const useAds = (events?: GenericEvents<AdsEventType>) => {
 
   useEffect(() => {
     listen(events);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {

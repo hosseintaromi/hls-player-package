@@ -91,7 +91,7 @@ export const useSubTitle = () => {
       state.currentSubtitle = nextSubtitle;
       nextSubtitle.is_selected = true;
       nextTrack.mode = "hidden";
-      nextTrack.oncuechange = (e) => {
+      nextTrack.oncuechange = () => {
         const cues: any = nextTrack?.activeCues;
         let cue = cues && cues[0];
         let idx = 0;
