@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useCallback, useRef } from "react";
 import PlayerTemplate from "../templates/red/PlayerTemplate";
 import { PlayerInstance, PlayerState } from "../../@types/player.model";
 import VideoPlayerContext from "../../contexts/VideoPlayerContext";
@@ -40,7 +40,7 @@ const VideoPlayer = ({
   const setVideoRef = (ref: HTMLVideoElement) => {
     videoRef.current = ref;
   };
-  const getVideoRef = () => videoRef.current;
+  const getVideoRef = useCallback(() => videoRef.current, []);
 
   if (config && src) {
     config.src = src;

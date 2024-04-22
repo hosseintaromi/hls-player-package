@@ -2,7 +2,7 @@ import React, { ReactNode, useEffect, useRef } from "react";
 import { useVideo } from "../../hooks/useVideo";
 import VideoPlayerContext from "../../contexts/VideoPlayerContext";
 import { PlayerEventsType } from "../../@types/player.model";
-import useContextEvents from "../../hooks/useContextEvents";
+import { useContextEvents } from "../../hooks/useContextEvents";
 import { useAds } from "../../hooks/useAds";
 import { useTime } from "../../hooks/useTime";
 

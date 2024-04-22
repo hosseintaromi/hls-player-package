@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useVideo } from "../../hooks/useVideo";
+import React, { useEffect, useRef } from "react";
 import styled from "@emotion/styled";
+import { useVideo } from "../../hooks/useVideo";
 
 const VideoTag = styled.video({
   width: "100%",
@@ -35,7 +35,7 @@ const Video = () => {
 
   useEffect(() => {
     setVideoRef?.(videoElRef.current!);
-  }, []);
+  }, [setVideoRef]);
 
   return (
     <>
@@ -46,9 +46,9 @@ const Video = () => {
         muted={muted}
         id="video_player"
         crossOrigin="anonymous"
-      ></VideoTag>
+      />
       <SubtitleTag className="subtitle">
-        <div className="text"></div>
+        <div className="text" />
       </SubtitleTag>
     </>
   );

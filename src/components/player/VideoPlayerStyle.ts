@@ -3,6 +3,7 @@ ui components
 */
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
+
 type ButtonPropsType = {
   animation?: boolean;
 };
@@ -30,7 +31,7 @@ export const ring = keyframes`
     }
 `;
 
-export const VideoWrapper = styled.div(({ theme }) => ({
+export const VideoWrapper = styled.div({
   width: "100%",
   height: "100%",
   position: "relative",
@@ -45,14 +46,14 @@ export const VideoWrapper = styled.div(({ theme }) => ({
   ":after": {
     boxSizing: "border-box",
   },
-}));
+});
 
-export const Video = styled.video(({ theme }) => ({
+export const Video = styled.video({
   width: "100%",
   height: "100%",
   // backgroundColor: theme.colors.videoBg,
   backgroundColor: "#000",
-}));
+});
 
 export const Button = styled.button<ButtonPropsType>((props) => ({
   background: "transparent",
@@ -219,7 +220,7 @@ export const VideoWrapperBlue = styled.div({
 });
 
 export const CustomPlayWrapper = styled.div(
-  ({ theme }) => ({
+  {
     position: "absolute",
     top: "50%",
     left: "50%",
@@ -236,11 +237,12 @@ export const CustomPlayWrapper = styled.div(
       width: "40px",
       height: "auto",
     },
-  }),
+  },
   ({ isFaded }: { isFaded: boolean }) => ({ opacity: isFaded ? 0 : 1 }),
 );
+
 export const PlayJumpIconWrapper = styled.div(
-  ({ theme }) => ({
+  {
     position: "absolute",
     top: "50%",
     left: "50%",
@@ -257,7 +259,7 @@ export const PlayJumpIconWrapper = styled.div(
       width: "40px",
       height: "auto",
     },
-  }),
+  },
   ({ isFaded }: { isFaded: boolean }) => ({ opacity: isFaded ? 0 : 1 }),
 );
 

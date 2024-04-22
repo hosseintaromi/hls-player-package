@@ -124,41 +124,44 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     }
   };
 
-  const setVideoRef = (el?: HTMLVideoElement) => {
-    if (!el) return;
-    videoRefSetter(el);
-    el.onwaiting = () => {
-      call.onLoading?.(true);
-    };
-    el.oncanplay = () => {
-      call.onLoading?.(false);
-    };
-    el.onplay = () => {
-      call.onPlayPause?.(true);
-    };
-    el.onpause = () => {
-      call.onPlayPause?.(false);
-    };
-    el.onended = () => {
-      call.onEnd?.();
-    };
-    el.onloadeddata = () => {
-      call.onReady?.(el);
-    };
-    el.ontimeupdate = () => {
-      const currentTime = el.currentTime;
-      if (currentTime !== timeRef.current) {
-        timeRef.current = currentTime;
-        const percentage = (currentTime / el.duration) * 100;
-        checkBuffer();
-        call.onUpdateTime?.({
-          time: timeRef.current,
-          duration: el.duration,
-          percentage,
-        });
-      }
-    };
-  };
+  const setVideoRef = useCallback(
+    (el?: HTMLVideoElement) => {
+      if (!el) return;
+      videoRefSetter(el);
+      el.onwaiting = () => {
+        call.onLoading?.(true);
+      };
+      el.oncanplay = () => {
+        call.onLoading?.(false);
+      };
+      el.onplay = () => {
+        call.onPlayPause?.(true);
+      };
+      el.onpause = () => {
+        call.onPlayPause?.(false);
+      };
+      el.onended = () => {
+        call.onEnd?.();
+      };
+      el.onloadeddata = () => {
+        call.onReady?.(el);
+      };
+      el.ontimeupdate = () => {
+        const currentTime = el.currentTime;
+        if (currentTime !== timeRef.current) {
+          timeRef.current = currentTime;
+          const percentage = (currentTime / el.duration) * 100;
+          checkBuffer();
+          call.onUpdateTime?.({
+            time: timeRef.current,
+            duration: el.duration,
+            percentage,
+          });
+        }
+      };
+    },
+    [call, checkBuffer, videoRefSetter],
+  );
 
   useEffect(() => {
     listen(events);
