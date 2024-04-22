@@ -46,15 +46,13 @@ const BadgeWrapper = styled.span(({ theme }) => ({
   },
 }));
 
-const Badge = ({ children, isFixed, colors }: BadgePropsType) => {
-  return (
-    <BadgeWrapper
-      className={`${!colors ? "badge-primary" : "badge-" + colors} ${
-        isFixed ? "badge-fixed" : ""
-      }`}
-    >
-      {children}
-    </BadgeWrapper>
-  );
-};
+const Badge = ({ children, isFixed, colors }: BadgePropsType) => (
+  <BadgeWrapper
+    className={`${!colors ? "badge-primary" : `badge-${colors}`} ${
+      isFixed ? "badge-fixed" : ""
+    }`}
+  >
+    {children}
+  </BadgeWrapper>
+);
 export default Badge;
