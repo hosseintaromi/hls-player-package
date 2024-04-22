@@ -1,72 +1,45 @@
-import React, { HTMLAttributes, useState } from "react";
-import Icon from "../../icons/Icon";
-import { useVideo } from "../../../hooks/useVideo";
-import Dialog from "../../general/Dialog";
-import { DialogTitle } from "../../general/DialogStyle";
-import {
-	SettingItemIcon,
-	SettingItemSpan,
-	SettingMenuItem,
-} from "../red/SettingStyle";
-import { CenterBox } from "../../general/FlexCenter";
+import React, { useCallback, useEffect, useState } from "react";
 import { useSpeed } from "../../../hooks/useSpeed";
+import SettingModal from "./SettingModal";
+import { useVideo } from "../../../hooks/useVideo";
 
-const Speed = ({ onClick }: HTMLAttributes<HTMLElement>) => {
-	const { getSpeeds, changeSpeed, speed } = useSpeed();
+const Speed = () => {
+  const [currentSpeed, setCurrentSpeed] = useState<number>();
 
-	const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { getSpeeds, changeSpeed, speed } = useSpeed();
 
-	const setSpeed = (index: number) => {
-		changeSpeed(index);
-	};
+  const setSpeed = (index: number) => {
+    changeSpeed(index);
+    setCurrentSpeed(index);
+  };
 
-	return (
-		<>
-			<Dialog
-				onClose={() => {
-					setIsOpen(false);
-				}}
-				isOpen={isOpen}
-			>
-				<DialogTitle>سرعت پخش</DialogTitle>
-				{getSpeeds()?.map((speedItem, index) => (
-					<SettingMenuItem
-						onClick={() => {
-							setSpeed(index);
-							setIsOpen((pre) => !pre);
-						}}
-						className={`is-reversed ${
-							speedItem.value === speed?.value ? "active" : ""
-						}`}
-						key={index + "speedDialog"}
-					>
-						<CenterBox>
-							<SettingItemIcon
-								className="reversed-icon"
-								style={{
-									display:
-										speedItem.value === speed?.value
-											? "flex"
-											: "none",
-								}}
-							>
-								<Icon isClickable={true} type="checkMark" />
-							</SettingItemIcon>
-							<SettingItemSpan className="reserved-span">
-								{speedItem.key}
-							</SettingItemSpan>
-						</CenterBox>
-					</SettingMenuItem>
-				))}
-			</Dialog>
-			<Icon
-				title={speed?.key + ""}
-				onClick={() => setIsOpen((pre) => !pre)}
-				isClickable={true}
-				type="speed"
-			/>
-		</>
-	);
+  const loadSpeed = useCallback(() => {
+    const speedIndex = getSpeeds()?.findIndex((item) => {
+      if (speed) {
+        return item.value === speed?.value;
+      }
+      return item.value === 1;
+    });
+    setCurrentSpeed(speedIndex);
+  }, [getSpeeds, speed]);
+
+  useVideo({
+    onLoaded: loadSpeed,
+  });
+
+  useEffect(() => {
+    loadSpeed();
+  }, [loadSpeed]);
+
+  return (
+    <SettingModal
+      currentItem={currentSpeed}
+      setItem={setSpeed}
+      title="سرعت پخش"
+      items={getSpeeds()?.map((item) => item.key)}
+      iconType="speed"
+    />
+  );
 };
 
 export default Speed;

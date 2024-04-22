@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { useVideo } from "./useVideo";
 
@@ -8,12 +8,18 @@ export const useAudio = () => {
   } = useVideo();
   const context = useContext(VideoPlayerContext);
 
-  const getAudioTracks = () =>
-    context.hls?.audioTracks.filter((item) =>
-      audioTracks.length ? audioTracks.includes(item.name) : true,
-    );
+  const getAudioTracks = useCallback(
+    () =>
+      context.hls?.audioTracks.filter((item) =>
+        audioTracks.length ? audioTracks.includes(item.name) : true,
+      ),
+    [audioTracks, context.hls?.audioTracks],
+  );
 
-  const getAudioTrack = () => context.hls?.audioTrack;
+  const getAudioTrack = useCallback(
+    () => context.hls?.audioTrack,
+    [context.hls?.audioTrack],
+  );
 
   const changeAudioTrack = (index: number) => {
     if (context.hls) context.hls.audioTrack = index;

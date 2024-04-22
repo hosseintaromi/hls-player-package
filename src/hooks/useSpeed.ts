@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { KeyValue } from "../@types";
 import { useVideo } from "./useVideo";
 
@@ -7,7 +7,7 @@ export const useSpeed = () => {
 
   const [speed, setSpeed] = useState<KeyValue | undefined>(state.currentSpeed);
 
-  const getSpeeds = () => state.speeds;
+  const getSpeeds = useCallback(() => state.speeds, [state.speeds]);
 
   const changeSpeed = (index: number) => {
     const videoRef = getVideoRef();
