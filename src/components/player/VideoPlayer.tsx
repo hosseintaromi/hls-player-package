@@ -5,7 +5,7 @@ import VideoPlayerContext from "../../contexts/VideoPlayerContext";
 import PlayerInitializer from "../tools/PlayerInitializer";
 import MobilePlayerTemplate from "../templates/red/MobilePlayerTemplate";
 import BlueTemplate from "../templates/blue/BlueTemplate";
-import CustomPlayer from "../templates/custom/CustomPlayer";
+import CustomPlayer from "../templates/custom/customPlayer";
 
 const PlayerTemplateSelector = ({
   config,
