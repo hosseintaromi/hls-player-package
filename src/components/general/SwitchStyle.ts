@@ -41,7 +41,7 @@ export const PlaySpanner = styled.div({
   height: "20px",
 });
 
-export const ToggleButton = styled.button(({ theme }) => ({
+export const ToggleButton = styled.button({
   padding: 0,
   border: "none",
   outline: "none",
@@ -54,18 +54,18 @@ export const ToggleButton = styled.button(({ theme }) => ({
   height: "20px",
   width: "40px",
   verticalAlign: "middle",
-}));
+});
 
-export const ButtonTrack = styled.div(({ theme }) => ({
+export const ButtonTrack = styled.div({
   position: "absolute",
   top: 0,
   height: "20px",
   width: "40px",
   borderRadius: "10px",
   backgroundColor: "#ccc",
-}));
+});
 
-export const ButtonCircle = styled.div(({ theme }) => ({
+export const ButtonCircle = styled.div({
   position: "absolute",
   top: 0,
   left: 0,
@@ -73,4 +73,4 @@ export const ButtonCircle = styled.div(({ theme }) => ({
   height: "20px",
   borderRadius: "100%",
   backgroundColor: "#909090",
-}));
+});

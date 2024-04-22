@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import SettingItem from "./SettingItem";
-import { SettingMenu } from "../../general/FlexCenter";
+import { SettingMenu } from "../../general/SettingMenu";
 import SettingHeader from "./SettingHeader";
 import { useVideo } from "../../../hooks/useVideo";
 import Locale from "../../locale/Locale";

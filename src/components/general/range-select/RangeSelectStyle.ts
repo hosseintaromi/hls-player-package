@@ -16,7 +16,7 @@ export const ProgressBar = styled.div(({ theme }) => ({
   transform: "translateY(-50%)",
   left: "0",
   zIndex: "3",
-  backgroundColor: theme.rangeFrontBg
+  backgroundColor: theme.rangeFrontBg,
 }));
 
 export const Thumb = styled.div(({ theme }) => ({
@@ -30,7 +30,7 @@ export const Thumb = styled.div(({ theme }) => ({
   border: `solid 3px ${theme.rangeFrontBg}`,
   borderRadius: "50%",
   zIndex: "4",
-  backgroundColor: theme.rangeFrontBg
+  backgroundColor: theme.rangeFrontBg,
 }));
 
 export const TimeLine = styled.div(({ theme }) => ({
@@ -43,7 +43,7 @@ export const TimeLine = styled.div(({ theme }) => ({
   transform: "translateY(-50%)",
   left: "0",
   zIndex: "1",
-  backgroundColor: theme.rangeBackBg
+  backgroundColor: theme.rangeBackBg,
 }));
 
 export const Slider = styled.input({
@@ -55,8 +55,8 @@ export const Slider = styled.input({
   position: "absolute",
   inset: "0",
   opacity: "0",
-  border: 'none',
-  margin: '0',
+  border: "none",
+  margin: "0",
 
   "::-webkit-slider-thumb": {
     WebkitAppearance: "none",

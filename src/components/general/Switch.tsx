@@ -42,26 +42,22 @@ const Switch = ({ hasIcon }: { hasIcon?: boolean }) => {
                 rx="7"
                 fill="white"
                 fillOpacity="0.5"
-              ></rect>
+              />
             </svg>
           </Spanner>
           {autoPlay === true ? (
             <PauseSpanner>
-              <Icon isClickable={true} type="autoPlayOn" />
+              <Icon isClickable type="autoPlayOn" />
             </PauseSpanner>
           ) : (
             <PlaySpanner>
-              <Icon
-                isClickable={true}
-                onClick={togglePlay}
-                type="autoPlayOff"
-              />
+              <Icon isClickable onClick={togglePlay} type="autoPlayOff" />
             </PlaySpanner>
           )}
         </SwitchButton>
       ) : (
         <ToggleButton onClick={toggleButton}>
-          <ButtonTrack></ButtonTrack>
+          <ButtonTrack />
           <ButtonCircle
             style={
               active
@@ -71,7 +67,7 @@ const Switch = ({ hasIcon }: { hasIcon?: boolean }) => {
                   }
                 : {}
             }
-          ></ButtonCircle>
+          />
         </ToggleButton>
       )}
     </>
