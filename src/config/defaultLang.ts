@@ -8,4 +8,6 @@ export const defaultLocale: PlayerLocaleType = {
   setting_menu_quality_active_list: "سلام پیش فرض",
   setting_menu_quality_list_item_auto: "سلام پیش فرض",
   setting_menu_subtitle_off: "off",
+  can_skip_text: "رد کردن تبلیغ پس از ",
+  skip_text: "رد کردن تبلیغ",
 };

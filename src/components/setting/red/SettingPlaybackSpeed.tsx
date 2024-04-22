@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import SettingItem from "./SettingItem";
-import { SettingMenu } from "../../general/FlexCenter";
+import { SettingMenu } from "../../general/SettingMenu";
 import SettingHeader from "./SettingHeader";
-import { usePlayerContext } from "../../../hooks/usePlayerContext";
+import { useVideo } from "../../../hooks/useVideo";
 import Locale from "../../locale/Locale";
 import Icon from "../../icons/Icon";
 import { pageName, pageDir } from "../../../@types/setting.model";
+import { useSpeed } from "../../../hooks/useSpeed";
 
 type settingPlaybackSpeedPropsType = {
   changePage: (newPageName: pageName, dir: pageDir) => void;
@@ -16,7 +17,7 @@ const SettingPlaybackSpeed = ({
   changePage,
   myRef,
 }: settingPlaybackSpeedPropsType) => {
-  const { getSpeeds, changeSpeed, speed } = usePlayerContext();
+  const { getSpeeds, changeSpeed, speed } = useSpeed();
   const setSpeed = (index: number) => {
     changeSpeed(index);
     changePage(pageName.settingList, pageDir.back);
@@ -28,7 +29,7 @@ const SettingPlaybackSpeed = ({
         <>
           <SettingHeader
             title={<Locale localeKey="setting_menu_change_speed_title" />}
-            hasBackButton={true}
+            hasBackButton
             hasCustomButton={false}
             changePage={changePage}
             backRoute={pageName.settingList}
@@ -39,7 +40,7 @@ const SettingPlaybackSpeed = ({
               onClick={() => setSpeed(index)}
               startIcon={
                 speedItem.value === speed?.value ? (
-                  <Icon isClickable={true} type="checkMark" />
+                  <Icon isClickable type="checkMark" />
                 ) : (
                   <></>
                 )

@@ -1,0 +1,6 @@
+// .eslintignore
+build/*
+dist/*
+public/*
+node_modules/*
+*.min.js

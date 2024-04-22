@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SettingItem from "./SettingItem";
-import { SettingMenu } from "../../general/FlexCenter";
+import { SettingMenu } from "../../general/SettingMenu";
 import SettingHeader from "./SettingHeader";
 import CheckMark from "../../icons/icon-list/CheckMark";
 import Locale from "../../locale/Locale";
@@ -15,7 +15,6 @@ type SettingSubtitleType = {
 };
 
 const SettingSubtitle = ({ changePage, myRef }: SettingSubtitleType) => {
-
   const [subtitles, setSubtitles] = useState<SubTitle[]>();
   const [selectedIndex, setSelectedIndex] = useState<number | undefined>(-1);
   const { getSubtitles, changeSubtitle } = useSubTitle();
@@ -35,13 +34,12 @@ const SettingSubtitle = ({ changePage, myRef }: SettingSubtitleType) => {
     }
   };
 
-
   useEffect(() => {
     loadSubtitles();
   }, []);
 
-  const subtitleListGenerator = () => {
-    return subtitles ? (
+  const subtitleListGenerator = () =>
+    subtitles ? (
       subtitles.map((item, index) => (
         <SettingItem
           key={`subtitleListGenerator${index}`}
@@ -53,12 +51,11 @@ const SettingSubtitle = ({ changePage, myRef }: SettingSubtitleType) => {
     ) : (
       <></>
     );
-  };
   return (
     <SettingMenu myRef={myRef}>
       <SettingHeader
         title={<Locale localeKey="setting_menu_change_subtitle" />}
-        hasBackButton={true}
+        hasBackButton
         hasCustomButton={false}
         changePage={changePage}
         backRoute={pageName.settingList}

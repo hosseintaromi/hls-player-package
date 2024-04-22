@@ -1,8 +1,10 @@
 import React, { ReactNode, useEffect, useRef } from "react";
-import { usePlayerContext } from "../../hooks/usePlayerContext";
+import { useVideo } from "../../hooks/useVideo";
 import VideoPlayerContext from "../../contexts/VideoPlayerContext";
 import { PlayerEventsType } from "../../@types/player.model";
-import useContextEvents from "../../hooks/useContextEvents";
+import { useContextEvents } from "../../hooks/useContextEvents";
+import { useAds } from "../../hooks/useAds";
+import { useTime } from "../../hooks/useTime";
 
 const TouchContainer = ({
   children,
@@ -19,14 +21,13 @@ const TouchContainer = ({
   const isShowToolbarRef = useRef<boolean>();
   const timeoutRef = useRef<NodeJS.Timeout | undefined>();
   const { listen } = useContextEvents<PlayerEventsType>(VideoPlayerContext);
+  const { showToolbar } = useAds();
 
+  const { increaseTime, decreaseTime } = useTime();
   const {
-    timeForHideEl,
+    config: { timeForHideEl, keyControl },
     changePlayPause,
-    increaseTime,
-    decreaseTime,
-    keyControl,
-  } = usePlayerContext({
+  } = useVideo({
     onPlayPause: (play: boolean) => {
       isPlayRef.current = play;
       hideIfIdle();
@@ -41,6 +42,10 @@ const TouchContainer = ({
   };
 
   const hideIfIdle = () => {
+    if (!showToolbar()) {
+      setIsShow(false);
+      return;
+    }
     setIsShow(true);
     if (!isPlayRef.current) return;
     if (timeoutRef.current) {
@@ -91,7 +96,7 @@ const TouchContainer = ({
 
   return (
     <div
-      id="touchkontanier"
+      id="touch-container"
       onMouseMove={hideIfIdle}
       onTouchStart={hideIfIdle}
       onMouseDown={hideIfIdle}

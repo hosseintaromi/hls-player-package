@@ -1,7 +1,4 @@
-import {
-  PlayerInstance,
-  PlayerLocaleType,
-} from "../@types/player.model";
+import { PlayerInstance } from "../@types/player.model";
 import { defaultIcons } from "./defaultIcons";
 import { defaultLocale } from "./defaultLang";
 import { defaultStyle } from "./defaultStyle";
@@ -15,12 +12,13 @@ export const defaultConfig: PlayerInstance = {
   autoPlay: true,
   timeForHideEl: 4000,
   type: "HLS",
-  theme: 'Red',
+  theme: "Red",
   qualities: [],
   audioTracks: [],
   subTitle: [],
   keyControl: true,
-  loadVideo: function (src: string): void { },
-  changeLocale: function (locale: PlayerLocaleType): void { },
-  thumbnail: ""
-}
+  loadVideo(): void {},
+  changeLocale(): void {},
+  thumbnail: "",
+  muted: false,
+};

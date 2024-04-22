@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-import { usePlayerContext } from "../../hooks/usePlayerContext";
+import React, { useEffect, useRef } from "react";
 import styled from "@emotion/styled";
+import { useVideo } from "../../hooks/useVideo";
 
 const VideoTag = styled.video({
   width: "100%",
@@ -16,7 +16,7 @@ const SubtitleTag = styled.div({
   textAlign: "center",
   width: "100%",
   padding: "5px",
-  display: 'none',
+  display: "none",
   "&.on": {
     display: "block",
   },
@@ -26,13 +26,16 @@ const SubtitleTag = styled.div({
 });
 
 const Video = () => {
-  const { setVideoRef, autoPlay, muted } = usePlayerContext();
+  const {
+    setVideoRef,
+    config: { autoPlay, muted },
+  } = useVideo();
 
   const videoElRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     setVideoRef?.(videoElRef.current!);
-  }, []);
+  }, [setVideoRef]);
 
   return (
     <>
@@ -43,9 +46,9 @@ const Video = () => {
         muted={muted}
         id="video_player"
         crossOrigin="anonymous"
-      ></VideoTag>
+      />
       <SubtitleTag className="subtitle">
-        <div className="text"></div>
+        <div className="text" />
       </SubtitleTag>
     </>
   );

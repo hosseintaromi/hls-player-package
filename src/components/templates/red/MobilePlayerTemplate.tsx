@@ -5,14 +5,16 @@ import {
   MobileGradient,
   MobileVideoWrapper,
 } from "../../player/VideoPlayerStyle";
-import { usePlayerContext } from "../../../hooks/usePlayerContext";
+import { useVideo } from "../../../hooks/useVideo";
 import TouchContainer from "../../player/TouchContainer";
-import Loading from "../../loading/Loading";
+import Loading from "../../general/Loading";
 import MobileToolbar from "../../toolbar/MobileToolbar";
 
 const MobilePlayerTemplate = () => {
   const [isFadeOut, setIsFadeOut] = useState<boolean>(false);
-  const { style } = usePlayerContext();
+  const {
+    config: { style },
+  } = useVideo();
   return (
     <ThemeProvider theme={style}>
       <MobileVideoWrapper id="video_wrapper_id">

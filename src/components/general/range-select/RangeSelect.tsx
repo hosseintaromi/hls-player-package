@@ -1,8 +1,20 @@
-import React, { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
-import { GeneralStyleForRange, ProgressBar, Slider, Thumb, TimeLine } from "./RangeSelectStyle";
-import { throttle } from "lodash-es"
+import React, {
+  memo,
+  useCallback,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
+import {
+  GeneralStyleForRange,
+  ProgressBar,
+  Slider,
+  Thumb,
+  TimeLine,
+} from "./RangeSelectStyle";
 import { RangePropsType } from "../../../@types/RangeSelectType.model";
 
+const TimeLineMemo = memo(() => <TimeLine className="timeline" />);
 
 const RangeSelect = ({
   min,
@@ -12,40 +24,50 @@ const RangeSelect = ({
   step,
   onRangeMove,
   onRangeEnd,
-  onRangeStart
+  onRangeStart,
 }: RangePropsType) => {
+  const [currentValue, setCurrentValue] = useState<number>(0);
+  const selectorRef = useRef<HTMLDivElement>(null);
+  const progressBarRef = useRef<HTMLDivElement>(null);
 
+  const toggleThumb = () => {
+    if (selectorRef.current) {
+      const preDisplay = selectorRef.current.style.display;
+      selectorRef.current.style.display =
+        preDisplay === "block" ? "none" : "block";
+    }
+  };
+
+  const calcInputVal = useCallback(
+    (e: number, updateParent: boolean) => {
+      if (updateParent && onChangeCallback) onChangeCallback(e);
+      setCurrentValue(+e);
+      if (selectorRef.current && progressBarRef.current) {
+        selectorRef.current.style.left = `calc(${e}% - 9px)`;
+        progressBarRef.current.style.width = `calc(${e}%)`;
+      }
+    },
+    [onChangeCallback],
+  );
 
   useImperativeHandle(controllerRef, () => ({
     calcInputVal,
-    toggleThumb
+    toggleThumb,
   }));
 
-  const selectorRef = useRef<HTMLDivElement>(null)
-  const progressBarRef = useRef<HTMLDivElement>(null)
-  const [currentValue, setCurrentValue] = useState<number>(0);
-  const [showThumb, setShowThumb] = useState<boolean>(false)
-  const toggleThumb = (isShow: boolean) => {
-    setShowThumb(pre => !pre)
-  }
+  const calcThrottle = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      calcInputVal(+e.target.value, true);
+    },
+    [calcInputVal],
+  );
 
-  const calcInputVal = useCallback((e: number, updateParent: boolean) => {
-    if (updateParent && onChangeCallback)
-      onChangeCallback(e)
-    setCurrentValue(+e);
-    if (selectorRef.current && progressBarRef.current) {
-      selectorRef.current.style.left = `calc(${e}% - 9px)`;
-      progressBarRef.current.style.width = `calc(${e}%)`;
-    }
-  }, []);
-
-  const calcThrottle = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    calcInputVal(+e.target.value, true)
-  }, [])
-
-  const TimeLineMemo = useMemo(() => {
-    return <TimeLine className="timeline" />
-  }, [])
+  const onTouchMove = (e: React.TouchEvent<HTMLInputElement>) => {
+    if (!onRangeMove) return;
+    const rect = (e.target as any).getBoundingClientRect();
+    (e as any).offsetX = e.touches[0].clientX - window.pageXOffset - rect.left;
+    onRangeMove(e);
+  };
 
   return (
     <GeneralStyleForRange>
@@ -55,27 +77,19 @@ const RangeSelect = ({
         min={min}
         max={max}
         value={currentValue}
-        id="slider"
-        onChange={(e) => calcThrottle(e)}
-        onMouseMove={(e) => {
-          onRangeMove?.(e);
-        }}
-        onTouchMove={(e) => {
-          if (!onRangeMove) return;
-          const rect = (e.target as any).getBoundingClientRect();
-          (e as any).offsetX = e.touches[0].clientX - window.pageXOffset - rect.left;
-          onRangeMove(e);
-        }}
+        onChange={calcThrottle}
+        onMouseMove={onRangeMove}
+        onTouchMove={onTouchMove}
         onTouchStart={onRangeStart}
         onTouchEnd={onRangeEnd}
         onMouseDown={onRangeStart}
         onMouseUp={onRangeEnd}
       />
-      <ProgressBar id="progressBar" className="vp-progress" ref={progressBarRef} />
+      <ProgressBar className="vp-progress" ref={progressBarRef} />
 
-      <Thumb id="selector" className="vp-thumb" ref={selectorRef} />
+      <Thumb className="vp-thumb" ref={selectorRef} />
 
-      {TimeLineMemo}
+      <TimeLineMemo />
     </GeneralStyleForRange>
   );
 };
