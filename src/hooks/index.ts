@@ -1,5 +1,5 @@
 export { usePlayer } from "./usePlayer";
-export { useVideo as usePlayerContext } from "./useVideo";
+export { useVideo } from "./useVideo";
 export { useFullscreen } from "./useFullscreen";
 export { useSubTitle } from "./useSubTitle";
 export { useAds } from "./useAds";
