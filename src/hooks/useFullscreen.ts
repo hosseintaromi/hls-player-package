@@ -1,9 +1,9 @@
-import { RefObject, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export const useFullscreen = (
   changed: (isFullscreen: boolean) => void,
   elRef: HTMLElement | null,
-  videoTagRef: HTMLElement | null
+  videoTagRef: HTMLElement | null,
 ) => {
   const [userAgent, setUserAgent] = useState("");
 
@@ -16,15 +16,13 @@ export const useFullscreen = (
     if (elRef && videoTagRef) {
       if (userAgent.search("iPhone") < 0) {
         return elRef;
-      } else {
-        return videoTagRef;
       }
-    } else {
-      return document.getElementsByTagName("body")[0];
+      return videoTagRef;
     }
+    return document.getElementsByTagName("body")[0];
   };
   const checkFullscreen = () => {
-    //TODO: how to fix this any
+    // TODO: how to fix this any
     const doc: any = document;
     return (
       doc.webkitIsFullScreen ||
@@ -34,7 +32,7 @@ export const useFullscreen = (
     );
   };
   const fullscreen = () => {
-    //TODO: how to fix this any
+    // TODO: how to fix this any
     const el: any = checkElement();
 
     if (!el) return;
@@ -49,7 +47,7 @@ export const useFullscreen = (
     }
   };
   const exitFullscreen = () => {
-    //TODO: how to fix this any
+    // TODO: how to fix this any
     const doc: any = document;
 
     if (doc.mozCancelFullScreen) {

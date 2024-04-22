@@ -4,10 +4,10 @@ import { defaultConfig } from "../config/defaultConfig";
 
 const VideoPlayerContext = createContext<PlayerContextType>({
   config: defaultConfig,
-  setVideoRef: (ref) => {},
+  setVideoRef: () => {},
   getVideoRef: () => undefined,
   listenOnLoad: [],
-  state: {},
+  state: {} as any,
 });
 
 export default VideoPlayerContext;

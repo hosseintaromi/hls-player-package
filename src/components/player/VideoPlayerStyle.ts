@@ -3,6 +3,7 @@ ui components
 */
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
+
 type ButtonPropsType = {
   animation?: boolean;
 };
@@ -22,15 +23,15 @@ export const bounce = keyframes`
 
 export const ring = keyframes`
 
-from {
-    transform: rotate(0deg);
-  }
-  to{
+  from {
+      transform: rotate(0deg);
+    }
+  to {
     transform: rotate(360deg);
-  }
-}`
+    }
+`;
 
-export const VideoWrapper = styled.div(({ theme }) => ({
+export const VideoWrapper = styled.div({
   width: "100%",
   height: "100%",
   position: "relative",
@@ -45,14 +46,14 @@ export const VideoWrapper = styled.div(({ theme }) => ({
   ":after": {
     boxSizing: "border-box",
   },
-}));
+});
 
-export const Video = styled.video(({ theme }) => ({
+export const Video = styled.video({
   width: "100%",
   height: "100%",
   // backgroundColor: theme.colors.videoBg,
   backgroundColor: "#000",
-}));
+});
 
 export const Button = styled.button<ButtonPropsType>((props) => ({
   background: "transparent",
@@ -67,22 +68,27 @@ export const Button = styled.button<ButtonPropsType>((props) => ({
   },
 }));
 
-export const PlayIconWrapper = styled.div({
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  zIndex: "300",
-  background: 'rgba(0,0,0,.5)',
-  borderRadius: '26px',
-  width: '52px',
-  height: '52px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  fontSize: '40px',
-},
-  ({ isClicked }: { isClicked: boolean }) => ({ animation: isClicked ? `${bounce} .5s linear 1 normal forwards` : 'none', opacity: isClicked ? 1 : 0 }));
+export const PlayIconWrapper = styled.div(
+  {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    zIndex: "300",
+    background: "rgba(0,0,0,.5)",
+    borderRadius: "26px",
+    width: "52px",
+    height: "52px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "40px",
+  },
+  ({ isClicked }: { isClicked: boolean }) => ({
+    animation: isClicked ? `${bounce} .5s linear 1 normal forwards` : "none",
+    opacity: isClicked ? 1 : 0,
+  }),
+);
 
 export const TopRightWrapper = styled.div({
   zIndex: "4",
@@ -135,18 +141,19 @@ export const ToolBarPlayIcon = styled.div({
   height: "100%",
 });
 
-export const Gradient = styled.div(({ theme }) => ({
-  transition: "opacity .25s cubic-bezier(0,0,.2,1)",
-  paddingTop: "37px",
-  bottom: 0,
-  zIndex: 24,
-  width: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  background: `${theme.toolbarBg}`,
-  height: '211px',
-}),
-  ({ isFaded }: { isFaded: boolean }) => ({ opacity: isFaded ? 0 : 1 })
+export const Gradient = styled.div(
+  ({ theme }) => ({
+    transition: "opacity .25s cubic-bezier(0,0,.2,1)",
+    paddingTop: "37px",
+    bottom: 0,
+    zIndex: 24,
+    width: "100%",
+    position: "absolute",
+    pointerEvents: "none",
+    background: `${theme.toolbarBg}`,
+    height: "211px",
+  }),
+  ({ isFaded }: { isFaded: boolean }) => ({ opacity: isFaded ? 0 : 1 }),
 );
 
 export const MobileVideoWrapper = styled.div({
@@ -165,17 +172,18 @@ export const MobileVideoWrapper = styled.div({
   },
 });
 
-export const MobileGradient = styled.div(({ theme }) => ({
-  transition: "opacity .25s cubic-bezier(0,0,.2,1)",
-  top: 0,
-  bottom: 0,
-  zIndex: 24,
-  width: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  background: `${theme.toolbarBg}`,
-}),
-  ({ isFaded }: { isFaded: boolean }) => ({ opacity: isFaded ? 0 : 1 })
+export const MobileGradient = styled.div(
+  ({ theme }) => ({
+    transition: "opacity .25s cubic-bezier(0,0,.2,1)",
+    top: 0,
+    bottom: 0,
+    zIndex: 24,
+    width: "100%",
+    position: "absolute",
+    pointerEvents: "none",
+    background: `${theme.toolbarBg}`,
+  }),
+  ({ isFaded }: { isFaded: boolean }) => ({ opacity: isFaded ? 0 : 1 }),
 );
 
 export const CustomVideoWrapper = styled.div({
@@ -211,72 +219,77 @@ export const VideoWrapperBlue = styled.div({
   },
 });
 
-export const CustomPlayWrapper = styled.div(({ theme }) => ({
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  zIndex: "300",
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  transition: "opacity .25s cubic-bezier(0,0,.2,1)",
-  width: '100%',
-  maxWidth: '350px',
+export const CustomPlayWrapper = styled.div(
+  {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    zIndex: "300",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    transition: "opacity .25s cubic-bezier(0,0,.2,1)",
+    width: "100%",
+    maxWidth: "350px",
 
-  "svg": {
-    width: '40px',
-    height: 'auto'
-  }
-}),
-  ({ isFaded }: { isFaded: boolean }) => ({ opacity: isFaded ? 0 : 1 })
-);
-export const PlayJumpIconWrapper = styled.div(({ theme }) => ({
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  zIndex: "300",
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  transition: "opacity .25s cubic-bezier(0,0,.2,1)",
-  width: '100%',
-  maxWidth: '350px',
-
-  "svg": {
-    width: '40px',
-    height: 'auto'
-  }
-}),
-  ({ isFaded }: { isFaded: boolean }) => ({ opacity: isFaded ? 0 : 1 })
+    svg: {
+      width: "40px",
+      height: "auto",
+    },
+  },
+  ({ isFaded }: { isFaded: boolean }) => ({ opacity: isFaded ? 0 : 1 }),
 );
 
-export const PlayJumpIcon = styled.div({
-  background: 'rgba(0,0,0,.5)',
-  borderRadius: '50%',
-  width: '72px',
-  height: '72px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+export const PlayJumpIconWrapper = styled.div(
+  {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    zIndex: "300",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    transition: "opacity .25s cubic-bezier(0,0,.2,1)",
+    width: "100%",
+    maxWidth: "350px",
 
-  "svg": {
-    width: '58px'
-  }
-},
-  ({ isClicked }: { isClicked: boolean }) => ({ opacity: isClicked ? 1 : 0 }));
+    svg: {
+      width: "40px",
+      height: "auto",
+    },
+  },
+  ({ isFaded }: { isFaded: boolean }) => ({ opacity: isFaded ? 0 : 1 }),
+);
+
+export const PlayJumpIcon = styled.div(
+  {
+    background: "rgba(0,0,0,.5)",
+    borderRadius: "50%",
+    width: "72px",
+    height: "72px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+
+    svg: {
+      width: "58px",
+    },
+  },
+  ({ isClicked }: { isClicked: boolean }) => ({ opacity: isClicked ? 1 : 0 }),
+);
 
 export const PlayJumpIconFix = styled.div({
-  background: 'rgba(0,0,0,.5)',
-  borderRadius: '50%',
-  width: '72px',
-  height: '72px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+  background: "rgba(0,0,0,.5)",
+  borderRadius: "50%",
+  width: "72px",
+  height: "72px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
 
-  "svg": {
-    width: '58px'
-  }
-})
+  svg: {
+    width: "58px",
+  },
+});

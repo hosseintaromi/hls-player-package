@@ -1,11 +1,12 @@
 import React, { ReactNode, useRef } from "react";
 import VideoPlayerContext from "../../contexts/VideoPlayerContext";
 import { PlayerEventsType } from "../../@types/player.model";
-import useContextEvents from "../../hooks/useContextEvents";
+import { useContextEvents } from "../../hooks/useContextEvents";
 
 const SensitiveArea = ({ children }: { children: ReactNode }) => {
   const mouseEnterRef = useRef<boolean>();
   const timeoutRef = useRef<NodeJS.Timeout | undefined>();
+
   const { call } = useContextEvents<PlayerEventsType>(VideoPlayerContext);
 
   const onMouseEnter = (enter: boolean) => {
@@ -13,7 +14,7 @@ const SensitiveArea = ({ children }: { children: ReactNode }) => {
       clearTimeout(timeoutRef.current);
     }
     timeoutRef.current = setTimeout(() => {
-      if (mouseEnterRef.current != enter) {
+      if (mouseEnterRef.current !== enter) {
         mouseEnterRef.current = enter;
         call.onActivateControls?.(enter);
       }

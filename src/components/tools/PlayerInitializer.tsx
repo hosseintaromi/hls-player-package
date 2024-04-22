@@ -1,25 +1,65 @@
-import React, { useContext, useEffect } from 'react'
-import { usePlayerEvents } from '../../hooks/usePlayerEvents';
-import VideoPlayerContext from '../../contexts/VideoPlayerContext';
-import { useLocale } from '../../hooks/useLocale';
+import React, { useContext, useEffect } from "react";
+import VideoPlayerContext from "../../contexts/VideoPlayerContext";
+import { useLocale } from "../../hooks/useLocale";
+import { useSubTitle } from "../../hooks/useSubTitle";
+import { useSpeed } from "../../hooks/useSpeed";
+import { useVideo } from "../../hooks/useVideo";
+import { useAds } from "../../hooks";
+import { AdType } from "../../@types";
 
 const PlayerInitializer = () => {
-    const { loadVideo } = usePlayerEvents();
-    const context = useContext(VideoPlayerContext);
-    const { changeLocale } = useLocale({});
+  const context = useContext(VideoPlayerContext);
 
-    useEffect(() => {
-        context.loadVideo = loadVideo;
-        context.config.loadVideo = loadVideo;
-        if (context.config.src) {
-            context.loadVideo(context.config.src)
-        }
-        context.config.changeLocale = changeLocale;
-    }, [])
+  const { loadVideo, config, state } = useVideo();
+  const { changeLocale } = useLocale({});
+  const { initSubtitle, changeSubtitle, getSubtitles, removeSubtitle } =
+    useSubTitle();
+  const { initSpeeds, changeSpeed, getSpeeds } = useSpeed();
 
-    return (
-        <></>
-    )
-}
+  const initConfig = () => {
+    initSpeeds();
+    initSubtitle();
+  };
 
-export default PlayerInitializer
+  const loadOriginalVideo = (startTime: number) => {
+    if (!config.src) return;
+    loadVideo?.(config.src, config.type, startTime);
+
+    if (state.prevSpeed !== undefined) changeSpeed(state.prevSpeed);
+    if (state.prevSubtitle !== undefined) changeSubtitle(state.prevSubtitle);
+  };
+
+  useAds({
+    onStartAd: (data: AdType) => {
+      state.prevSubtitle = getSubtitles().findIndex((x) => x.is_selected);
+      if (getSpeeds())
+        state.prevSpeed = getSpeeds()?.findIndex(
+          (s) => s.key === state.currentSpeed?.key,
+        );
+      loadVideo?.(data.src, "MP4", 0);
+      removeSubtitle();
+    },
+    onSkipAd: (startTime: number) => {
+      loadOriginalVideo(startTime);
+    },
+    onEndAd: (startTime: number) => {
+      loadOriginalVideo(startTime);
+    },
+  });
+
+  useEffect(() => {
+    if (context.config.src) {
+      loadVideo(context.config.src);
+    }
+    context.config.changeLocale = changeLocale;
+
+    initConfig();
+    return () => {
+      context.hls?.destroy();
+    };
+  }, []);
+
+  return <></>;
+};
+
+export default PlayerInitializer;

@@ -1,42 +1,57 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { usePlayerContext } from '../../hooks/usePlayerContext'
-import styled from '@emotion/styled'
-
+import React, { useEffect, useRef } from "react";
+import styled from "@emotion/styled";
+import { useVideo } from "../../hooks/useVideo";
 
 const VideoTag = styled.video({
-    width: "100%",
-    height: "100%",
-    display: 'block',
-    backgroundColor: '#000'
+  width: "100%",
+  height: "100%",
+  display: "block",
+  backgroundColor: "#000",
 });
+
+const SubtitleTag = styled.div({
+  position: "absolute",
+  color: "#fff",
+  bottom: "120px",
+  textAlign: "center",
+  width: "100%",
+  padding: "5px",
+  display: "none",
+  "&.on": {
+    display: "block",
+  },
+  "&.off": {
+    display: "none",
+  },
+});
+
 const Video = () => {
-    const { setVideoRef, autoPlay } = usePlayerContext()
-    const [mode, setMode] = useState('')
-    const videoRef = useRef<HTMLVideoElement>(null)
-    useEffect(() => {
-        setVideoRef?.(videoRef.current!)
-    }, [])
+  const {
+    setVideoRef,
+    config: { autoPlay, muted },
+  } = useVideo();
 
-    // const showMe = () => {
+  const videoElRef = useRef<HTMLVideoElement>(null);
 
-    //     console.log('first')
-    //     let trackElem = document.querySelector("track")!;
-    //     let track = trackElem.track as any;
-    //     track.mode = "showing";
+  useEffect(() => {
+    setVideoRef?.(videoElRef.current!);
+  }, [setVideoRef]);
 
-    //     for (const cue of track.cues) {
+  return (
+    <>
+      <VideoTag
+        ref={videoElRef}
+        autoPlay={autoPlay}
+        playsInline
+        muted={muted}
+        id="video_player"
+        crossOrigin="anonymous"
+      />
+      <SubtitleTag className="subtitle">
+        <div className="text" />
+      </SubtitleTag>
+    </>
+  );
+};
 
-    //         cue.pauseOnExit = true;
-    //     }
-
-    // }
-
-    return (
-
-        <VideoTag ref={videoRef} autoPlay={autoPlay} playsInline muted id='video_player' crossOrigin='anonymous'>
-            {/* <track label="p2" kind="subtitles" srcLang="en" src="https://brenopolanski.github.io/html5-video-webvtt-example/MIB2-subtitles-pt-BR.vtt" default /> */}
-        </VideoTag>
-    )
-}
-
-export default Video
+export default Video;

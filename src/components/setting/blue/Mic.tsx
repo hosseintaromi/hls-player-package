@@ -1,55 +1,36 @@
-import React, { HTMLAttributes, useEffect, useState } from 'react'
-import Icon from '../../icons/Icon'
-import { usePlayerEvents } from '../../../hooks/usePlayerEvents'
-import { MediaPlaylistType } from '../../../@types/UseVideoHlsType.model'
-import Dialog from '../../general/Dialog'
-import { DialogTitle } from '../../general/DialogStyle'
-import Locale from '../../locale/Locale'
-import { SettingItemIcon, SettingItemSpan, SettingMenuItem } from '../red/SettingStyle'
-import { CenterBox } from '../../general/FlexCenter'
+import React, { useCallback, useState } from "react";
+import { MediaPlaylistType } from "../../../@types/UseVideoHlsType.model";
+import { useAudio } from "../../../hooks/useAudio";
+import SettingModal from "./SettingModal";
 
-const Mic = ({ onClick }: HTMLAttributes<HTMLElement>) => {
-    const [currentAudioTrack, setCurrentAudioTrack] = useState<number | undefined>()
-    const [audioTracks, setAudioTracks] = useState<MediaPlaylistType>()
-    const [isOpen, setIsOpen] = useState<boolean>(false);
+const Mic = () => {
+  const [currentAudioTrack, setCurrentAudioTrack] = useState<
+    number | undefined
+  >();
+  const [audioTracks, setAudioTracks] = useState<MediaPlaylistType>();
 
-    const loadLevels = () => {
-        setCurrentAudioTrack(getAudioTrack())
-        setAudioTracks(getAudioTracks() || [])
-    }
-    const { getAudioTrack, getAudioTracks, changeAudioTrack } = usePlayerEvents({ onLoaded: loadLevels })
-    useEffect(() => {
-        loadLevels()
-    }, [])
+  const { getAudioTrack, getAudioTracks, changeAudioTrack } = useAudio();
 
-    const setAudioTrack = (index: number) => {
-        changeAudioTrack(index)
-        setCurrentAudioTrack(index)
-    }
-    return (
-        <>
-            <Dialog onClose={() => { setIsOpen(false) }} isOpen={isOpen} >
-                <DialogTitle>زبان پخش</DialogTitle>
-                {audioTracks?.map((item, index) => (
-                    <SettingMenuItem
-                        onClick={() => { setAudioTrack(index); setIsOpen(pre => !pre) }}
-                        className={`is-reversed ${currentAudioTrack === index ? 'active' : ''}`} key={index + 'MicDialog'}
-                    >
-                        <CenterBox>
-                            <SettingItemIcon className='reversed-icon' style={{ display: currentAudioTrack === index ? 'flex' : 'none' }}>
-                                <Icon isClickable={true} type='checkMark' />
-                            </SettingItemIcon>
-                            <SettingItemSpan className='reserved-span'>
-                                {item.name}
-                            </SettingItemSpan>
-                        </CenterBox>
-                    </SettingMenuItem>
-                ))}
+  const loadLevels = useCallback(() => {
+    setCurrentAudioTrack(getAudioTrack());
+    setAudioTracks(getAudioTracks() || []);
+  }, [getAudioTrack, getAudioTracks]);
 
-            </Dialog>
-            <Icon onClick={() => setIsOpen(pre => !pre)} isClickable={true} type="mic" />
-        </>
-    )
-}
+  const setAudioTrack = (index: number) => {
+    changeAudioTrack(index);
+    setCurrentAudioTrack(index);
+  };
 
-export default Mic
+  return (
+    <SettingModal
+      onLoadedFunction={loadLevels}
+      currentItem={currentAudioTrack}
+      setItem={setAudioTrack}
+      title="زبان پخش"
+      items={audioTracks?.map((item) => item.name)}
+      iconType="mic"
+    />
+  );
+};
+
+export default Mic;

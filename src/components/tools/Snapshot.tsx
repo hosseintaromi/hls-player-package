@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { formatDuration } from "../../utils/player-utils";
 
 export interface SnapshotModel {
   img: string;
@@ -11,6 +12,7 @@ interface SnapshotPropsType {
   time: any;
 }
 const cashedImages: any = {};
+
 const loadSnapshotImage = (src: string, loaded: () => void) => {
   let cashedImage = cashedImages[src];
   if (!cashedImage) {
@@ -37,6 +39,7 @@ const Snapshot = ({ snapshots, time }: SnapshotPropsType) => {
 
   const findSnapshot = (time: number) =>
     snapshots.find((x) => x.startTime < time && x.endTime >= time);
+
   useEffect(() => {
     const found = findSnapshot(time);
     if (!found) return;
@@ -44,18 +47,24 @@ const Snapshot = ({ snapshots, time }: SnapshotPropsType) => {
       setSnapshot(found);
     });
   }, [time]);
+
   return (
     <>
       {snapshot && (
-        <div
-          id="snapshot"
-          style={{
-            backgroundImage: `url("${snapshot.img}")`,
-            width: `${snapshot.location[2]}px`,
-            height: `${snapshot.location[3]}px`,
-            backgroundPosition: `-${snapshot.location[0]}px -${snapshot.location[1]}px `,
-          }}
-        />
+        <>
+          <div
+            id="snapshot"
+            style={{
+              backgroundImage: `url("${snapshot.img}")`,
+              width: `${snapshot.location[2]}px`,
+              height: `${snapshot.location[3]}px`,
+              backgroundPosition: `-${snapshot.location[0]}px -${snapshot.location[1]}px `,
+            }}
+          />
+          <div style={{ marginTop: '5px' }}>
+            {formatDuration(time)}
+          </div>
+        </>
       )}
     </>
   );

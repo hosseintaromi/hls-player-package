@@ -1,4 +1,11 @@
 export { usePlayer } from "./usePlayer";
-export { usePlayerContext } from "./usePlayerContext";
+export { useVideo } from "./useVideo";
 export { useFullscreen } from "./useFullscreen";
-export { usePlayerEvents } from "./usePlayerEvents";
+export { useSubTitle } from "./useSubTitle";
+export { useAds } from "./useAds";
+export { useAudio } from "./useAudio";
+export { useBuffer } from "./useBuffer";
+export { useLevel } from "./useLevel";
+export { useSpeed } from "./useSpeed";
+export { useTime } from "./useTime";
+export { useVolume } from "./useVolume";
