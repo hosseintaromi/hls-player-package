@@ -7,7 +7,7 @@ import {
 } from "../../player/VideoPlayerStyle";
 import { useVideo } from "../../../hooks/useVideo";
 import TouchContainer from "../../player/TouchContainer";
-import Loading from "../../loading/Loading";
+import Loading from "../../general/Loading";
 import MobileToolbar from "../../toolbar/MobileToolbar";
 
 const MobilePlayerTemplate = () => {

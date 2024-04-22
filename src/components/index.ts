@@ -1,7 +1,7 @@
 export { default as PlayerTemplate } from "./templates/red/PlayerTemplate";
 export { default as VideoPlayer } from "./player/VideoPlayer";
 export { default as Play } from "./tools/Play";
-export { default as Loading } from "./loading/Loading";
+export { default as Loading } from "./general/Loading";
 export { default as TouchContainer } from "./player/TouchContainer";
 export { default as SensitiveArea } from "./player/SensitiveArea";
 export { default as Video } from "./player/Video";

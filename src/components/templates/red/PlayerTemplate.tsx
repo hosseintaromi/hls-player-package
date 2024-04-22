@@ -10,7 +10,7 @@ import { useVideo } from "../../../hooks/useVideo";
 import Toolbar from "../../toolbar/Toolbar";
 import TouchContainer from "../../player/TouchContainer";
 import Play from "../../tools/Play";
-import Loading from "../../loading/Loading";
+import Loading from "../../general/Loading";
 
 const PlayerTemplate = () => {
   const [isFadeOut, setIsFadeOut] = useState<boolean>(false);

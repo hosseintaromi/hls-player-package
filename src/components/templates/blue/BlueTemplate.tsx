@@ -6,7 +6,7 @@ import {
   PlayJumpIconWrapper,
   VideoWrapperBlue,
 } from "../../player/VideoPlayerStyle";
-import Loading from "../../loading/Loading";
+import Loading from "../../general/Loading";
 import TouchContainer from "../../player/TouchContainer";
 import Video from "../../player/Video";
 import Play from "../../tools/Play";
