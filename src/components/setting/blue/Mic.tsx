@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { MediaPlaylistType } from "../../../@types/UseVideoHlsType.model";
 import { useAudio } from "../../../hooks/useAudio";
-import { useVideo } from "../../../hooks/useVideo";
 import SettingModal from "./SettingModal";
 
 const Mic = () => {
@@ -17,12 +16,6 @@ const Mic = () => {
     setAudioTracks(getAudioTracks() || []);
   }, [getAudioTrack, getAudioTracks]);
 
-  useVideo({ onLoaded: loadLevels });
-
-  useEffect(() => {
-    loadLevels();
-  }, [loadLevels]);
-
   const setAudioTrack = (index: number) => {
     changeAudioTrack(index);
     setCurrentAudioTrack(index);
@@ -30,6 +23,7 @@ const Mic = () => {
 
   return (
     <SettingModal
+      onLoadedFunction={loadLevels}
       currentItem={currentAudioTrack}
       setItem={setAudioTrack}
       title="زبان پخش"

@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useSpeed } from "../../../hooks/useSpeed";
 import SettingModal from "./SettingModal";
-import { useVideo } from "../../../hooks/useVideo";
 
 const Speed = () => {
   const [currentSpeed, setCurrentSpeed] = useState<number>();
@@ -23,16 +22,9 @@ const Speed = () => {
     setCurrentSpeed(speedIndex);
   }, [getSpeeds, speed]);
 
-  useVideo({
-    onLoaded: loadSpeed,
-  });
-
-  useEffect(() => {
-    loadSpeed();
-  }, [loadSpeed]);
-
   return (
     <SettingModal
+      onLoadedFunction={loadSpeed}
       currentItem={currentSpeed}
       setItem={setSpeed}
       title="سرعت پخش"

@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useLevel } from "../../../hooks/useLevel";
-import { useVideo } from "../../../hooks/useVideo";
 import SettingModal from "./SettingModal";
 
 const Quality = () => {
@@ -15,21 +14,14 @@ const Quality = () => {
     setCurrentLevel(currLevel === undefined ? -1 : currLevel);
   }, [getCurrentLevel]);
 
-  useVideo({
-    onLoaded: loadLevels,
-  });
-
   const setQuality = (index: number) => {
     changeLevel(index);
     setCurrentLevel(index);
   };
 
-  useEffect(() => {
-    loadLevels();
-  }, [loadLevels]);
-
   return (
     <SettingModal
+      onLoadedFunction={loadLevels}
       currentItem={currentLevel}
       setItem={setQuality}
       title="کیفیت پخش"

@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useSubTitle } from "../../../hooks/useSubTitle";
 import SettingModal from "./SettingModal";
-import { useVideo } from "../../../hooks/useVideo";
 
 const Subtitle = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | undefined>(-1);
@@ -21,16 +20,9 @@ const Subtitle = () => {
     }
   }, [getSubtitles]);
 
-  useVideo({
-    onLoaded: loadSubtitles,
-  });
-
-  useEffect(() => {
-    loadSubtitles();
-  }, [loadSubtitles]);
-
   return (
     <SettingModal
+      onLoadedFunction={loadSubtitles}
       currentItem={selectedIndex}
       setItem={setSubtitle}
       title="زیرنویس"

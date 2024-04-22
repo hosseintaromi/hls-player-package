@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Icon from "../../icons/Icon";
 import Dialog from "../../general/Dialog";
 import { DialogTitle } from "../../general/DialogStyle";
@@ -10,11 +10,13 @@ import {
 import { CenterBox } from "../../general/FlexCenter";
 import { IconsType, PlayerLocaleType } from "../../../@types";
 import Locale from "../../locale/Locale";
+import { useVideo } from "../../../hooks/useVideo";
 
 type SettingModalType = {
   title: string;
   setItem: (index: number) => void;
   iconType: keyof IconsType;
+  onLoadedFunction: () => void;
   lastItemLocale?: keyof PlayerLocaleType;
   currentItem?: number;
   items?: (string | number)[];
@@ -27,8 +29,17 @@ const SettingModal = ({
   currentItem,
   iconType,
   lastItemLocale,
+  onLoadedFunction,
 }: SettingModalType) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  useVideo({
+    onLoaded: onLoadedFunction,
+  });
+
+  useEffect(() => {
+    onLoadedFunction();
+  }, [onLoadedFunction]);
 
   return (
     <>
