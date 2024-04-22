@@ -1,7 +1,6 @@
-import { HTMLAttributes } from "react";
-import { IconsType } from "../../@types/player.model";
+import React, { HTMLAttributes } from "react";
 import styled from "@emotion/styled";
-import React from "react";
+import { IconsType } from "../../@types/player.model";
 import { useVideo } from "../../hooks/useVideo";
 
 const IconWrapperStyle = styled.div(
@@ -19,10 +18,12 @@ const IconWrapperStyle = styled.div(
     cursor: isClickable ? "pointer" : "default",
   }),
 );
+
 type IconType = {
   type: keyof IconsType;
   isClickable: boolean;
 } & HTMLAttributes<HTMLElement>;
+
 const Icon = ({ type, onClick, ...other }: IconType) => {
   const {
     config: { icons },
