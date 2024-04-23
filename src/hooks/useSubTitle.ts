@@ -8,8 +8,9 @@ import { useUpdate } from "./useUpdate";
 export const useSubTitle = () => {
   const { getVideoRef, state, config } = useVideo();
   const context = useContext(VideoPlayerContext);
+
   const subtitleState = useUpdate(
-    state.currentSubtitle,
+    state.subTitles?.findIndex((x) => x.is_selected),
     "subtitle",
     VideoPlayerContext,
   );
@@ -78,6 +79,7 @@ export const useSubTitle = () => {
     const nextSubtitle = titles[index];
     if (!nextSubtitle) {
       state.currentSubtitle = undefined;
+      subtitleState.update(index);
       if (subEl) {
         subEl.classList.remove("on");
       }
@@ -95,7 +97,7 @@ export const useSubTitle = () => {
     }
     if (nextTrack) {
       state.currentSubtitle = nextSubtitle;
-      subtitleState.update(nextSubtitle);
+      subtitleState.update(index);
       nextSubtitle.is_selected = true;
       nextTrack.mode = "hidden";
       nextTrack.oncuechange = () => {
