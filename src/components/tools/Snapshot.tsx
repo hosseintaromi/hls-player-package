@@ -61,9 +61,7 @@ const Snapshot = ({ snapshots, time }: SnapshotPropsType) => {
               backgroundPosition: `-${snapshot.location[0]}px -${snapshot.location[1]}px `,
             }}
           />
-          <div style={{ marginTop: '5px' }}>
-            {formatDuration(time)}
-          </div>
+
         </>
       )}
     </>
