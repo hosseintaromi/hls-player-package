@@ -1,11 +1,11 @@
+import styled from "@emotion/styled";
 import React, { ReactNode, useState } from "react";
-import { usePlayerContext } from "../../hooks";
 import { useAds } from "../../hooks/useAds";
 import { formatDuration } from "../../utils/player-utils";
 import { OnUpdateTimeType } from "../../@types";
 import Locale from "../locale/Locale";
 import Icon from "../icons/Icon";
-import styled from "@emotion/styled";
+import { useVideo } from "../../hooks";
 
 type SkipStylePropType = {
   canSkip?: boolean;
@@ -29,7 +29,7 @@ const Skip = ({ children }: { children?: ReactNode }) => {
   const { isPlayingAd, currentAd, skipCurrentAd } = useAds();
   const [remainDuration, setRemainDuration] = useState(0);
 
-  usePlayerContext({
+  useVideo({
     onUpdateTime: (e: OnUpdateTimeType) => {
       const skipTime = currentAd()?.skipTime;
       if (currentAd()?.canSkip && skipTime !== undefined) {
