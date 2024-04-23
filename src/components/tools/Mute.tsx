@@ -1,53 +1,27 @@
-import React, { useState } from "react";
+import React from "react";
 import Icon from "../icons/Icon";
-import { useVideo } from "../../hooks/useVideo";
 import { useVolume } from "../../hooks/useVolume";
+import { useSignal } from "../../hooks/useSignal";
 
 const Mute = () => {
-	const [volume, setVolume] = useState<number>(100);
+  const { changeMute, isMute, currentVolume } = useVolume();
+  const $isMute = useSignal(isMute);
+  const $currentVolume = useSignal(currentVolume);
 
-	const [isMute, setIsMuted] = useState<boolean>(true);
+  const mute = () => {
+    changeMute(!$isMute);
+  };
 
-	const { changeMute } = useVolume();
+  const calcVolumeIcon = () => {
+    if (($currentVolume || 100) * 100 <= 1 || $isMute) {
+      return <Icon isClickable type="mute" onClick={() => mute()} />;
+    }
+    if (($currentVolume || 100) * 100 >= 66)
+      return <Icon isClickable type="volumeUp" onClick={() => mute()} />;
+    return <Icon isClickable type="volumeDown" onClick={() => mute()} />;
+  };
 
-	const calcVolumeIcon = () => {
-		if (volume <= 1 || isMute) {
-			return (
-				<Icon isClickable={true} type="mute" onClick={() => mute()} />
-			);
-		} else {
-			if (volume >= 66)
-				return (
-					<Icon
-						isClickable={true}
-						type="volumeUp"
-						onClick={() => mute()}
-					/>
-				);
-			else
-				return (
-					<Icon
-						isClickable={true}
-						type="volumeDown"
-						onClick={() => mute()}
-					/>
-				);
-		}
-	};
-
-	const mute = () => {
-		changeMute(!isMute);
-	};
-
-	useVideo({
-		onChangeVolume: (e) => {
-			setVolume(e * 100);
-		},
-		onChangeMute: (e) => {
-			setIsMuted(e);
-		},
-	});
-	return calcVolumeIcon();
+  return calcVolumeIcon();
 };
 
 export default Mute;
