@@ -1,29 +1,19 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React from "react";
 import { useVideo } from "../../hooks/useVideo";
 import Icon from "../icons/Icon";
+import { useSignal } from "../../hooks/useSignal";
 
-const Play = ({ children }: { children?: ReactNode }) => {
-  const [isPlay, setIsPlay] = useState<boolean>(false);
-
-  const { changePlayPause, getIsPlay } = useVideo({
-    onPlayPause: (play: boolean) => {
-      console.log("play", play);
-      setIsPlay(play);
-    },
-  });
+const Play = () => {
+  const { changePlayPause, isPlay } = useVideo();
+  const $isPlay = useSignal(isPlay);
 
   const togglePlay = () => {
-    changePlayPause(!isPlay);
+    changePlayPause(!$isPlay);
   };
-
-  useEffect(() => {
-    const isPlay = getIsPlay();
-    if (isPlay) setIsPlay(isPlay);
-  }, []);
 
   return (
     <>
-      {isPlay === true ? (
+      {$isPlay === true ? (
         <Icon
           isClickable
           onClick={togglePlay}

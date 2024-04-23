@@ -4,6 +4,7 @@ import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { GenericEvents, PlayerEventsType } from "../@types/player.model";
 import { useContextEvents } from "./useContextEvents";
 import { useBuffer } from "./useBuffer";
+import { useUpdate } from "./useUpdate";
 
 const isSupportedPlatform = Hls.isSupported();
 
@@ -17,34 +18,37 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
   } = useContext(VideoPlayerContext);
   const context = useContext(VideoPlayerContext);
   const { checkBuffer } = useBuffer();
+  const playState = useUpdate(
+    !getVideoRef()?.paused,
+    "play",
+    VideoPlayerContext,
+  );
 
   const timeRef = useRef<number>(0);
 
   const { listen, call } =
     useContextEvents<PlayerEventsType>(VideoPlayerContext);
 
-  const loadMP4Video = useCallback((src: string, startTime?: number) => {
-    const currentStartTime = startTime || config.startTime || 0;
+  const loadMP4Video = useCallback(
+    (src: string, startTime?: number) => {
+      const currentStartTime = startTime || config.startTime || 0;
 
-    // Clear the onloadeddata event listener if a hls has played before
-    context.hls?.destroy();
+      // Clear the onloadeddata event listener if a hls has played before
+      context.hls?.destroy();
 
-    const videoEl = getVideoRef();
-    if (!videoEl) return;
-    videoEl.src = src;
-    videoEl.load();
-    videoEl.currentTime = currentStartTime;
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      const videoEl = getVideoRef();
+      if (!videoEl) return;
+      videoEl.src = src;
+      videoEl.load();
+      videoEl.currentTime = currentStartTime;
+    },
+    [config.startTime, context.hls, getVideoRef],
+  );
 
   const loadHlsVideo = useCallback((src: string, startTime?: number) => {
     const currentStartTime = startTime || config.startTime || 0;
     const videoEl = getVideoRef();
     if (!videoEl) return;
-
-    // Clear the onloadeddata event listener if a mp4 has played before
-    // videoEl.onloadeddata = null;
 
     const hls = (context.hls = new Hls({
       enableWorker: false,
@@ -107,18 +111,20 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     if (videoRef) {
       if (play) {
         videoRef.play();
+        playState.update(true);
       } else {
         videoRef.pause();
+        playState.update(false);
       }
     }
   };
 
-  const getIsPlay = () => {
+  const getIsPlay = useCallback(() => {
     const videoRef = getVideoRef();
     if (videoRef) {
       return !videoRef.paused;
     }
-  };
+  }, [getVideoRef]);
 
   const setVideoRef = useCallback(
     (el?: HTMLVideoElement) => {
@@ -159,7 +165,7 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
         }
       };
     },
-    [call, checkBuffer, videoRefSetter],
+    [call, checkBuffer, listenOnLoad, videoRefSetter],
   );
 
   useEffect(() => {
@@ -182,5 +188,6 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     state,
     loadVideo,
     config,
+    isPlay: playState.subject,
   };
 };
