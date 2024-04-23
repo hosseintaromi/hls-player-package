@@ -6,26 +6,26 @@ import { formatDuration } from "../../utils/player-utils";
 import { useTime } from "../../hooks/useTime";
 
 const Time = ({ type }: { type: "Current" | "Total" | "Remain" }) => {
-	const [time, setTime] = useState<string>("00:00:00");
+  const [time, setTime] = useState<string>("00:00:00");
 
-	const { getDuration } = useTime();
-	useVideo({
-		onReady: () => {
-			if (type === "Total") setTime(formatDuration(getDuration() || 0));
-		},
-		onUpdateTime: (e: OnUpdateTimeType) => {
-			switch (type) {
-				case "Current":
-					setTime(formatDuration(e.time));
-					break;
-				case "Remain":
-					setTime(formatDuration(e.duration - e.time));
-					break;
-			}
-		},
-	});
+  const { getDuration } = useTime();
+  useVideo({
+    onReady: () => {
+      if (type === "Total") setTime(formatDuration(getDuration() || 0));
+    },
+    onUpdateTime: (e: OnUpdateTimeType) => {
+      switch (type) {
+        case "Current":
+          setTime(formatDuration(e.time));
+          break;
+        case "Remain":
+          setTime(formatDuration(e.duration - e.time));
+          break;
+      }
+    },
+  });
 
-	return <TimeCounter>{time}</TimeCounter>;
+  return <TimeCounter>{time}</TimeCounter>;
 };
 
 export default Time;

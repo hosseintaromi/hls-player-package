@@ -24,7 +24,7 @@ const SettingAudioTrack = ({ changePage, myRef }: SettingAudioTrackType) => {
     setAudioTracks(getAudioTracks() || []);
   };
   const { getAudioTrack, getAudioTracks, changeAudioTrack } = useAudio();
-  useVideo({ onLoaded: loadLevels });
+  useVideo({ onReady: loadLevels });
 
   useEffect(() => {
     loadLevels();
