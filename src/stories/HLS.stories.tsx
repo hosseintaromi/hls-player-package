@@ -40,14 +40,14 @@ const Demo = ({ length }: DemoProps) => {
     },
     thumbnail:
       "https://cdn.bitmovin.com/content/assets/art-of-motion-dash-hls-progressive/thumbnails/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.vtt",
-    ads: [
-      {
-        src: "https://quickframe.com/wp-content/uploads/2022/09/Aveeno_eCom-Example_Max-Glow-SerumPrimer.mp4",
-        startTime: 4,
-        canSkip: true,
-        skipTime: 2,
-      },
-    ],
+    // ads: [
+    //   {
+    //     src: "https://quickframe.com/wp-content/uploads/2022/09/Aveeno_eCom-Example_Max-Glow-SerumPrimer.mp4",
+    //     startTime: 4,
+    //     canSkip: true,
+    //     skipTime: 2,
+    //   },
+    // ],
     showToolbarOnAd: false,
     // startTime: 4,
     // style: {

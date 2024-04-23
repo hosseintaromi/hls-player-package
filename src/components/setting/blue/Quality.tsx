@@ -1,28 +1,20 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import { useLevel } from "../../../hooks/useLevel";
 import SettingModal from "./SettingModal";
+import { useSignal } from "../../../hooks/useSignal";
 
 const Quality = () => {
-  const [currentLevel, setCurrentLevel] = useState<number>();
+  const { getLevels, changeLevel, currentLevel } = useLevel();
 
-  const { getLevels, changeLevel, getCurrentLevel } = useLevel();
-
-  const loadLevels = useCallback(() => {
-    const currLevel = getCurrentLevel().isAuto
-      ? -1
-      : getCurrentLevel().currentLevel;
-    setCurrentLevel(currLevel === undefined ? -1 : currLevel);
-  }, [getCurrentLevel]);
+  const $currentLevel = useSignal(currentLevel);
 
   const setQuality = (index: number) => {
     changeLevel(index);
-    setCurrentLevel(index);
   };
 
   return (
     <SettingModal
-      onLoadedFunction={loadLevels}
-      currentItem={currentLevel}
+      currentItem={$currentLevel}
       setItem={setQuality}
       title="کیفیت پخش"
       items={getLevels()

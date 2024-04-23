@@ -1,12 +1,18 @@
 import { useCallback, useContext } from "react";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { useVideo } from "./useVideo";
+import { useUpdate } from "./useUpdate";
 
 export const useLevel = () => {
   const context = useContext(VideoPlayerContext);
   const {
     config: { qualities },
   } = useVideo();
+  const levelState = useUpdate(
+    context.hls?.currentLevel,
+    "level",
+    VideoPlayerContext,
+  );
 
   const getLevels = useCallback(
     () =>
@@ -31,11 +37,13 @@ export const useLevel = () => {
 
   const changeLevel = (index: number) => {
     if (context.hls) context.hls.currentLevel = index;
+    levelState.update(index);
   };
 
   return {
     getLevels,
     getCurrentLevel,
     changeLevel,
+    currentLevel: levelState.subject,
   };
 };

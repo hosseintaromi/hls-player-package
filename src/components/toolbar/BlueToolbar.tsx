@@ -5,7 +5,7 @@ import {
   SettingRightSection,
   TimeCounter,
   ToolbarWrapper,
-} from "../toolbar/ToolbarStyle";
+} from "./ToolbarStyle";
 import { ToolBarPlayIcon } from "../player/VideoPlayerStyle";
 import Play from "../tools/Play";
 import Time from "../tools/Time";

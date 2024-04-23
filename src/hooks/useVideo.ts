@@ -33,12 +33,8 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     if (!videoEl) return;
     videoEl.src = src;
     videoEl.load();
-    videoEl.onloadeddata = () => {
-      videoEl.currentTime = currentStartTime;
-      listenOnLoad.forEach((listener) => {
-        listener();
-      });
-    };
+    videoEl.currentTime = currentStartTime;
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -48,7 +44,7 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     if (!videoEl) return;
 
     // Clear the onloadeddata event listener if a mp4 has played before
-    videoEl.onloadeddata = null;
+    // videoEl.onloadeddata = null;
 
     const hls = (context.hls = new Hls({
       enableWorker: false,
@@ -86,9 +82,9 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
       }
     });
     hls.on(Hls.Events.LEVEL_LOADED, () => {
-      listenOnLoad.forEach((listener) => {
-        listener();
-      });
+      // listenOnLoad.forEach((listener) => {
+      //   listener();
+      // });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -144,6 +140,9 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
         call.onEnd?.();
       };
       el.onloadeddata = () => {
+        listenOnLoad.forEach((listener) => {
+          listener();
+        });
         call.onReady?.(el);
       };
       el.ontimeupdate = () => {
