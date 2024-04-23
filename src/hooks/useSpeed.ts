@@ -1,11 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
 import { KeyValue } from "../@types";
 import { useVideo } from "./useVideo";
+import { useUpdate } from "./useUpdate";
+import VideoPlayerContext from "../contexts/VideoPlayerContext";
 
 export const useSpeed = () => {
   const { config, state, getVideoRef } = useVideo();
-
-  const [speed, setSpeed] = useState<KeyValue | undefined>(state.currentSpeed);
+  const speedState = useUpdate(
+    state.subTitles?.findIndex((x) => x.is_selected),
+    "speed",
+    VideoPlayerContext,
+  );
 
   const getSpeeds = useCallback(() => state.speeds, [state.speeds]);
 
@@ -15,7 +20,7 @@ export const useSpeed = () => {
       const speeds = getSpeeds();
       if (speeds) {
         videoRef.playbackRate = speeds[index].value;
-        setSpeed((state.currentSpeed = speeds[index]));
+        speedState.update(index);
       }
     }
   };
@@ -45,10 +50,10 @@ export const useSpeed = () => {
     }
   };
 
-  useEffect(() => {
-    setSpeed(state.currentSpeed);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return { initSpeeds, changeSpeed, getSpeeds, speed };
+  return {
+    initSpeeds,
+    changeSpeed,
+    getSpeeds,
+    currentSpeed: speedState.subject,
+  };
 };
