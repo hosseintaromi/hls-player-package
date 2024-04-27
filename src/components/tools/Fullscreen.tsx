@@ -2,16 +2,14 @@ import React from "react";
 import Icon from "../icons/Icon";
 import { useFullScreen } from "../../hooks/useFullScreen";
 import { useSignal } from "../../hooks/useSignal";
+import { useVideo } from "../../hooks";
 
 const Fullscreen = () => {
-  const video_wrapper_id = document.getElementById("video_wrapper_id");
-  const video_player = document.getElementById("video_player");
-
+  const { getVideoRef, getVideoWrapperRef } = useVideo();
   const { toggleFullScreen, isFullscreen } = useFullScreen(
-    video_wrapper_id,
-    video_player,
+    getVideoWrapperRef(),
+    getVideoRef() || null,
   );
-
   const $isFullScreen = useSignal(isFullscreen);
 
   return (

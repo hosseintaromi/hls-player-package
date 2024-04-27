@@ -4,21 +4,20 @@ import { useVolume } from "../../hooks/useVolume";
 import { useSignal } from "../../hooks/useSignal";
 
 const Mute = () => {
-  const { changeMute, isMute, currentVolume } = useVolume();
+  const { changeMute, isMute } = useVolume();
   const $isMute = useSignal(isMute);
-  const $currentVolume = useSignal(currentVolume);
 
   const mute = () => {
     changeMute(!$isMute);
   };
 
   const calcVolumeIcon = () => {
-    if (($currentVolume || 100) * 100 <= 1 || $isMute) {
-      return <Icon isClickable type="mute" onClick={() => mute()} />;
+    if ($isMute) {
+      return <Icon id="mute" isClickable type="mute" onClick={() => mute()} />;
     }
-    if (($currentVolume || 100) * 100 >= 66)
-      return <Icon isClickable type="volumeUp" onClick={() => mute()} />;
-    return <Icon isClickable type="volumeDown" onClick={() => mute()} />;
+    return (
+      <Icon isClickable id="volumeUp" type="volumeUp" onClick={() => mute()} />
+    );
   };
 
   return calcVolumeIcon();

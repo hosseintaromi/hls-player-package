@@ -23,6 +23,7 @@ import { useLevel } from "../../hooks/useLevel";
 import { useSubTitle } from "../../hooks";
 import { useAudio } from "../../hooks/useAudio";
 import { useVideo } from "../../hooks/useVideo";
+import Volume from "../tools/Volume";
 
 const BlueToolbar = ({ isFaded }: { isFaded: boolean }) => {
   const [isShowQ, setIsShowQ] = useState<any>();
@@ -54,7 +55,8 @@ const BlueToolbar = ({ isFaded }: { isFaded: boolean }) => {
             <ToolBarPlayIcon>
               <Play />
             </ToolBarPlayIcon>
-            <Mute />
+            {/* <Mute /> */}
+            <Volume />
           </SettingLeftSection>
           <SettingRightSection>
             {isShowA && <Mic />}

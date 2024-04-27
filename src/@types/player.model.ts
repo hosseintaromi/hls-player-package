@@ -139,6 +139,7 @@ export type PlayerState = {
 export interface PlayerContextType {
   setVideoRef: (ref: HTMLVideoElement) => void;
   getVideoRef: () => HTMLVideoElement | undefined;
+  getVideoWrapperRef: () => HTMLDivElement | null;
   config: PlayerInstance;
   hls?: Hls;
   listenOnLoad: (() => void)[];

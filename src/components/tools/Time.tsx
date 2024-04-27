@@ -9,6 +9,7 @@ const Time = ({ type }: { type: "Current" | "Total" | "Remain" }) => {
   const [time, setTime] = useState<string>("00:00:00");
 
   const { getDuration } = useTime();
+
   useVideo({
     onReady: () => {
       if (type === "Total") setTime(formatDuration(getDuration() || 0));

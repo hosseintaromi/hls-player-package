@@ -15,6 +15,7 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     getVideoRef,
     listenOnLoad,
     state,
+    ...others
   } = useContext(VideoPlayerContext);
   const context = useContext(VideoPlayerContext);
   const { checkBuffer } = useBuffer();
@@ -189,5 +190,6 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     loadVideo,
     config,
     isPlay: playState.subject,
+    ...others,
   };
 };

@@ -5,9 +5,13 @@ import { useContextEvents } from "./useContextEvents";
 import { useUpdate } from "./useUpdate";
 
 export const useVolume = () => {
-  const { getVideoRef } = useVideo();
+  const { getVideoRef, config } = useVideo();
   const { call } = useContextEvents<PlayerEventsType>(VideoPlayerContext);
-  const muteState = useUpdate(getVideoRef()?.muted, "mute", VideoPlayerContext);
+  const muteState = useUpdate(
+    getVideoRef()?.muted === undefined ? config.muted : getVideoRef()?.muted,
+    "mute",
+    VideoPlayerContext,
+  );
   const volumeState = useUpdate(
     getVideoRef()?.volume,
     "volume",

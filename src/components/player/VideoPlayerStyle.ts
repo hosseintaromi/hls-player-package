@@ -186,25 +186,9 @@ export const MobileGradient = styled.div(
   ({ isFaded }: { isFaded: boolean }) => ({ opacity: isFaded ? 0 : 1 }),
 );
 
-export const CustomVideoWrapper = styled.div({
+export const VideoWrapperStyle = styled.div({
   width: "100%",
-  height: "100%",
-  position: "relative",
-  overflow: "hidden",
-  boxSizing: "border-box",
-  "> *": {
-    boxSizing: "border-box",
-  },
-  ":before": {
-    boxSizing: "border-box",
-  },
-  ":after": {
-    boxSizing: "border-box",
-  },
-});
-export const VideoWrapperBlue = styled.div({
-  width: "100%",
-  height: "100%",
+  height: window.innerWidth < 768 ? "unset" : "100%",
   position: "relative",
   overflow: "hidden",
   boxSizing: "border-box",
