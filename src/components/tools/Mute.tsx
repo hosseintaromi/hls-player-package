@@ -11,16 +11,12 @@ const Mute = () => {
     changeMute(!$isMute);
   };
 
-  const calcVolumeIcon = () => {
-    if ($isMute) {
-      return <Icon id="mute" isClickable type="mute" onClick={() => mute()} />;
-    }
-    return (
-      <Icon isClickable id="volumeUp" type="volumeUp" onClick={() => mute()} />
-    );
-  };
-
-  return calcVolumeIcon();
+  if ($isMute) {
+    return <Icon id="mute" isClickable type="mute" onClick={() => mute()} />;
+  }
+  return (
+    <Icon isClickable id="volumeUp" type="volumeUp" onClick={() => mute()} />
+  );
 };
 
 export default Mute;
