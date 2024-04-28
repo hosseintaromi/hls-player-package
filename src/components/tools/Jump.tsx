@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import Icon from "../icons/Icon";
 import { useTime } from "../../hooks/useTime";
 

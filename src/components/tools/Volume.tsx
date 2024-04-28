@@ -6,6 +6,37 @@ import Icon from "../icons/Icon";
 import { useVolume } from "../../hooks/useVolume";
 import { useSignal } from "../../hooks/useSignal";
 
+const VolumeComponent = ({
+  volume,
+  handleClick,
+  isMute,
+}: {
+  volume: number;
+  handleClick: () => void;
+  isMute?: boolean;
+}) => {
+  const getVolumeIcon = () => {
+    if (volume <= 1 || isMute) {
+      return "mute";
+    }
+    if (volume >= 66) return "volumeUp";
+    if (volume < 66 && volume >= 1) return "volumeDown";
+  };
+  const volumeIcon = getVolumeIcon();
+
+  if (volumeIcon)
+    return (
+      <Icon
+        isClickable
+        {...{
+          type: volumeIcon,
+        }}
+        onClick={handleClick}
+      />
+    );
+  return <></>;
+};
+
 type ChangeRangeSelectType = {
   calcInputVal: (e: number, updateParent: boolean) => void;
 };
@@ -48,16 +79,6 @@ const Volume = memo(() => {
     changeVolume(e / 100);
   };
 
-  const calcVolumeIcon = () => {
-    if (volume <= 1 || $isMute) {
-      return <Icon isClickable type="mute" onClick={mute} />;
-    }
-    if (volume >= 66)
-      return <Icon isClickable type="volumeUp" onClick={mute} />;
-    if (volume < 66 && volume >= 1)
-      return <Icon isClickable type="volumeDown" onClick={mute} />;
-  };
-
   return (
     <VolumeWrapper
       className="controlled-tool"
@@ -65,7 +86,7 @@ const Volume = memo(() => {
       onMouseEnter={() => setVolumeVisibility(true)}
       onMouseLeave={() => setVolumeVisibility(false)}
     >
-      {calcVolumeIcon()}
+      <VolumeComponent handleClick={mute} isMute={$isMute} volume={volume} />
       <RangeSelectWrapper visible={volumeVisibility}>
         <RangeSelect
           step={1}
