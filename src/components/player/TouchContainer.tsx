@@ -5,7 +5,7 @@ import { useAds } from "../../hooks/useAds";
 const HideContainer = ({ children }: { children: ReactNode }) => {
   const isShowRef = useRef<boolean>();
   const isSettingOpenRef = useRef<boolean>();
-  const isShowToolbarRef = useRef<boolean>();
+  const isActivateControlsRef = useRef<boolean>();
   const timeoutRef = useRef<NodeJS.Timeout | undefined>();
 
   const { showToolbar } = useAds();
@@ -21,7 +21,7 @@ const HideContainer = ({ children }: { children: ReactNode }) => {
       isSettingOpenRef.current = e;
     },
     onActivateControls: (e) => {
-      isShowToolbarRef.current = e;
+      isActivateControlsRef.current = e;
     },
   });
 
@@ -53,7 +53,7 @@ const HideContainer = ({ children }: { children: ReactNode }) => {
       if (
         getIsPlay() &&
         !isSettingOpenRef.current &&
-        !isShowToolbarRef.current
+        !isActivateControlsRef.current
       ) {
         setIsShow(false);
       }
