@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Video from "../../player/Video";
 import { Gradient, PlayIconWrapper } from "../../player/VideoPlayerStyle";
 import Toolbar from "../../toolbar/Toolbar";
-import TouchContainer from "../../player/TouchContainer";
+import HideContainer from "../../player/TouchContainer";
 import Play from "../../tools/Play";
 import Loading from "../../general/Loading";
 
@@ -14,14 +14,13 @@ const PlayerTemplate = () => {
         <Play />
       </PlayIconWrapper>
       <Loading />
-      <TouchContainer
-        canPlayOnClick
+      <HideContainer
         onShow={(show: boolean) => {
           setIsFadeOut(!show);
         }}
       >
         <Video />
-      </TouchContainer>
+      </HideContainer>
       <Gradient isFaded={isFadeOut} />
       <Toolbar isFaded={isFadeOut} />
     </>

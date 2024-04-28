@@ -60,6 +60,7 @@ const Volume = memo(() => {
 
   return (
     <VolumeWrapper
+      className="controlled-tool"
       gap={volumeVisibility}
       onMouseEnter={() => setVolumeVisibility(true)}
       onMouseLeave={() => setVolumeVisibility(false)}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import Icon from "../icons/Icon";
 import { useTime } from "../../hooks/useTime";
 
@@ -18,16 +18,18 @@ const JumpBack = ({ type }: { type: "back" | "forward" }) => {
       {type === "back" ? (
         <Icon
           isClickable
+          isSensitive
           onClick={jumpBack}
           type="jumpBack"
-          className="vp-icon-jump-back"
+          className="vp-icon-jump-back controlled-tool"
         />
       ) : (
         <Icon
           isClickable
+          isSensitive
           onClick={JumpForward}
           type="jumpForward"
-          className="vp-icon-jump-forward"
+          className="vp-icon-jump-forward controlled-tool"
         />
       )}
     </>

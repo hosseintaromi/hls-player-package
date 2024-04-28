@@ -12,10 +12,24 @@ const Mute = () => {
   };
 
   if ($isMute) {
-    return <Icon id="mute" isClickable type="mute" onClick={() => mute()} />;
+    return (
+      <Icon
+        id="mute"
+        isClickable
+        type="mute"
+        onClick={mute}
+        className="controlled-tool"
+      />
+    );
   }
   return (
-    <Icon isClickable id="volumeUp" type="volumeUp" onClick={() => mute()} />
+    <Icon
+      isClickable
+      id="volumeUp"
+      type="volumeUp"
+      onClick={mute}
+      className="controlled-tool"
+    />
   );
 };
 

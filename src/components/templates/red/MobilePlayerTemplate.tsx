@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Video from "../../player/Video";
 import { MobileGradient } from "../../player/VideoPlayerStyle";
-import TouchContainer from "../../player/TouchContainer";
+import HideContainer from "../../player/TouchContainer";
 import Loading from "../../general/Loading";
 import MobileToolbar from "../../toolbar/MobileToolbar";
 
@@ -10,8 +10,7 @@ const MobilePlayerTemplate = () => {
   return (
     <>
       <Loading />
-      <TouchContainer
-        canPlayOnClick
+      <HideContainer
         onShow={(show: boolean) => {
           setIsFadeOut(!show);
         }}
@@ -19,7 +18,7 @@ const MobilePlayerTemplate = () => {
         <Video />
         <MobileGradient isFaded={isFadeOut} />
         <MobileToolbar isFaded={isFadeOut} />
-      </TouchContainer>
+      </HideContainer>
     </>
   );
 };

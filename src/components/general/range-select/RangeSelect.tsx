@@ -1,6 +1,7 @@
 import React, {
   memo,
   useCallback,
+  useEffect,
   useImperativeHandle,
   useRef,
   useState,
@@ -13,6 +14,7 @@ import {
   TimeLine,
 } from "./RangeSelectStyle";
 import { RangePropsType } from "../../../@types/RangeSelectType.model";
+import { useSensitiveArea } from "../../../hooks/useSensitiveArea";
 
 const TimeLineMemo = memo(() => <TimeLine className="timeline" />);
 
@@ -29,6 +31,9 @@ const RangeSelect = ({
   const [currentValue, setCurrentValue] = useState<number>(0);
   const selectorRef = useRef<HTMLDivElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
+  const generalRef = useRef<HTMLDivElement>(null);
+
+  const { setSensitive } = useSensitiveArea();
 
   const toggleThumb = () => {
     if (selectorRef.current) {
@@ -69,8 +74,12 @@ const RangeSelect = ({
     onRangeMove(e);
   };
 
+  useEffect(() => {
+    if (generalRef.current) setSensitive(generalRef.current);
+  }, [setSensitive]);
+
   return (
-    <GeneralStyleForRange>
+    <GeneralStyleForRange ref={generalRef}>
       <Slider
         type="range"
         step={step}

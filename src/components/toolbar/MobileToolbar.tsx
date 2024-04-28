@@ -8,7 +8,7 @@ import {
   SettingLeftSection,
   SettingRightSection,
   TimeCounter,
-} from "../toolbar/ToolbarStyle";
+} from "./ToolbarStyle";
 import { ToolBarPlayIcon } from "../player/VideoPlayerStyle";
 import Play from "../tools/Play";
 import Time from "../tools/Time";
@@ -18,7 +18,6 @@ import Switch from "../general/Switch";
 import Dialog from "../general/Dialog";
 import Icon from "../icons/Icon";
 import Dropdown from "../general/Dropdown";
-import styled from "@emotion/styled";
 import { DialogLabel, DialogTitle } from "../general/DialogStyle";
 import SettingItem from "../setting/red/SettingItem";
 import Locale from "../locale/Locale";
@@ -56,7 +55,7 @@ const MobileToolbar = ({ isFaded }: { isFaded: boolean }) => {
           <DialogTitle>تنظیمات</DialogTitle>
           <SettingItem
             className="dialog-item"
-            startIcon={<Icon isClickable={true} type="speed" />}
+            startIcon={<Icon isClickable type="speed" />}
             text={<Locale localeKey="setting_menu_change_speed_title" />}
           >
             <Switch />
@@ -66,7 +65,7 @@ const MobileToolbar = ({ isFaded }: { isFaded: boolean }) => {
           <DialogLabel>سرعت</DialogLabel>
           <Dropdown className="dialog-dropdown" options={DropdownList} />
         </Dialog>
-        <Switch hasIcon={true} />
+        <Switch hasIcon />
         <IconButton
           onClick={() => {
             setIsOpen(true);

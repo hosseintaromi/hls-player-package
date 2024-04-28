@@ -1,5 +1,5 @@
 import React, { useCallback, useRef } from "react";
-import { ThemeProvider } from "@emotion/react";
+import { Global, ThemeProvider, css } from "@emotion/react";
 import PlayerTemplate from "../templates/red/PlayerTemplate";
 import { PlayerInstance, PlayerState } from "../../@types/player.model";
 import VideoPlayerContext from "../../contexts/VideoPlayerContext";
@@ -7,6 +7,7 @@ import PlayerInitializer from "../tools/PlayerInitializer";
 import MobilePlayerTemplate from "../templates/red/MobilePlayerTemplate";
 import BlueTemplate from "../templates/blue/BlueTemplate";
 import { VideoWrapperStyle } from "./VideoPlayerStyle";
+import { GlobalStyles } from "./GlobalStyles";
 
 const PlayerTemplateSelector = ({
   config,
@@ -59,6 +60,7 @@ const VideoPlayer = ({
         getVideoWrapperRef: () => videoWrapperRef.current,
       }}
     >
+      <GlobalStyles />
       <ThemeProvider theme={config?.style || {}}>
         <VideoWrapperStyle ref={videoWrapperRef}>
           <>

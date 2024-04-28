@@ -15,17 +15,19 @@ const Play = () => {
     <>
       {$isPlay === true ? (
         <Icon
+          isSensitive
           isClickable
           onClick={togglePlay}
           type="pause"
-          className="vp-icon-pause"
+          className="vp-icon-pause controlled-tool"
         />
       ) : (
         <Icon
           isClickable
+          isSensitive
           onClick={togglePlay}
           type="play"
-          className="vp-icon-play"
+          className="vp-icon-play controlled-tool"
         />
       )}
     </>

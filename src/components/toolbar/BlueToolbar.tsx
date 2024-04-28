@@ -25,18 +25,19 @@ import { useAudio } from "../../hooks/useAudio";
 import { useVideo } from "../../hooks/useVideo";
 import Volume from "../tools/Volume";
 
-const BlueToolbar = ({ isFaded }: { isFaded: boolean }) => {
+const BlueToolbar = () => {
   const [isShowQ, setIsShowQ] = useState<any>();
   const [isShowS, setIsShowS] = useState<any>();
   const [isShowA, setIsShowA] = useState<any>();
+  const { getLevels } = useLevel();
+  const { getSubtitle } = useSubTitle();
+  const { getAudioTracks } = useAudio();
+
   const loadLevels = () => {
     setIsShowQ(getLevels() !== undefined);
     setIsShowS(getSubtitle() !== undefined);
     setIsShowA(getAudioTracks() !== undefined);
   };
-  const { getLevels } = useLevel();
-  const { getSubtitle } = useSubTitle();
-  const { getAudioTracks } = useAudio();
   useVideo({
     onLoaded: loadLevels,
   });
@@ -44,8 +45,8 @@ const BlueToolbar = ({ isFaded }: { isFaded: boolean }) => {
   return (
     <SensitiveArea>
       <Skip />
-      <ToolbarWrapper isFaded={isFaded}>
-        <TimeCounter className="blue-counter">
+      <ToolbarWrapper>
+        <TimeCounter className="blue-counter controlled-tool">
           <Time type="Current" />
           <Time type="Total" />
         </TimeCounter>

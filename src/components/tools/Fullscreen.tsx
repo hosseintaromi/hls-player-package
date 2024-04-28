@@ -14,7 +14,7 @@ const Fullscreen = () => {
 
   return (
     <Icon
-      className="vp-icon-fullscreen"
+      className="vp-icon-fullscreen controlled-tool"
       isClickable
       onClick={() => toggleFullScreen()}
       type={!$isFullScreen ? "fullScreen" : "unFullScreen"}

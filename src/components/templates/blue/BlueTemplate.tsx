@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Gradient, PlayJumpIconWrapper } from "../../player/VideoPlayerStyle";
 import Loading from "../../general/Loading";
 import TouchContainer from "../../player/TouchContainer";
@@ -7,28 +7,21 @@ import Play from "../../tools/Play";
 import Jump from "../../tools/Jump";
 import BlueToolbar from "../../toolbar/BlueToolbar";
 
-const BlueTemplate = () => {
-  const [isFadeOut, setIsFadeOut] = useState<boolean>(false);
-
-  return (
-    <>
-      <PlayJumpIconWrapper isFaded={isFadeOut}>
-        <Jump type="back" />
-        <Play />
-        <Jump type="forward" />
-      </PlayJumpIconWrapper>
-      <Loading />
-      <TouchContainer
-        canPlayOnClick={false}
-        onShow={(show: boolean) => setIsFadeOut(!show)}
-      >
-        <Video />
-      </TouchContainer>
-      <Gradient isFaded={isFadeOut} />
-      <BlueToolbar isFaded={isFadeOut} />
-    </>
-  );
-};
+const BlueTemplate = () => (
+  <>
+    <PlayJumpIconWrapper>
+      <Jump type="back" />
+      <Play />
+      <Jump type="forward" />
+    </PlayJumpIconWrapper>
+    <Loading />
+    <TouchContainer>
+      <Video />
+    </TouchContainer>
+    <Gradient id="gradient" className="controlled-tool" />
+    <BlueToolbar />
+  </>
+);
 export default BlueTemplate;
 
 // var source = {

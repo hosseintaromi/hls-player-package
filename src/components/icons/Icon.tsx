@@ -1,7 +1,8 @@
-import React, { HTMLAttributes } from "react";
+import React, { HTMLAttributes, useEffect, useRef } from "react";
 import styled from "@emotion/styled";
 import { IconsType } from "../../@types/player.model";
 import { useVideo } from "../../hooks/useVideo";
+import { useSensitiveArea } from "../../hooks/useSensitiveArea";
 
 const IconWrapperStyle = styled.div(
   ({ theme }) => ({
@@ -22,14 +23,26 @@ const IconWrapperStyle = styled.div(
 type IconType = {
   type: keyof IconsType;
   isClickable: boolean;
+  isSensitive?: boolean;
 } & HTMLAttributes<HTMLElement>;
 
-const Icon = ({ type, onClick, ...other }: IconType) => {
+const Icon = ({ type, onClick, isSensitive, ...other }: IconType) => {
+  const iconRef = useRef<HTMLDivElement>(null);
+
   const {
     config: { icons },
   } = useVideo();
+
+  const { setSensitive } = useSensitiveArea();
+
+  useEffect(() => {
+    if (isSensitive && iconRef.current) {
+      setSensitive(iconRef.current);
+    }
+  }, [isSensitive, setSensitive]);
+
   return (
-    <IconWrapperStyle onClick={onClick} {...other}>
+    <IconWrapperStyle ref={iconRef} onClick={onClick} {...other}>
       {icons[type]}
     </IconWrapperStyle>
   );

@@ -75,6 +75,7 @@ const SettingModal = ({
         onClick={() => setIsOpen((pre) => !pre)}
         isClickable
         type={iconType}
+        className="controlled-tool"
       />
     </>
   );

@@ -141,20 +141,17 @@ export const ToolBarPlayIcon = styled.div({
   height: "100%",
 });
 
-export const Gradient = styled.div(
-  ({ theme }) => ({
-    transition: "opacity .25s cubic-bezier(0,0,.2,1)",
-    paddingTop: "37px",
-    bottom: 0,
-    zIndex: 24,
-    width: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    background: `${theme.toolbarBg}`,
-    height: "211px",
-  }),
-  ({ isFaded }: { isFaded: boolean }) => ({ opacity: isFaded ? 0 : 1 }),
-);
+export const Gradient = styled.div(({ theme }) => ({
+  transition: "opacity .25s cubic-bezier(0,0,.2,1)",
+  paddingTop: "37px",
+  bottom: 0,
+  zIndex: 24,
+  width: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  background: `${theme.toolbarBg}`,
+  height: "211px",
+}));
 
 export const MobileVideoWrapper = styled.div({
   width: "100%",
@@ -225,27 +222,24 @@ export const CustomPlayWrapper = styled.div(
   ({ isFaded }: { isFaded: boolean }) => ({ opacity: isFaded ? 0 : 1 }),
 );
 
-export const PlayJumpIconWrapper = styled.div(
-  {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    zIndex: "300",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    transition: "opacity .25s cubic-bezier(0,0,.2,1)",
-    width: "100%",
-    maxWidth: "350px",
+export const PlayJumpIconWrapper = styled.div({
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  zIndex: "300",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  transition: "opacity .25s cubic-bezier(0,0,.2,1)",
+  width: "100%",
+  maxWidth: "350px",
 
-    svg: {
-      width: "40px",
-      height: "auto",
-    },
+  svg: {
+    width: "40px",
+    height: "auto",
   },
-  ({ isFaded }: { isFaded: boolean }) => ({ opacity: isFaded ? 0 : 1 }),
-);
+});
 
 export const PlayJumpIcon = styled.div(
   {

@@ -1,43 +1,41 @@
 import React, { ReactNode, useEffect, useRef } from "react";
 import { useVideo } from "../../hooks/useVideo";
-import VideoPlayerContext from "../../contexts/VideoPlayerContext";
-import { PlayerEventsType } from "../../@types/player.model";
-import { useContextEvents } from "../../hooks/useContextEvents";
 import { useAds } from "../../hooks/useAds";
-import { useTime } from "../../hooks/useTime";
 
-const TouchContainer = ({
-  children,
-  onShow,
-  canPlayOnClick,
-}: {
-  children: ReactNode;
-  canPlayOnClick: boolean;
-  onShow: (show: boolean) => void;
-}) => {
-  const isPlayRef = useRef<boolean>();
+const HideContainer = ({ children }: { children: ReactNode }) => {
   const isShowRef = useRef<boolean>();
   const isSettingOpenRef = useRef<boolean>();
   const isShowToolbarRef = useRef<boolean>();
   const timeoutRef = useRef<NodeJS.Timeout | undefined>();
-  const { listen } = useContextEvents<PlayerEventsType>(VideoPlayerContext);
-  const { showToolbar } = useAds();
 
-  const { increaseTime, decreaseTime } = useTime();
+  const { showToolbar } = useAds();
   const {
-    config: { timeForHideEl, keyControl },
-    changePlayPause,
+    config: { timeForHideEl },
+    getIsPlay,
+    getVideoWrapperRef,
   } = useVideo({
-    onPlayPause: (play: boolean) => {
-      isPlayRef.current = play;
+    onPlayPause: () => {
       hideIfIdle();
+    },
+    onChangeSetting: (e) => {
+      isSettingOpenRef.current = e;
+    },
+    onActivateControls: (e) => {
+      isShowToolbarRef.current = e;
     },
   });
 
   const setIsShow = (show: boolean) => {
     if (show !== isShowRef.current) {
       isShowRef.current = show;
-      onShow(show);
+      const videoWrapperRef = getVideoWrapperRef();
+      if (show) {
+        videoWrapperRef?.classList.remove("hide-tools");
+        document.body.style.cursor = "auto";
+      } else {
+        videoWrapperRef?.classList.add("hide-tools");
+        document.body.style.cursor = "none";
+      }
     }
   };
 
@@ -47,13 +45,13 @@ const TouchContainer = ({
       return;
     }
     setIsShow(true);
-    if (!isPlayRef.current) return;
+    if (!getIsPlay()) return;
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
     timeoutRef.current = setTimeout(() => {
       if (
-        isPlayRef.current &&
+        getIsPlay() &&
         !isSettingOpenRef.current &&
         !isShowToolbarRef.current
       ) {
@@ -62,32 +60,13 @@ const TouchContainer = ({
     }, timeForHideEl);
   };
 
-  const onKeyDown = (e: KeyboardEvent) => {
-    hideIfIdle();
-    if (!keyControl) return;
-    if (e.key === "ArrowRight") increaseTime(10);
-    if (e.key === "ArrowLeft") decreaseTime(10);
-    if (e.key === "Enter" && isPlayRef.current !== undefined) {
-      changePlayPause(!isPlayRef.current);
-    }
-  };
-
   useEffect(() => {
-    listen({
-      onChangeSetting: (e) => {
-        isSettingOpenRef.current = e;
-      },
-      onActivateControls: (e) => {
-        isShowToolbarRef.current = e;
-      },
-    });
-
-    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keydown", hideIfIdle);
     window.addEventListener("mousedown", hideIfIdle);
     window.addEventListener("touchstart ", hideIfIdle);
 
     return () => {
-      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keydown", hideIfIdle);
       window.removeEventListener("mousedown", hideIfIdle);
       window.removeEventListener("touchstart", hideIfIdle);
     };
@@ -96,7 +75,6 @@ const TouchContainer = ({
 
   return (
     <div
-      id="touch-container"
       onMouseMove={hideIfIdle}
       onTouchStart={hideIfIdle}
       onMouseDown={hideIfIdle}
@@ -108,4 +86,4 @@ const TouchContainer = ({
   );
 };
 
-export default TouchContainer;
+export default HideContainer;

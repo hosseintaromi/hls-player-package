@@ -149,7 +149,7 @@ const TimeLine = () => {
 
   return (
     <GeneralStyleForRange
-      className="media-timeLine"
+      className="media-timeLine controlled-tool"
       onMouseEnter={() => {
         changeShowBubble(true);
       }}

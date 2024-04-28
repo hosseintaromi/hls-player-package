@@ -120,6 +120,17 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     }
   };
 
+  const togglePlayPause = useCallback(() => {
+    const videoRef = getVideoRef();
+    if (videoRef && videoRef?.paused) {
+      videoRef.play();
+      playState.update(true);
+    } else if (videoRef && !videoRef?.paused) {
+      videoRef.pause();
+      playState.update(false);
+    }
+  }, [getVideoRef, playState]);
+
   const getIsPlay = useCallback(() => {
     const videoRef = getVideoRef();
     if (videoRef) {
@@ -190,6 +201,7 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     loadVideo,
     config,
     isPlay: playState.subject,
+    togglePlayPause,
     ...others,
   };
 };

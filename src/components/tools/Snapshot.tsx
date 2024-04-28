@@ -33,6 +33,7 @@ const Snapshot = ({ snapshots, time }: SnapshotPropsType) => {
     <>
       {snapshot && (
         <div
+          className="controlled-tool"
           id="snapshot"
           style={{
             backgroundImage: `url("${snapshot.img}")`,

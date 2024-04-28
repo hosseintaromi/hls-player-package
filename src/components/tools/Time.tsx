@@ -26,7 +26,7 @@ const Time = ({ type }: { type: "Current" | "Total" | "Remain" }) => {
     },
   });
 
-  return <TimeCounter>{time}</TimeCounter>;
+  return <TimeCounter className="controlled-tool">{time}</TimeCounter>;
 };
 
 export default Time;
