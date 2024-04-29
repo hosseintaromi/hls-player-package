@@ -27,22 +27,14 @@ type IconType = {
 } & HTMLAttributes<HTMLElement>;
 
 const Icon = ({ type, onClick, isSensitive, ...other }: IconType) => {
-  const iconRef = useRef<HTMLDivElement>(null);
-
   const {
     config: { icons },
   } = useVideo();
 
-  const { setSensitive } = useSensitiveArea();
-
-  useEffect(() => {
-    if (isSensitive && iconRef.current) {
-      setSensitive(iconRef.current);
-    }
-  }, [isSensitive, setSensitive]);
+  const sensitiveRef = useSensitiveArea(isSensitive);
 
   return (
-    <IconWrapperStyle ref={iconRef} onClick={onClick} {...other}>
+    <IconWrapperStyle ref={sensitiveRef} onClick={onClick} {...other}>
       {icons[type]}
     </IconWrapperStyle>
   );

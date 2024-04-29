@@ -6,11 +6,14 @@ export const useTime = () => {
   const { checkBuffer } = useBuffer();
   const { getVideoRef } = useVideo();
 
-  const changeTime = (time: number) => {
-    const el = getVideoRef();
-    if (el) el.currentTime = time;
-    checkBuffer(true);
-  };
+  const changeTime = useCallback(
+    (time: number) => {
+      const el = getVideoRef();
+      if (el) el.currentTime = time;
+      checkBuffer(true);
+    },
+    [checkBuffer, getVideoRef],
+  );
 
   const increaseTime = useCallback(
     (time: number) => {
@@ -30,10 +33,10 @@ export const useTime = () => {
     [checkBuffer, getVideoRef],
   );
 
-  const getDuration = () => {
+  const getDuration = useCallback(() => {
     const el = getVideoRef();
     return el?.duration;
-  };
+  }, [getVideoRef]);
 
   const getCurrentTime = () => {
     const el = getVideoRef();

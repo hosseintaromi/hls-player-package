@@ -4,16 +4,26 @@ import { useVideo } from "../../hooks/useVideo";
 import { OnUpdateTimeType } from "../../@types/player.model";
 import {
   Bubble,
+  BufferSize,
   GeneralStyleForRange,
   ThumbCursor,
 } from "./MediaTimeLineStyle";
 import Snapshot, { SnapshotModel } from "../tools/Snapshot";
 import { formatDuration } from "../../utils/player-utils";
+import { useTime } from "../../hooks/useTime";
 import BufferIndicator from "./BufferIndicator";
-import ProgressBar from "./ProgressBar";
-import SeekThumb from "./SeekThumb";
+
+type ChangeRangeSelectType = {
+  calcInputVal: (e: number, updateParent: boolean) => void;
+  toggleThumb: (isShow: boolean) => void;
+};
 
 const TimeLine = () => {
+  const controllerRef = useRef<ChangeRangeSelectType>({
+    calcInputVal: () => {},
+    toggleThumb: () => {},
+  });
+  const [hoverTime, setHoverTime] = useState<number | string>();
   const [hoverValue, setHoverValue] = useState<number | string>();
   const [hoverPercent, setHoverPercent] = useState<number>();
 
@@ -23,8 +33,10 @@ const TimeLine = () => {
   const snapShotBox = useRef<HTMLOutputElement>(null);
   const duration = useRef(0);
 
+  let percentage = 0;
   let timeOut: ReturnType<typeof setTimeout>;
 
+  const { changeTime } = useTime();
   const {
     getIsPlay,
     changePlayPause,
@@ -35,8 +47,22 @@ const TimeLine = () => {
     },
     onUpdateTime: (e: OnUpdateTimeType) => {
       duration.current = e.duration;
+      percentage = e.percentage;
+      controllerRef.current.calcInputVal(percentage, false);
+    },
+    onUpdateBuffer: (e: number) => {
+      const buffer_size = document.getElementById("buffer-size");
+      if (buffer_size)
+        buffer_size.style.width = `${JSON.stringify(Math.round(e))}%`;
     },
   });
+
+  const rangeSelectChangeVideoTime = useCallback(
+    (e: number) => {
+      changeTime((e * duration.current) / 100);
+    },
+    [changeTime],
+  );
 
   const setBubble = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
     const event: any = e.nativeEvent;
@@ -57,6 +83,9 @@ const TimeLine = () => {
       -1,
       Math.min(offsetX, event.target.clientWidth) + -1,
     )}px `;
+    setHoverTime(
+      ((offsetX / event.target.clientWidth) * 100 * duration.current) / 100,
+    );
 
     setHoverPercent((offsetX / event.target.clientWidth) * 100);
 
@@ -71,9 +100,13 @@ const TimeLine = () => {
 
     if (!bubbleEl || !bubbleCursorEl) return;
     if (e) {
+      controllerRef.current.toggleThumb(true);
+
       bubbleEl.style.display = "flex";
       bubbleCursorEl.style.display = "flex";
     } else {
+      controllerRef.current.toggleThumb(false);
+
       bubbleCursorEl.style.display = "none";
       bubbleEl.style.display = "none";
     }
@@ -121,11 +154,28 @@ const TimeLine = () => {
   }, [thumbnail, toSecond]);
 
   return (
-    <GeneralStyleForRange className="media-timeLine controlled-tool">
+    <GeneralStyleForRange
+      className="media-timeLine controlled-tool"
+      onMouseEnter={() => {
+        changeShowBubble(true);
+      }}
+      onMouseLeave={() => {
+        changeShowBubble(false);
+      }}
+      onTouchMove={() => {
+        changeShowBubble(true);
+        clearTimeout(timeOut);
+        timeOut = setTimeout(() => {
+          changeShowBubble(false);
+        }, 2000);
+      }}
+    >
       <RangeSelect
         max={100}
         min={0}
         step={0.1}
+        controllerRef={controllerRef}
+        onChangeCallback={rangeSelectChangeVideoTime}
         onRangeMove={(e: any) => {
           setBubble(e);
         }}
@@ -136,22 +186,8 @@ const TimeLine = () => {
         onRangeEnd={() => {
           if (playStateRef.current) changePlayPause(true);
         }}
-        onMouseEnter={() => {
-          changeShowBubble(true);
-        }}
-        onMouseLeave={() => {
-          changeShowBubble(false);
-        }}
-        onTouchMove={() => {
-          changeShowBubble(true);
-          clearTimeout(timeOut);
-          timeOut = setTimeout(() => {
-            changeShowBubble(false);
-          }, 2000);
-        }}
       />
-      <SeekThumb />
-      <ProgressBar />
+      {/* <BufferSize id="buffer-size" /> */}
       <BufferIndicator />
       {thumbnail && (
         <>

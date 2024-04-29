@@ -1,24 +1,16 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import RangeSelect from "../general/range-select/RangeSelect";
 import { useVideo } from "../../hooks/useVideo";
 import { OnUpdateTimeType } from "../../@types/player.model";
-import {
-  Bubble,
-  GeneralStyleForRange,
-  ThumbCursor,
-} from "./MediaTimeLineStyle";
+import { Bubble, ThumbCursor } from "./MediaTimeLineStyle";
 import Snapshot, { SnapshotModel } from "../tools/Snapshot";
 import { formatDuration } from "../../utils/player-utils";
-import BufferIndicator from "./BufferIndicator";
-import ProgressBar from "./ProgressBar";
-import SeekThumb from "./SeekThumb";
+import { useTimeLine } from "../../hooks/useTimeLine";
 
 const TimeLine = () => {
   const [hoverValue, setHoverValue] = useState<number | string>();
   const [hoverPercent, setHoverPercent] = useState<number>();
 
   const snapshots = useRef<SnapshotModel[]>([]);
-  const playStateRef = useRef<boolean>();
   const snapShotBoxCursor = useRef<HTMLDivElement>(null);
   const snapShotBox = useRef<HTMLOutputElement>(null);
   const duration = useRef(0);
@@ -26,8 +18,6 @@ const TimeLine = () => {
   let timeOut: ReturnType<typeof setTimeout>;
 
   const {
-    getIsPlay,
-    changePlayPause,
     config: { thumbnail },
   } = useVideo({
     onReady: (e) => {
@@ -79,6 +69,25 @@ const TimeLine = () => {
     }
   };
 
+  useTimeLine({
+    onTimeLineMouseMove: (e) => {
+      setBubble(e);
+    },
+    onTimeLineMouseEnter: () => {
+      changeShowBubble(true);
+    },
+    onTimeLineMouseLeave: () => {
+      changeShowBubble(true);
+    },
+    onTimeLineTouchMove: () => {
+      changeShowBubble(true);
+      clearTimeout(timeOut);
+      timeOut = setTimeout(() => {
+        changeShowBubble(false);
+      }, 2000);
+    },
+  });
+
   const toSecond = useCallback((time: string) => {
     const timeArr = time.trim().split(":");
     return (
@@ -121,38 +130,7 @@ const TimeLine = () => {
   }, [thumbnail, toSecond]);
 
   return (
-    <GeneralStyleForRange className="media-timeLine controlled-tool">
-      <RangeSelect
-        max={100}
-        min={0}
-        step={0.1}
-        onRangeMove={(e: any) => {
-          setBubble(e);
-        }}
-        onRangeStart={() => {
-          const isPlay = (playStateRef.current = getIsPlay());
-          if (isPlay) changePlayPause(false);
-        }}
-        onRangeEnd={() => {
-          if (playStateRef.current) changePlayPause(true);
-        }}
-        onMouseEnter={() => {
-          changeShowBubble(true);
-        }}
-        onMouseLeave={() => {
-          changeShowBubble(false);
-        }}
-        onTouchMove={() => {
-          changeShowBubble(true);
-          clearTimeout(timeOut);
-          timeOut = setTimeout(() => {
-            changeShowBubble(false);
-          }, 2000);
-        }}
-      />
-      <SeekThumb />
-      <ProgressBar />
-      <BufferIndicator />
+    <>
       {thumbnail && (
         <>
           <Bubble ref={snapShotBox} className="bubble">
@@ -162,7 +140,7 @@ const TimeLine = () => {
           <ThumbCursor ref={snapShotBoxCursor} />
         </>
       )}
-    </GeneralStyleForRange>
+    </>
   );
 };
 

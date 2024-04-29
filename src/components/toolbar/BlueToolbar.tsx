@@ -16,7 +16,6 @@ import Speed from "../setting/blue/Speed";
 import Subtitle from "../setting/blue/SubTitle";
 import Mic from "../setting/blue/Mic";
 import Quality from "../setting/blue/Quality";
-import Mute from "../tools/Mute";
 import SensitiveArea from "../player/SensitiveArea";
 import Skip from "../tools/SkipAd";
 import { useLevel } from "../../hooks/useLevel";
@@ -56,7 +55,6 @@ const BlueToolbar = () => {
             <ToolBarPlayIcon>
               <Play />
             </ToolBarPlayIcon>
-            {/* <Mute /> */}
             <Volume />
           </SettingLeftSection>
           <SettingRightSection>

@@ -18,7 +18,7 @@ const BlueTemplate = () => (
     <TouchContainer>
       <Video />
     </TouchContainer>
-    <Gradient id="gradient" className="controlled-tool" />
+    <Gradient className="controlled-tool" />
     <BlueToolbar />
   </>
 );
