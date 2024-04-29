@@ -2,12 +2,6 @@ export type RangePropsType = {
   min: number;
   max: number;
   step: number;
-  onMouseEnter?: any;
-  onMouseLeave?: any;
-  onRangeMove?: (e: any) => void;
-  onRangeStart?: (e: any) => void;
-  onRangeEnd?: (e: any) => void;
-  onTouchMove?: (e: any) => void;
 };
 
 export type TimeLineEventType = {

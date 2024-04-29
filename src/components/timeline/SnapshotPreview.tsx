@@ -6,7 +6,7 @@ import Snapshot, { SnapshotModel } from "../tools/Snapshot";
 import { formatDuration } from "../../utils/player-utils";
 import { useTimeLine } from "../../hooks/useTimeLine";
 
-const TimeLine = () => {
+const SnapshotPreview = () => {
   const [hoverValue, setHoverValue] = useState<number | string>();
   const [hoverPercent, setHoverPercent] = useState<number>();
 
@@ -77,14 +77,18 @@ const TimeLine = () => {
       changeShowBubble(true);
     },
     onTimeLineMouseLeave: () => {
-      changeShowBubble(true);
+      changeShowBubble(false);
     },
-    onTimeLineTouchMove: () => {
+    onTimeLineTouchMove: (e) => {
       changeShowBubble(true);
       clearTimeout(timeOut);
       timeOut = setTimeout(() => {
         changeShowBubble(false);
       }, 2000);
+      const rect = (e.target as any).getBoundingClientRect();
+      (e as any).offsetX =
+        e.touches[0].clientX - window.pageXOffset - rect.left;
+      setBubble(e);
     },
   });
 
@@ -144,4 +148,4 @@ const TimeLine = () => {
   );
 };
 
-export default TimeLine;
+export default SnapshotPreview;

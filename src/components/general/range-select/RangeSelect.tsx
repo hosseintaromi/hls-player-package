@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useRef, useState } from "react";
 import { GeneralStyleForRange, Slider, TimeLine } from "./RangeSelectStyle";
 import {
   RangePropsType,
@@ -12,24 +12,15 @@ import { OnUpdateTimeType } from "../../../@types";
 
 const TimeLineMemo = memo(() => <TimeLine className="timeline" />);
 
-const RangeSelect = ({
-  min,
-  max,
-  step,
-  onRangeMove,
-  onRangeEnd,
-  onRangeStart,
-  onTouchMove: onTouchMove2,
-  onMouseEnter,
-  onMouseLeave,
-}: RangePropsType) => {
+const RangeSelect = ({ min, max, step }: RangePropsType) => {
   const [currentValue, setCurrentValue] = useState<number>(0);
+  const playStateRef = useRef<boolean>();
 
   const { changeTime, getDuration } = useTime();
   const sensitiveRef = useSensitiveArea();
   const { call } = useContextEvents<TimeLineEventType>(VideoPlayerContext);
 
-  useVideo({
+  const { getIsPlay, changePlayPause } = useVideo({
     onUpdateTime: (e: OnUpdateTimeType) => {
       setCurrentValue(+e.percentage);
     },
@@ -44,12 +35,13 @@ const RangeSelect = ({
     [call, changeTime, getDuration],
   );
 
-  const onTouchMove = (e: React.TouchEvent<HTMLInputElement>) => {
-    if (!onRangeMove) return;
-    const rect = (e.target as any).getBoundingClientRect();
-    (e as any).offsetX = e.touches[0].clientX - window.pageXOffset - rect.left;
-    onRangeMove(e);
-    onTouchMove2?.(e);
+  const onRangeStart = () => {
+    const isPlay = (playStateRef.current = getIsPlay());
+    if (isPlay) changePlayPause(false);
+  };
+
+  const onRangeEnd = () => {
+    if (playStateRef.current) changePlayPause(true);
   };
 
   return (
@@ -63,35 +55,31 @@ const RangeSelect = ({
           value={currentValue}
           onChange={calcThrottle}
           onMouseMove={(e) => {
-            onRangeMove?.(e);
             call.onTimeLineMouseMove?.(e);
           }}
           onTouchMove={(e) => {
-            onTouchMove?.(e);
             call.onTimeLineTouchMove?.(e);
           }}
           onTouchStart={(e) => {
-            onRangeStart?.(e);
+            onRangeStart?.();
             call.onTimeLineTouchStart?.(e);
           }}
           onTouchEnd={(e) => {
-            onRangeEnd?.(e);
+            onRangeEnd?.();
             call.onTimeLineTouchEnd?.(e);
           }}
           onMouseDown={(e) => {
-            onRangeStart?.(e);
+            onRangeStart?.();
             call.onTimeLineMouseDown?.(e);
           }}
           onMouseUp={(e) => {
-            onRangeEnd?.(e);
+            onRangeEnd?.();
             call.onTimeLineMouseUp?.(e);
           }}
           onMouseEnter={(e) => {
-            onMouseEnter?.(e);
             call.onTimeLineMouseEnter?.(e);
           }}
           onMouseLeave={(e) => {
-            onMouseLeave?.(e);
             call.onTimeLineMouseLeave?.(e);
           }}
         />
