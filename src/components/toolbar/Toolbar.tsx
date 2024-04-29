@@ -16,8 +16,8 @@ import PictureInPicture from "../tools/PictureInPicture";
 import Fullscreen from "../tools/Fullscreen";
 import MediaTimeLine from "../timeline/MediaTimeLine";
 
-const Toolbar = ({ isFaded }: { isFaded: boolean }) => (
-  <ToolbarWrapper isFaded={isFaded}>
+const Toolbar = () => (
+  <ToolbarWrapper>
     <MediaTimeLine />
     <SettingItemWrapper>
       <SettingLeftSection>

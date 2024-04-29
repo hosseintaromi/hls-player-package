@@ -2,7 +2,7 @@ import React, { ReactNode, useEffect, useRef } from "react";
 import { useVideo } from "../../hooks/useVideo";
 import { useAds } from "../../hooks/useAds";
 
-const HideContainer = ({ children }: { children: ReactNode }) => {
+const TouchContainer = ({ children }: { children: ReactNode }) => {
   const isShowRef = useRef<boolean>();
   const isSettingOpenRef = useRef<boolean>();
   const isActivateControlsRef = useRef<boolean>();
@@ -31,10 +31,8 @@ const HideContainer = ({ children }: { children: ReactNode }) => {
       const videoWrapperRef = getVideoWrapperRef();
       if (show) {
         videoWrapperRef?.classList.remove("hide-tools");
-        document.body.style.cursor = "auto";
       } else {
         videoWrapperRef?.classList.add("hide-tools");
-        document.body.style.cursor = "none";
       }
     }
   };
@@ -86,4 +84,4 @@ const HideContainer = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export default HideContainer;
+export default TouchContainer;

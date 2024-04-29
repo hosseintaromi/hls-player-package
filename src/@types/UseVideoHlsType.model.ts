@@ -28,11 +28,11 @@ export type UseVideoHlsType = {
   };
   getHlsSubtitle?: (
     subsArr: MediaPlaylistType,
-    currentSubtitle: number
+    currentSubtitle: number,
   ) => void;
   getHlsAudioTrack?: (
     audioArr: MediaPlaylistType,
-    currentAudio: number
+    currentAudio: number,
   ) => void;
   getHlsLevels?: (levels: LevelType) => void;
   getCurrentLevel?: (currentLevel: number) => void;

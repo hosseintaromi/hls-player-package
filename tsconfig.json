@@ -8,8 +8,8 @@
     "skipLibCheck": true,
 
     // Added
-    "jsx": "react",
     "module": "ESNext",
+    "jsx": "react-jsx",
     "declaration": true,
     "declarationDir": "types",
     "sourceMap": false,
