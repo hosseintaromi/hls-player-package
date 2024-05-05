@@ -135,6 +135,7 @@ export type PlayerState = {
   prevSubtitle?: number;
   prevSpeed?: number;
   currentPlayingAd?: AdType;
+  levels?: any[];
 };
 export interface PlayerContextType {
   setVideoRef: (ref: HTMLVideoElement) => void;
