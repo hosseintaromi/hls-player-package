@@ -15,7 +15,6 @@ type SettingModalType = {
   title: string;
   setItem: (index: number) => void;
   iconType: keyof IconsType;
-  onLoadedFunction?: () => void;
   lastItemLocale?: keyof PlayerLocaleType;
   currentItem?: number;
   items?: (string | number)[];

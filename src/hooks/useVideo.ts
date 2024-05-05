@@ -91,6 +91,7 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
 
   const loadVideo = useCallback(
     (src: string, type?: string, startTime?: number) => {
+      call.onLoading?.(true);
       const currentType = type || config.type;
       if (currentType === "HLS" && isSupportedPlatform) {
         loadHlsVideo(src, startTime);
@@ -127,7 +128,7 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
       el.onwaiting = () => {
         call.onLoading?.(true);
       };
-      el.oncanplay = () => {
+      el.onplaying = () => {
         call.onLoading?.(false);
       };
       el.onplay = () => {
