@@ -1,12 +1,20 @@
 import { useEffect } from "react";
 
+export type UseUpdateSubjectType<T> = {
+  onUpdate: (listener: (newValue: T) => void) => () => void;
+  value: T;
+};
+
 let __onUpdateContext = {};
 
 export const useUpdate = <T>(
   value: T,
   key: string,
   context?: React.Context<any>,
-) => {
+): {
+  subject: UseUpdateSubjectType<T>;
+  update: (newValue: T) => void;
+} => {
   const eventContext: any = context || __onUpdateContext;
   if (!eventContext.__states) {
     eventContext.__states = {};

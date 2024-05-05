@@ -5,6 +5,8 @@ import { VolumeWrapper } from "../toolbar/ToolbarStyle";
 import Icon from "../icons/Icon";
 import { useVolume } from "../../hooks/useVolume";
 import { useSignal } from "../../hooks/useSignal";
+import SeekThumb from "../timeline/SeekThumb";
+import ProgressBar from "../timeline/ProgressBar";
 
 const VolumeComponent = ({
   volume,
@@ -95,6 +97,8 @@ const Volume = memo(() => {
           controllerRef={controllerRef}
           onChangeCallback={changeVol}
         />
+        <SeekThumb />
+        <ProgressBar />
       </RangeSelectWrapper>
     </VolumeWrapper>
   );

@@ -1,21 +1,20 @@
 import { useRef } from "react";
 import { Thumb } from "../general/range-select/RangeSelectStyle";
-import { useVideo } from "../../hooks";
-import { OnUpdateTimeType } from "../../@types";
 import { useTimeLine } from "../../hooks/useTimeLine";
+import { UseUpdateSubjectType } from "../../hooks/useUpdate";
+import { useSignal } from "../../hooks/useSignal";
 
-const SeekThumb = () => {
+const SeekThumb = ({ value }: { value: UseUpdateSubjectType<number> }) => {
   const thumbRef = useRef<HTMLDivElement>(null);
+  console.log(value);
+  const $currentValue = useSignal(value);
 
-  useTimeLine({
-    onTimeLineChange: (e: string) => {
-      if (thumbRef.current) thumbRef.current.style.left = `calc(${e}% - 9px)`;
-    },
-  });
-  // useVideo({
-  //   onUpdateTime: (e: OnUpdateTimeType) => {
-  //     if (thumbRef.current)
-  //       thumbRef.current.style.left = `calc(${e.percentage}% - 9px)`;
+  if (thumbRef.current)
+    thumbRef.current.style.left = `calc(${$currentValue}% - 9px)`;
+
+  // useTimeLine({
+  //   onTimeLineChange: (e: string) => {
+  //     if (thumbRef.current) thumbRef.current.style.left = `calc(${e}% - 9px)`;
   //   },
   // });
 

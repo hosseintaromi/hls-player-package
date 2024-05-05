@@ -1,32 +1,25 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useVideo } from "../../hooks/useVideo";
-import { OnUpdateTimeType } from "../../@types/player.model";
-import { Bubble, ThumbCursor } from "./MediaTimeLineStyle";
+import { Bubble } from "./MediaTimeLineStyle";
 import Snapshot, { SnapshotModel } from "../tools/Snapshot";
 import { formatDuration } from "../../utils/player-utils";
 import { useTimeLine } from "../../hooks/useTimeLine";
+import CursorIndicator from "./CursorIndicator";
+import { useTime } from "../../hooks";
 
 const SnapshotPreview = () => {
   const [hoverValue, setHoverValue] = useState<number | string>();
   const [hoverPercent, setHoverPercent] = useState<number>();
 
   const snapshots = useRef<SnapshotModel[]>([]);
-  const snapShotBoxCursor = useRef<HTMLDivElement>(null);
   const snapShotBox = useRef<HTMLOutputElement>(null);
-  const duration = useRef(0);
 
   let timeOut: ReturnType<typeof setTimeout>;
 
+  const { getDuration } = useTime();
   const {
     config: { thumbnail },
-  } = useVideo({
-    onReady: (e) => {
-      duration.current = e.duration;
-    },
-    onUpdateTime: (e: OnUpdateTimeType) => {
-      duration.current = e.duration;
-    },
-  });
+  } = useVideo();
 
   const setBubble = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
     const event: any = e.nativeEvent;
@@ -34,37 +27,29 @@ const SnapshotPreview = () => {
     if (!event.target) return;
 
     const bubbleEl = snapShotBox.current;
-    const bubbleCursorEl = snapShotBoxCursor.current;
 
-    if (!bubbleEl || !bubbleCursorEl) return;
+    if (!bubbleEl) return;
     const halfBubbleWidth = bubbleEl.offsetWidth / 2;
     bubbleEl.style.left = `${Math.max(
       halfBubbleWidth,
       Math.min(offsetX, event.target.clientWidth - halfBubbleWidth),
     )}px`;
     bubbleEl.style.marginLeft = `-${65}px `;
-    bubbleCursorEl.style.left = `${Math.max(
-      -1,
-      Math.min(offsetX, event.target.clientWidth) + -1,
-    )}px `;
 
     setHoverPercent((offsetX / event.target.clientWidth) * 100);
 
     const val = hoverPercent || 0;
-
-    setHoverValue((val * duration.current) / 100);
+    const duration = getDuration();
+    if (duration) setHoverValue((val * duration) / 100);
   };
 
   const changeShowBubble = (e: boolean) => {
     const bubbleEl = snapShotBox.current;
-    const bubbleCursorEl = snapShotBoxCursor.current;
 
-    if (!bubbleEl || !bubbleCursorEl) return;
+    if (!bubbleEl) return;
     if (e) {
       bubbleEl.style.display = "flex";
-      bubbleCursorEl.style.display = "flex";
     } else {
-      bubbleCursorEl.style.display = "none";
       bubbleEl.style.display = "none";
     }
   };
@@ -141,7 +126,7 @@ const SnapshotPreview = () => {
             <Snapshot snapshots={snapshots.current} time={hoverValue} />
             <div style={{ marginTop: "5px" }}>{formatDuration(hoverValue)}</div>
           </Bubble>
-          <ThumbCursor ref={snapShotBoxCursor} />
+          <CursorIndicator />
         </>
       )}
     </>

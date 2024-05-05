@@ -1,38 +1,51 @@
 import React, { memo, useCallback, useRef, useState } from "react";
 import { GeneralStyleForRange, Slider, TimeLine } from "./RangeSelectStyle";
-import {
-  RangePropsType,
-  TimeLineEventType,
-} from "../../../@types/RangeSelectType.model";
+import { RangePropsType } from "../../../@types/RangeSelectType.model";
 import { useSensitiveArea } from "../../../hooks/useSensitiveArea";
 import VideoPlayerContext from "../../../contexts/VideoPlayerContext";
 import { useTime, useVideo } from "../../../hooks";
-import { useContextEvents } from "../../../hooks/useContextEvents";
 import { OnUpdateTimeType } from "../../../@types";
+import SeekThumb from "../../timeline/SeekThumb";
+import ProgressBar from "../../timeline/ProgressBar";
+import { useUpdate } from "../../../hooks/useUpdate";
 
 const TimeLineMemo = memo(() => <TimeLine className="timeline" />);
 
-const RangeSelect = ({ min, max, step }: RangePropsType) => {
+const RangeSelect = ({
+  min,
+  max,
+  step,
+  onMouseMove,
+  onTouchMove,
+  onTouchStart,
+  onTouchEnd,
+  onMouseDown,
+  onMouseUp,
+  onMouseEnter,
+  onMouseLeave,
+}: RangePropsType) => {
   const [currentValue, setCurrentValue] = useState<number>(0);
   const playStateRef = useRef<boolean>();
 
   const { changeTime, getDuration } = useTime();
   const sensitiveRef = useSensitiveArea();
-  const { call } = useContextEvents<TimeLineEventType>(VideoPlayerContext);
-
   const { getIsPlay, changePlayPause } = useVideo({
     onUpdateTime: (e: OnUpdateTimeType) => {
       setCurrentValue(+e.percentage);
     },
   });
+  const rangeValue = useUpdate(currentValue, "range-value", VideoPlayerContext);
+
+  console.log(rangeValue);
 
   const calcThrottle = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const videoDuration = getDuration?.();
       if (videoDuration) changeTime((+e.target.value * videoDuration) / 100);
-      call.onTimeLineChange?.(+e.target.value);
+      // call.onTimeLineChange?.(+e.target.value);
+      rangeValue.update(+e.target.value);
     },
-    [call, changeTime, getDuration],
+    [changeTime, getDuration, rangeValue],
   );
 
   const onRangeStart = () => {
@@ -55,35 +68,37 @@ const RangeSelect = ({ min, max, step }: RangePropsType) => {
           value={currentValue}
           onChange={calcThrottle}
           onMouseMove={(e) => {
-            call.onTimeLineMouseMove?.(e);
+            onMouseMove(e);
           }}
           onTouchMove={(e) => {
-            call.onTimeLineTouchMove?.(e);
+            onTouchMove(e);
           }}
           onTouchStart={(e) => {
             onRangeStart?.();
-            call.onTimeLineTouchStart?.(e);
+            onTouchStart(e);
           }}
           onTouchEnd={(e) => {
             onRangeEnd?.();
-            call.onTimeLineTouchEnd?.(e);
+            onTouchEnd(e);
           }}
           onMouseDown={(e) => {
             onRangeStart?.();
-            call.onTimeLineMouseDown?.(e);
+            onMouseDown(e);
           }}
           onMouseUp={(e) => {
             onRangeEnd?.();
-            call.onTimeLineMouseUp?.(e);
+            onMouseUp(e);
           }}
           onMouseEnter={(e) => {
-            call.onTimeLineMouseEnter?.(e);
+            onMouseEnter(e);
           }}
           onMouseLeave={(e) => {
-            call.onTimeLineMouseLeave?.(e);
+            onMouseLeave?.(e);
           }}
         />
         <TimeLineMemo />
+        <SeekThumb value={rangeValue.subject} />
+        <ProgressBar />
       </GeneralStyleForRange>
     </>
   );
