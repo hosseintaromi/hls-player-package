@@ -58,12 +58,12 @@ const SettingList = ({ changePage, myRef, currentPage }: SettingListType) => {
     const track = getAudioTrack();
     if (track) setCurrentAudioTrack(audioTracks?.[track].name);
 
-    setCurrentLevels(getLevels());
+    setCurrentLevels(levels);
   };
   const { currentSpeed, getSpeeds } = useSpeed();
   const $currentSpeed = useSignal(currentSpeed);
 
-  const { getCurrentLevel, getLevels } = useLevel();
+  const { getCurrentLevel, levels } = useLevel();
   const { getCurrentSubtitle, getSubtitle } = useSubTitle();
   const { getAudioTrack, getAudioTracks } = useAudio();
   useVideo({

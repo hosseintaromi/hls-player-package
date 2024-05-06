@@ -23,17 +23,20 @@ import { useSubTitle } from "../../hooks";
 import { useAudio } from "../../hooks/useAudio";
 import { useVideo } from "../../hooks/useVideo";
 import Volume from "../tools/Volume";
+import { useSignal } from "../../hooks/useSignal";
 
 const BlueToolbar = () => {
   const [isShowQ, setIsShowQ] = useState<any>();
   const [isShowS, setIsShowS] = useState<any>();
   const [isShowA, setIsShowA] = useState<any>();
-  const { getLevels } = useLevel();
+  const { levels } = useLevel();
   const { getSubtitle } = useSubTitle();
   const { getAudioTracks } = useAudio();
 
+  const $levels = useSignal(levels);
+
   const loadLevels = () => {
-    setIsShowQ(getLevels() !== undefined);
+    setIsShowQ($levels !== undefined);
     setIsShowS(getSubtitle() !== undefined);
     setIsShowA(getAudioTracks() !== undefined);
   };

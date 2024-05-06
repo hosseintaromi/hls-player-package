@@ -22,6 +22,7 @@ const PlayerInitializer = () => {
 
   const { loadVideo, config, state } = useVideo({
     onChangeSrc(data) {
+      context.hls?.destroy();
       loadVideo(data.src, data.type, data.startTime);
       initConfig();
     },

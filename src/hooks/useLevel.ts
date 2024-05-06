@@ -16,6 +16,35 @@ export const useLevel = () => {
     "level",
     VideoPlayerContext,
   );
+  const levelsState = useUpdate<{ level: number }[]>(
+    context.hls?.levels?.map((level) => ({ level: level.height })) || [],
+    "levels",
+    VideoPlayerContext,
+  );
+
+  const initLevels = useCallback(() => {
+    const state = context.state;
+    if (!context.hls) {
+      levelsState.update(
+        state.levels?.map((level) => ({ level: level.level })) || [],
+      );
+    } else {
+      levelsState.update(
+        context.hls?.levels
+          .filter((item) =>
+            qualities.length ? qualities.includes(item.height) : true,
+          )
+          .map((level) => ({ level: level.height })) || [],
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useVideo({
+    onReady: () => {
+      initLevels();
+    },
+  });
 
   const getQualities = useCallback(
     () =>
@@ -69,16 +98,6 @@ export const useLevel = () => {
     [context.state, src],
   );
 
-  const getLevels = useCallback(() => {
-    const state = context.state;
-    if (!context.hls) {
-      return state.levels?.map((level) => ({ height: level.level }));
-    }
-    return context.hls?.levels.filter((item) =>
-      qualities.length ? qualities.includes(item.height) : true,
-    );
-  }, [context.hls, context.state, qualities]);
-
   const getCurrentLevel = useCallback(
     () => ({
       currentLevel: context.hls?.currentLevel || levelState.subject.value,
@@ -109,7 +128,7 @@ export const useLevel = () => {
   }, []);
 
   return {
-    getLevels,
+    levels: levelsState.subject,
     getCurrentLevel,
     changeLevel,
     currentLevel: levelState.subject,

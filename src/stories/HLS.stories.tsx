@@ -89,7 +89,12 @@ const Demo = ({ length }: DemoProps) => {
 
   useEffect(() => {
     // setTimeout(() => {
-    //   playerConfig.src && playerConfig.loadVideo(playerConfig.src, "HLS", 100);
+    //   playerConfig.src &&
+    //     playerConfig.loadVideo(
+    //       "https://cdn.bitmovin.com/content/assets/sintel/hls/playlist.m3u8",
+    //       "HLS",
+    //       0,
+    //     );
     // }, 4000);
   }, []);
   return (

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import RangeSelect from "../general/range-select/RangeSelect";
 import { GeneralStyleForRange } from "./MediaTimeLineStyle";
 import BufferIndicator from "./BufferIndicator";
@@ -21,8 +21,8 @@ const TimeLine = () => {
   const [rangeValue, setRangeValue] = useState<number>(startTime || 0);
 
   const isPlay = useRef(getIsPlay());
-  const { call } = useContextEvents<TimeLineEventType>(VideoPlayerContext);
 
+  const { call } = useContextEvents<TimeLineEventType>(VideoPlayerContext);
   const { changeTime, getDuration } = useTime();
   useVideo({
     onUpdateTime: (e: OnUpdateTimeType) => {
