@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useVideo } from "../../hooks/useVideo";
 import { Bubble } from "./MediaTimeLineStyle";
 import Snapshot, { SnapshotModel } from "../tools/Snapshot";

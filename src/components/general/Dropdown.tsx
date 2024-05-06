@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { HTMLAttributes, useState } from "react";
+import { HTMLAttributes, useState } from "react";
 
 type DropdownOption = {
   value: string;

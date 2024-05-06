@@ -1,4 +1,3 @@
-import React from "react";
 import { Gradient, PlayJumpIconWrapper } from "../../player/VideoPlayerStyle";
 import Loading from "../../general/Loading";
 import TouchContainer from "../../player/TouchContainer";

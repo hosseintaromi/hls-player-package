@@ -1,4 +1,3 @@
-import React from "react";
 import { useVideo } from "../../hooks/useVideo";
 import Icon from "../icons/Icon";
 import { useSignal } from "../../hooks/useSignal";

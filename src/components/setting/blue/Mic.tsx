@@ -1,4 +1,3 @@
-import React from "react";
 import { useAudio } from "../../../hooks/useAudio";
 import SettingModal from "./SettingModal";
 import { useSignal } from "../../../hooks/useSignal";

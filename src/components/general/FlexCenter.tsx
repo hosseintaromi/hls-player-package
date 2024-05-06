@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { HTMLAttributes } from "react";
+import { HTMLAttributes } from "react";
 
 export const CenterBox = styled.div({
   display: "flex",

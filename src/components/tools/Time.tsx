@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useVideo } from "../../hooks/useVideo";
 import { OnUpdateTimeType } from "../../@types/player.model";
 import { TimeCounter } from "../toolbar/ToolbarStyle";

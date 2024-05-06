@@ -1,4 +1,3 @@
-import React, { useCallback, useState } from "react";
 import { useSubTitle } from "../../../hooks/useSubTitle";
 import SettingModal from "./SettingModal";
 import { useSignal } from "../../../hooks/useSignal";

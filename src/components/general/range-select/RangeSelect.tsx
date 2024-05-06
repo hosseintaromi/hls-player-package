@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import { memo, useCallback } from "react";
 import { GeneralStyleForRange, Slider, TimeLine } from "./RangeSelectStyle";
 import { RangePropsType } from "../../../@types/RangeSelectType.model";
 import { useSensitiveArea } from "../../../hooks/useSensitiveArea";

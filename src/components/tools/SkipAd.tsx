@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useAds } from "../../hooks/useAds";
 import { formatDuration } from "../../utils/player-utils";
 import { OnUpdateTimeType } from "../../@types";

@@ -1,4 +1,3 @@
-import React from "react";
 import Icon from "../icons/Icon";
 import { useFullScreen } from "../../hooks/useFullScreen";
 import { useSignal } from "../../hooks/useSignal";

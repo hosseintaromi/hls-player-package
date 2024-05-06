@@ -1,13 +1,10 @@
-import React, { memo, useRef, useState } from "react";
+import { memo, useState } from "react";
 import styled from "@emotion/styled";
-import { values } from "lodash-es";
 import RangeSelect from "../general/range-select/RangeSelect";
 import { VolumeWrapper } from "../toolbar/ToolbarStyle";
 import Icon from "../icons/Icon";
 import { useVolume } from "../../hooks/useVolume";
 import { useSignal } from "../../hooks/useSignal";
-import SeekThumb from "../timeline/SeekThumb";
-import ProgressBar from "../timeline/ProgressBar";
 import { useUpdate } from "../../hooks/useUpdate";
 import VideoPlayerContext from "../../contexts/VideoPlayerContext";
 
@@ -40,10 +37,6 @@ const VolumeComponent = ({
       />
     );
   return <></>;
-};
-
-type ChangeRangeSelectType = {
-  calcInputVal: (e: number, updateParent: boolean) => void;
 };
 
 const RangeSelectWrapper = styled.div(
@@ -89,7 +82,7 @@ const Volume = memo(() => {
       onMouseLeave={() => setVolumeVisibility(false)}
     >
       <VolumeComponent handleClick={mute} isMute={$isMute} volume={volume} />
-      <RangeSelectWrapper visible>
+      <RangeSelectWrapper visible={volumeVisibility}>
         <RangeSelect
           step={1}
           min={0}

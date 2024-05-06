@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import React from "react";
 
 const SettingMenuWrapper = styled.div({
   transition: "all 0.3s ease",

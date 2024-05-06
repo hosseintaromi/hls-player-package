@@ -1,4 +1,3 @@
-import React, { useCallback, useState } from "react";
 import { useSpeed } from "../../../hooks/useSpeed";
 import SettingModal from "./SettingModal";
 import { useSignal } from "../../../hooks/useSignal";

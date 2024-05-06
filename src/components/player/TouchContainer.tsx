@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 import { useVideo } from "../../hooks/useVideo";
 import { useAds } from "../../hooks/useAds";
 

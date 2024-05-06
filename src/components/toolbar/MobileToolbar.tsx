@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   IconButton,
   MobileSettingPlay,
@@ -22,7 +22,7 @@ import { DialogLabel, DialogTitle } from "../general/DialogStyle";
 import SettingItem from "../setting/red/SettingItem";
 import Locale from "../locale/Locale";
 
-const MobileToolbar = ({ isFaded }: { isFaded: boolean }) => {
+const MobileToolbar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const DropdownList = [
@@ -44,7 +44,7 @@ const MobileToolbar = ({ isFaded }: { isFaded: boolean }) => {
     },
   ];
   return (
-    <MobileToolbarWrapper isFaded={isFaded}>
+    <MobileToolbarWrapper className="controlled-tool">
       <MobileTopToolbar>
         <Dialog
           onClose={() => {

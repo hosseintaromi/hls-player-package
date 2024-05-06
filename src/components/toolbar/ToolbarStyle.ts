@@ -62,32 +62,29 @@ export const VolumeWrapper = styled.div(
   ({ gap }: { gap: boolean }) => ({ gap: gap ? "10px" : "0" }),
 );
 
-export const MobileToolbarWrapper = styled.div(
-  {
-    position: "absolute",
-    zIndex: "10",
-    top: "0",
-    bottom: "0",
-    left: "0",
-    right: "0",
+export const MobileToolbarWrapper = styled.div({
+  position: "absolute",
+  zIndex: "10",
+  top: "0",
+  bottom: "0",
+  left: "0",
+  right: "0",
 
-    ".media-timeLine": {
-      position: "absolute",
-      bottom: "16px",
-      left: "32px",
-      right: "32px",
-      width: "auto",
-    },
-    ".setting-item-wrapper": {
-      position: "absolute",
-      bottom: "45px",
-      left: "32px",
-      right: "32px",
-      width: "auto",
-    },
+  ".media-timeLine": {
+    position: "absolute",
+    bottom: "16px",
+    left: "32px",
+    right: "32px",
+    width: "auto",
   },
-  ({ isFaded }: { isFaded: boolean }) => ({ opacity: isFaded ? 0 : 1 }),
-);
+  ".setting-item-wrapper": {
+    position: "absolute",
+    bottom: "45px",
+    left: "32px",
+    right: "32px",
+    width: "auto",
+  },
+});
 export const MobileSettingPlay = styled.div({
   position: "absolute",
   top: "50%",

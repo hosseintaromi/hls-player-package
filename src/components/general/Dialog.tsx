@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { ModalContent, ModalOverlay, ModalWrapper } from "./DialogStyle";
 import { useContextEvents } from "../../hooks/useContextEvents";

@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, useEffect, useRef } from "react";
+import { HTMLAttributes } from "react";
 import styled from "@emotion/styled";
 import { IconsType } from "../../@types/player.model";
 import { useVideo } from "../../hooks/useVideo";

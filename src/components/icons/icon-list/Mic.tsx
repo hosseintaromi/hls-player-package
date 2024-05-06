@@ -1,5 +1,3 @@
-import React from "react";
-
 const Mic = () => (
   <svg
     width="24"

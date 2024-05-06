@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Meta, Story } from "@storybook/react";
 import VideoPlayer from "../components/player/VideoPlayer";
 import { usePlayer } from "../hooks";

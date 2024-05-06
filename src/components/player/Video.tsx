@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import styled from "@emotion/styled";
 import { useVideo } from "../../hooks/useVideo";
 import { useTime } from "../../hooks";

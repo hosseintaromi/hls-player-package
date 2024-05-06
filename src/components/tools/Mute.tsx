@@ -1,4 +1,3 @@
-import React from "react";
 import Icon from "../icons/Icon";
 import { useVolume } from "../../hooks/useVolume";
 import { useSignal } from "../../hooks/useSignal";

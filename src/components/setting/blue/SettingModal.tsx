@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Icon from "../../icons/Icon";
 import Dialog from "../../general/Dialog";
 import { DialogTitle } from "../../general/DialogStyle";

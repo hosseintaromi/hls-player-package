@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import SettingItem from "./SettingItem";
 import { SettingMenu } from "../../general/SettingMenu";
 import SettingHeader from "./SettingHeader";

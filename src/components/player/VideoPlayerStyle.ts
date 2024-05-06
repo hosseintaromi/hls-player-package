@@ -169,19 +169,16 @@ export const MobileVideoWrapper = styled.div({
   },
 });
 
-export const MobileGradient = styled.div(
-  ({ theme }) => ({
-    transition: "opacity .25s cubic-bezier(0,0,.2,1)",
-    top: 0,
-    bottom: 0,
-    zIndex: 24,
-    width: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    background: `${theme.toolbarBg}`,
-  }),
-  ({ isFaded }: { isFaded: boolean }) => ({ opacity: isFaded ? 0 : 1 }),
-);
+export const MobileGradient = styled.div(({ theme }) => ({
+  transition: "opacity .25s cubic-bezier(0,0,.2,1)",
+  top: 0,
+  bottom: 0,
+  zIndex: 24,
+  width: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  background: `${theme.toolbarBg}`,
+}));
 
 export const VideoWrapperStyle = styled.div({
   width: "100%",

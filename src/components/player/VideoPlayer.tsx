@@ -1,5 +1,5 @@
-import React, { useCallback, useRef } from "react";
-import { Global, ThemeProvider, css } from "@emotion/react";
+import { useCallback, useRef } from "react";
+import { ThemeProvider } from "@emotion/react";
 import PlayerTemplate from "../templates/red/PlayerTemplate";
 import { PlayerInstance, PlayerState } from "../../@types/player.model";
 import VideoPlayerContext from "../../contexts/VideoPlayerContext";

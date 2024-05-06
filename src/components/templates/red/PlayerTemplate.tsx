@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import Video from "../../player/Video";
 import { Gradient, PlayIconWrapper } from "../../player/VideoPlayerStyle";
 import Toolbar from "../../toolbar/Toolbar";

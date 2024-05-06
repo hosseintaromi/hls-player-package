@@ -1,4 +1,3 @@
-import React from "react";
 import { useLevel } from "../../../hooks/useLevel";
 import SettingModal from "./SettingModal";
 import { useSignal } from "../../../hooks/useSignal";
