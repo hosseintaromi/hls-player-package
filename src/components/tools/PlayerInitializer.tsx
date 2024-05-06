@@ -10,7 +10,6 @@ import { AdType } from "../../@types";
 const PlayerInitializer = () => {
   const context = useContext(VideoPlayerContext);
 
-  const { loadVideo, config, state } = useVideo();
   const { changeLocale } = useLocale({});
   const { initSubtitle, changeSubtitle, getSubtitles, removeSubtitle } =
     useSubTitle();
@@ -20,6 +19,13 @@ const PlayerInitializer = () => {
     initSpeeds();
     initSubtitle();
   };
+
+  const { loadVideo, config, state } = useVideo({
+    onChangeSrc(data) {
+      loadVideo(data.src, data.type, data.startTime);
+      initConfig();
+    },
+  });
 
   const loadOriginalVideo = (startTime: number) => {
     if (!config.src) return;

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import RangeSelect from "../general/range-select/RangeSelect";
 import { GeneralStyleForRange } from "./MediaTimeLineStyle";
 import BufferIndicator from "./BufferIndicator";
@@ -11,10 +11,15 @@ import { OnUpdateTimeType } from "../../@types";
 import { useSensitiveArea } from "../../hooks/useSensitiveArea";
 
 const TimeLine = () => {
-  const [rangeValue, setRangeValue] = useState<number>(0);
-
   const sensitiveRef = useSensitiveArea();
-  const { changePlayPause, getIsPlay } = useVideo();
+  const {
+    changePlayPause,
+    getIsPlay,
+    config: { startTime },
+  } = useVideo();
+
+  const [rangeValue, setRangeValue] = useState<number>(startTime || 0);
+
   const isPlay = useRef(getIsPlay());
   const { call } = useContextEvents<TimeLineEventType>(VideoPlayerContext);
 

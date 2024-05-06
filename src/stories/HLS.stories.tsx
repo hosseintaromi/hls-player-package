@@ -89,7 +89,7 @@ const Demo = ({ length }: DemoProps) => {
 
   useEffect(() => {
     // setTimeout(() => {
-    // 	playerConfig.src && playerConfig.loadVideo(playerConfig.src);
+    //   playerConfig.src && playerConfig.loadVideo(playerConfig.src, "HLS", 100);
     // }, 4000);
   }, []);
   return (

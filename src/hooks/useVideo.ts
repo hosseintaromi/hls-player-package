@@ -108,6 +108,14 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     [],
   );
 
+  const setSrc = useCallback(
+    (src: string, type?: string, startTime?: number) => {
+      call.onChangeSrc?.({ src, type, startTime });
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
   const changePlayPause = (play: boolean) => {
     const videoRef = getVideoRef();
     if (videoRef) {
@@ -189,7 +197,7 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  config.loadVideo = loadVideo;
+  config.loadVideo = setSrc;
 
   return {
     hls: context.hls,

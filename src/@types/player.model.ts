@@ -160,4 +160,5 @@ export type PlayerEventsType = {
   onChangeSetting: "onChangeSetting";
   onActivateControls: "onActivateControls";
   onLoaded: "OnLoaded";
+  onChangeSrc: "OnChangeSrc";
 };
