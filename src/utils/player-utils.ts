@@ -39,3 +39,10 @@ export const formatDuration = (duration: any, milisecond?: boolean) => {
     },
   );
 };
+
+export const toSecond = (time: string) => {
+  const timeArr = time.trim().split(":");
+  return (
+    Number(timeArr[0]) * 3600 + Number(timeArr[1]) * 60 + Number(timeArr[2])
+  );
+};

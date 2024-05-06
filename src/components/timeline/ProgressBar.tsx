@@ -1,16 +1,15 @@
 import { useRef } from "react";
 import { ProgressBarStyle } from "../general/range-select/RangeSelectStyle";
 import { useTimeLine } from "../../hooks/useTimeLine";
+import { UseUpdateSubjectType } from "../../hooks/useUpdate";
+import { useSignal } from "../../hooks/useSignal";
 
-const ProgressBar = () => {
+const ProgressBar = ({ value }: { value: UseUpdateSubjectType<number> }) => {
   const progressBarRef = useRef<HTMLDivElement>(null);
+  const $currentValue = useSignal(value);
 
-  useTimeLine({
-    onTimeLineChange: (e: string) => {
-      if (progressBarRef.current)
-        progressBarRef.current.style.width = `calc(${e}%)`;
-    },
-  });
+  if (progressBarRef.current)
+    progressBarRef.current.style.width = `calc(${$currentValue}%)`;
 
   return <ProgressBarStyle ref={progressBarRef} />;
 };

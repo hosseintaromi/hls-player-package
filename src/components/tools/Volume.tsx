@@ -1,5 +1,6 @@
 import React, { memo, useRef, useState } from "react";
 import styled from "@emotion/styled";
+import { values } from "lodash-es";
 import RangeSelect from "../general/range-select/RangeSelect";
 import { VolumeWrapper } from "../toolbar/ToolbarStyle";
 import Icon from "../icons/Icon";
@@ -7,6 +8,8 @@ import { useVolume } from "../../hooks/useVolume";
 import { useSignal } from "../../hooks/useSignal";
 import SeekThumb from "../timeline/SeekThumb";
 import ProgressBar from "../timeline/ProgressBar";
+import { useUpdate } from "../../hooks/useUpdate";
+import VideoPlayerContext from "../../contexts/VideoPlayerContext";
 
 const VolumeComponent = ({
   volume,
@@ -58,11 +61,8 @@ const RangeSelectWrapper = styled.div(
 const Volume = memo(() => {
   const [volumeVisibility, setVolumeVisibility] = useState<boolean>(false);
 
-  const controllerRef = useRef<ChangeRangeSelectType>({
-    calcInputVal: () => {},
-  });
-
   const { changeVolume, changeMute, isMute, currentVolume } = useVolume();
+  const rangeValue = useUpdate(100, "volume-range", VideoPlayerContext);
   const $isMute = useSignal(isMute);
   const $currentVolume = useSignal(currentVolume);
 
@@ -71,9 +71,9 @@ const Volume = memo(() => {
   const mute = () => {
     changeMute(!$isMute);
     if (!$isMute) {
-      controllerRef.current.calcInputVal(0, false);
+      rangeValue.update(0);
     } else {
-      controllerRef.current.calcInputVal(volume, false);
+      rangeValue.update(volume);
     }
   };
 
@@ -89,16 +89,15 @@ const Volume = memo(() => {
       onMouseLeave={() => setVolumeVisibility(false)}
     >
       <VolumeComponent handleClick={mute} isMute={$isMute} volume={volume} />
-      <RangeSelectWrapper visible={volumeVisibility}>
+      <RangeSelectWrapper visible>
         <RangeSelect
           step={1}
           min={0}
           max={100}
-          controllerRef={controllerRef}
-          onChangeCallback={changeVol}
+          defaultValue={100}
+          updateKey="volume-range"
+          onChange={changeVol}
         />
-        <SeekThumb />
-        <ProgressBar />
       </RangeSelectWrapper>
     </VolumeWrapper>
   );
