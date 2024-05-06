@@ -1,7 +1,7 @@
 import { useRef } from "react";
-import { Thumb } from "../general/range-select/RangeSelectStyle";
-import { UseUpdateSubjectType } from "../../hooks/useUpdate";
-import { useSignal } from "../../hooks/useSignal";
+import { Thumb } from "./RangeSelectStyle";
+import { UseUpdateSubjectType } from "../../../hooks/useUpdate";
+import { useSignal } from "../../../hooks/useSignal";
 
 const SeekThumb = ({ value }: { value: UseUpdateSubjectType<number> }) => {
   const thumbRef = useRef<HTMLDivElement>(null);

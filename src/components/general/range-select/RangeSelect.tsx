@@ -3,8 +3,8 @@ import { GeneralStyleForRange, Slider, TimeLine } from "./RangeSelectStyle";
 import { RangePropsType } from "../../../@types/RangeSelectType.model";
 import { useSensitiveArea } from "../../../hooks/useSensitiveArea";
 import VideoPlayerContext from "../../../contexts/VideoPlayerContext";
-import SeekThumb from "../../timeline/SeekThumb";
-import ProgressBar from "../../timeline/ProgressBar";
+import SeekThumb from "./SeekThumb";
+import ProgressBar from "./ProgressBar";
 import { useUpdate } from "../../../hooks/useUpdate";
 
 const TimeLineMemo = memo(() => <TimeLine className="timeline" />);
