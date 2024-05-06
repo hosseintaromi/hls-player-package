@@ -9,7 +9,8 @@ export const useTimeLine = (events?: GenericEvents<TimeLineEventType>) => {
 
   useEffect(() => {
     listen(events);
-  }, [events, listen]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return {};
 };

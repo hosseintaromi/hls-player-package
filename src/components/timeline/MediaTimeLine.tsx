@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import RangeSelect from "../general/range-select/RangeSelect";
 import { GeneralStyleForRange } from "./MediaTimeLineStyle";
 import BufferIndicator from "./BufferIndicator";
@@ -7,15 +8,20 @@ import { TimeLineEventType } from "../../@types/RangeSelectType.model";
 import VideoPlayerContext from "../../contexts/VideoPlayerContext";
 import { useTime, useVideo } from "../../hooks";
 import { OnUpdateTimeType } from "../../@types";
-import { useUpdate } from "../../hooks/useUpdate";
+import { useSensitiveArea } from "../../hooks/useSensitiveArea";
 
 const TimeLine = () => {
+  const [rangeValue, setRangeValue] = useState<number>(0);
+
+  const sensitiveRef = useSensitiveArea();
+  const { changePlayPause, getIsPlay } = useVideo();
+  const isPlay = useRef(getIsPlay());
   const { call } = useContextEvents<TimeLineEventType>(VideoPlayerContext);
-  const rangeValue = useUpdate(0, "range-value", VideoPlayerContext);
+
   const { changeTime, getDuration } = useTime();
   useVideo({
     onUpdateTime: (e: OnUpdateTimeType) => {
-      rangeValue.update(+e.percentage);
+      setRangeValue(+e.percentage);
     },
   });
 
@@ -27,12 +33,15 @@ const TimeLine = () => {
   };
 
   return (
-    <GeneralStyleForRange className="media-timeLine controlled-tool">
+    <GeneralStyleForRange
+      className="media-timeLine controlled-tool"
+      ref={sensitiveRef}
+    >
       <RangeSelect
-        updateKey="range-value"
         max={100}
         min={0}
         step={0.1}
+        value={rangeValue}
         onChange={onChange}
         onMouseMove={(e) => {
           call.onTimeLineMouseMove?.(e);
@@ -46,6 +55,11 @@ const TimeLine = () => {
         onMouseLeave={(e) => {
           call.onTimeLineMouseLeave?.(e);
         }}
+        onMouseDown={() => {
+          isPlay.current = getIsPlay();
+          changePlayPause(false);
+        }}
+        onMouseUp={() => changePlayPause(!!isPlay.current)}
       />
 
       <BufferIndicator />

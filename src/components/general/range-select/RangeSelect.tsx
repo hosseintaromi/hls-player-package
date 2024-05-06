@@ -1,11 +1,9 @@
-import { memo, useCallback } from "react";
+import { memo, useState } from "react";
 import { GeneralStyleForRange, Slider, TimeLine } from "./RangeSelectStyle";
 import { RangePropsType } from "../../../@types/RangeSelectType.model";
 import { useSensitiveArea } from "../../../hooks/useSensitiveArea";
-import VideoPlayerContext from "../../../contexts/VideoPlayerContext";
 import SeekThumb from "./SeekThumb";
 import ProgressBar from "./ProgressBar";
-import { useUpdate } from "../../../hooks/useUpdate";
 
 const TimeLineMemo = memo(() => <TimeLine className="timeline" />);
 
@@ -13,35 +11,32 @@ const RangeSelect = ({
   min,
   max,
   step,
-  updateKey,
-  defaultValue = 0,
+  value = 0,
   onChange,
   onMouseMove,
   onTouchMove,
   onMouseEnter,
   onMouseLeave,
+  onMouseDown,
+  onMouseUp,
 }: RangePropsType) => {
-  const sensitiveRef = useSensitiveArea();
-  const rangeValue = useUpdate(defaultValue, updateKey, VideoPlayerContext);
+  const [rangeValue, setRangeValue] = useState(value);
 
-  const calcThrottle = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      rangeValue.update(+e.target.value);
-      onChange?.(+e.target.value);
-    },
-    [onChange, rangeValue],
-  );
+  const change = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRangeValue(+e.target.value);
+    onChange?.(+e.target.value);
+  };
 
   return (
     <>
-      <GeneralStyleForRange ref={sensitiveRef}>
+      <GeneralStyleForRange>
         <Slider
           type="range"
           step={step}
           min={min}
           max={max}
-          defaultValue={defaultValue}
-          onChange={calcThrottle}
+          value={rangeValue}
+          onChange={change}
           onMouseMove={(e) => {
             onMouseMove?.(e);
           }}
@@ -54,10 +49,16 @@ const RangeSelect = ({
           onMouseLeave={(e) => {
             onMouseLeave?.(e);
           }}
+          onMouseDown={(e) => {
+            onMouseDown?.(e);
+          }}
+          onMouseUp={(e) => {
+            onMouseUp?.(e);
+          }}
         />
         <TimeLineMemo />
-        <SeekThumb value={rangeValue.subject} />
-        <ProgressBar value={rangeValue.subject} />
+        <SeekThumb value={rangeValue} />
+        <ProgressBar value={rangeValue} />
       </GeneralStyleForRange>
     </>
   );
