@@ -65,7 +65,7 @@ const VideoPlayer = ({
         <VideoWrapperStyle ref={videoWrapperRef}>
           <>
             {children ? (
-              { children }
+              <>{children}</>
             ) : (
               <PlayerTemplateSelector config={config} />
             )}
