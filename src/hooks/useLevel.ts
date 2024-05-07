@@ -3,6 +3,7 @@ import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { useVideo } from "./useVideo";
 import { useUpdate } from "./useUpdate";
 import { useTime } from "./useTime";
+import { useSignal } from "./useSignal";
 
 export const useLevel = () => {
   const context = useContext(VideoPlayerContext);
@@ -21,6 +22,7 @@ export const useLevel = () => {
     "levels",
     VideoPlayerContext,
   );
+  const $levels = useSignal(levelsState.subject);
 
   const initLevels = useCallback(() => {
     const state = context.state;
@@ -128,7 +130,7 @@ export const useLevel = () => {
   }, []);
 
   return {
-    levels: levelsState.subject,
+    levels: $levels,
     getCurrentLevel,
     changeLevel,
     currentLevel: levelState.subject,

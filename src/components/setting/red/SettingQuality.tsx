@@ -1,14 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SettingItem from "./SettingItem";
 import { SettingMenu } from "../../general/SettingMenu";
 import SettingHeader from "./SettingHeader";
 import CheckMark from "../../icons/icon-list/CheckMark";
-import { LevelType } from "../../../@types/UseVideoHlsType.model";
 import Locale from "../../locale/Locale";
 import { pageName, pageDir } from "../../../@types/setting.model";
 import { useLevel } from "../../../hooks/useLevel";
-import { useVideo } from "../../../hooks/useVideo";
-import { useSignal } from "../../../hooks/useSignal";
 
 type SettingQualityType = {
   changePage: (newPageName: pageName, dir: pageDir) => void;
@@ -18,7 +15,6 @@ type SettingQualityType = {
 const SettingQuality = ({ changePage, myRef }: SettingQualityType) => {
   const [currentLevel, setCurrentLevel] = useState<number>();
   const { levels, changeLevel } = useLevel();
-  const $levels = useSignal(levels);
 
   const setQuality = (index: number) => {
     changeLevel(index);
@@ -28,7 +24,7 @@ const SettingQuality = ({ changePage, myRef }: SettingQualityType) => {
 
   const qualityListGenerator = () =>
     levels ? (
-      $levels.map((item, index) => (
+      levels.map((item, index) => (
         <SettingItem
           key={`qualityListGenerator${index}`}
           onClick={() => setQuality(index)}
