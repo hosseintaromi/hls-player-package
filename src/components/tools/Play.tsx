@@ -6,6 +6,8 @@ const Play = () => {
   const { changePlayPause, isPlay } = useVideo();
   const $isPlay = useSignal(isPlay);
 
+  console.log("isPlay", $isPlay);
+
   const togglePlay = () => {
     changePlayPause(!$isPlay);
   };

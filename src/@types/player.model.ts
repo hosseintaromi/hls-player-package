@@ -136,6 +136,7 @@ export type PlayerState = {
   prevSpeed?: number;
   currentPlayingAd?: AdType;
   levels?: any[];
+  isPlaying?: boolean;
 };
 export interface PlayerContextType {
   setVideoRef: (ref: HTMLVideoElement) => void;
