@@ -13,7 +13,6 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     config,
     setVideoRef: videoRefSetter,
     getVideoRef,
-    listenOnLoad,
     state,
     ...others
   } = useContext(VideoPlayerContext);
@@ -68,21 +67,23 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
 
     hls.on(Hls.Events.LEVEL_SWITCHED, () => {
       videoEl.onplaying = () => {
-        console.log("onplaying", false);
         call.onLoading?.(false);
       };
       // bindVideoElEvents(videoEl);
     });
 
     hls.on(Hls.Events.ERROR, (event, data) => {
+      // eslint-disable-next-line no-console
       if (data) console.log(JSON.stringify(data));
       if (data.fatal) {
         switch (data.type) {
           case Hls.ErrorTypes.MEDIA_ERROR:
+            // eslint-disable-next-line no-console
             console.log("MEDIA_ERROR");
             hls.recoverMediaError();
             break;
           case Hls.ErrorTypes.NETWORK_ERROR:
+            // eslint-disable-next-line no-console
             console.error("fatal network error encountered", data);
             // All retries and media options have been exhausted.
             // Immediately trying to restart loading could cause loop loading.
@@ -95,11 +96,6 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
             break;
         }
       }
-    });
-    hls.on(Hls.Events.LEVEL_LOADED, () => {
-      // listenOnLoad.forEach((listener) => {
-      //   listener();
-      // });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -149,29 +145,23 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
   }, [getVideoRef]);
 
   const bindVideoElEvents = (el: HTMLVideoElement) => {
-    console.log("bindVideoElEvents");
     if (!el) return;
     videoRefSetter(el);
     el.onwaiting = () => {
-      console.log("onwaiting", true);
       call.onLoading?.(true);
     };
     el.oncanplay = () => {
-      console.log("oncanplay", false);
       call.onLoading?.(false);
     };
     el.onplaying = () => {
-      console.log("onplaying", false);
       call.onLoading?.(false);
     };
     el.onplay = () => {
-      console.log("onplay", true);
       state.isPlaying = true;
       playState.update(true);
       call.onPlayPause?.(true);
     };
     el.onpause = () => {
-      console.log("onpause", false);
       state.isPlaying = false;
       playState.update(false);
       call.onLoading?.(false);
@@ -182,9 +172,6 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     };
     el.onloadeddata = () => {
       call.onLoading?.(true); // so it shows loading by default
-      listenOnLoad.forEach((listener) => {
-        listener();
-      });
       call.onReady?.(el);
     };
     el.ontimeupdate = () => {
@@ -202,20 +189,15 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     };
   };
 
-  const setVideoRef = useCallback(
-    (el?: HTMLVideoElement) => {
-      if (!el) return;
-      videoRefSetter(el);
-      bindVideoElEvents(el);
-    },
-    [call, checkBuffer, listenOnLoad, videoRefSetter],
-  );
+  const setVideoRef = useCallback((el?: HTMLVideoElement) => {
+    if (!el) return;
+    videoRefSetter(el);
+    bindVideoElEvents(el);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     listen(events);
-    if (events?.onLoaded) {
-      listenOnLoad.push(events?.onLoaded);
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -229,7 +211,6 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     getVideoRef,
     changePlayPause,
     getIsPlay,
-    listenOnLoad,
     state,
     loadVideo,
     config,

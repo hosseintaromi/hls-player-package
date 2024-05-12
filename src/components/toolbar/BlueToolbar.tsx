@@ -38,7 +38,7 @@ const BlueToolbar = () => {
     setIsShowA(getAudioTracks() !== undefined);
   };
   useVideo({
-    onLoaded: loadLevels,
+    onReady: loadLevels,
   });
 
   return (
