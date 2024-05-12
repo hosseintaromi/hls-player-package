@@ -16,6 +16,7 @@ const Demo = ({ length }: DemoProps) => {
     speeds: [0.5, 1, 1.25, 1.5, 2],
     // qualities: [252, 432],
     audioTracks: ["English"],
+    loop: false,
     subTitle: [
       {
         url: "https://gotranscript.com/samples/captions-example.srt",

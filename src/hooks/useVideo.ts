@@ -210,7 +210,7 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
       call.onPlayPause?.(false);
     };
     el.onended = () => {
-      call.onEnd?.();
+      // call.onEnd?.();
     };
     el.onloadeddata = () => {
       call.onLoading?.(true); // so it shows loading by default

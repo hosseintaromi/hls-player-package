@@ -17,10 +17,10 @@ const Time = ({ type }: { type: "Current" | "Total" | "Remain" }) => {
     onUpdateTime: (e: OnUpdateTimeType) => {
       switch (type) {
         case "Current":
-          setTime(formatDuration(e.time));
+          setTime(formatDuration(Math.ceil(e.time)));
           break;
         case "Remain":
-          setTime(formatDuration(e.duration - e.time));
+          setTime(formatDuration(Math.ceil(e.duration - e.time)));
           break;
       }
     },
