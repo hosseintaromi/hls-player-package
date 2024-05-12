@@ -55,6 +55,7 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
       enableWorker: false,
       startPosition: currentStartTime,
     }));
+
     hls.attachMedia(videoEl);
 
     hls.on(Hls.Events.MEDIA_ATTACHED, () => {
@@ -64,6 +65,15 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
         videoEl.src = src;
       }
     });
+
+    hls.on(Hls.Events.LEVEL_SWITCHED, () => {
+      videoEl.onplaying = () => {
+        console.log("onplaying", false);
+        call.onLoading?.(false);
+      };
+      // bindVideoElEvents(videoEl);
+    });
+
     hls.on(Hls.Events.ERROR, (event, data) => {
       if (data) console.log(JSON.stringify(data));
       if (data.fatal) {
@@ -96,7 +106,6 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
 
   const loadVideo = useCallback(
     (src: string, type?: string, startTime?: number) => {
-      call.onLoading?.(true);
       const currentType = type || config.type;
       if (currentType === "HLS" && isSupportedPlatform) {
         loadHlsVideo(src, startTime);
@@ -119,11 +128,16 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
   const changePlayPause = (play: boolean) => {
     const videoRef = getVideoRef();
     if (videoRef) {
+      console.log("first video");
       if (play) {
         videoRef.play();
+        console.log("first video", true);
+
         playState.update(true);
       } else {
         videoRef.pause();
+        console.log("first video", false);
+
         playState.update(false);
       }
     }
@@ -147,44 +161,56 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     }
   }, [getVideoRef]);
 
+  const bindVideoElEvents = (el: HTMLVideoElement) => {
+    if (!el) return;
+    videoRefSetter(el);
+    el.onwaiting = () => {
+      console.log("onwaiting", true);
+      call.onLoading?.(true);
+    };
+    el.onplaying = () => {
+      console.log("onplaying", false);
+      call.onLoading?.(false);
+    };
+    el.onplay = () => {
+      console.log("onplay", true);
+      call.onPlayPause?.(true);
+    };
+    el.onpause = () => {
+      console.log("onpause", false);
+      call.onLoading?.(false);
+      call.onPlayPause?.(false);
+    };
+    el.onended = () => {
+      call.onEnd?.();
+    };
+    el.onloadeddata = () => {
+      call.onLoading?.(true);
+      listenOnLoad.forEach((listener) => {
+        listener();
+      });
+      call.onReady?.(el);
+    };
+    el.ontimeupdate = () => {
+      const currentTime = el.currentTime;
+      if (currentTime !== timeRef.current) {
+        timeRef.current = currentTime;
+        const percentage = (currentTime / el.duration) * 100;
+        checkBuffer();
+        call.onUpdateTime?.({
+          time: timeRef.current,
+          duration: el.duration,
+          percentage,
+        });
+      }
+    };
+  };
+
   const setVideoRef = useCallback(
     (el?: HTMLVideoElement) => {
       if (!el) return;
       videoRefSetter(el);
-      el.onwaiting = () => {
-        call.onLoading?.(true);
-      };
-      el.onplaying = () => {
-        call.onLoading?.(false);
-      };
-      el.onplay = () => {
-        call.onPlayPause?.(true);
-      };
-      el.onpause = () => {
-        call.onPlayPause?.(false);
-      };
-      el.onended = () => {
-        call.onEnd?.();
-      };
-      el.onloadeddata = () => {
-        listenOnLoad.forEach((listener) => {
-          listener();
-        });
-        call.onReady?.(el);
-      };
-      el.ontimeupdate = () => {
-        const currentTime = el.currentTime;
-        if (currentTime !== timeRef.current) {
-          timeRef.current = currentTime;
-          const percentage = (currentTime / el.duration) * 100;
-          checkBuffer();
-          call.onUpdateTime?.({
-            time: timeRef.current,
-            duration: el.duration,
-            percentage,
-          });
-        }
-      };
+      bindVideoElEvents(el);
     },
     [call, checkBuffer, listenOnLoad, videoRefSetter],
   );

@@ -49,7 +49,7 @@ const Demo = ({ length }: DemoProps) => {
     //   },
     // ],
     showToolbarOnAd: false,
-    // startTime: 4,
+    startTime: 4,
     // style: {
     //   bufferBg: 'blue',
     //   dir: 'rtl',

@@ -6,7 +6,8 @@ export const useSignal = <T>(subject: SubjectType<T>) => {
 
   useEffect(() => {
     subject.onUpdate((newValue) => setSignal(newValue));
-  }, [subject]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return signal;
 };
