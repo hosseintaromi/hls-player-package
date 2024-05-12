@@ -1,6 +1,6 @@
 {
   "name": "@hosseintaromi/video_player",
-  "version": "0.1.228",
+  "version": "0.1.229",
   "description": "Easily play any type of video by customizing the appearance",
   "scripts": {
     "rollup": "rollup -c",
