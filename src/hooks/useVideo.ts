@@ -20,7 +20,7 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
   const context = useContext(VideoPlayerContext);
   const { checkBuffer } = useBuffer();
   const playState = useUpdate(
-    !getVideoRef()?.paused,
+    state.isPlaying || false,
     "play",
     VideoPlayerContext,
   );
