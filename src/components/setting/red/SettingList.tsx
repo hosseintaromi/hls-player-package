@@ -67,7 +67,7 @@ const SettingList = ({ changePage, myRef, currentPage }: SettingListType) => {
   const { getCurrentSubtitle, getSubtitle } = useSubTitle();
   const { getAudioTrack, getAudioTracks } = useAudio();
   useVideo({
-    onLoaded: loadLevels,
+    onReady: loadLevels,
   });
 
   useEffect(() => {

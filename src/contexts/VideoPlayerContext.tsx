@@ -7,7 +7,6 @@ const VideoPlayerContext = createContext<PlayerContextType>({
   setVideoRef: () => {},
   getVideoRef: () => undefined,
   getVideoWrapperRef: () => null,
-  listenOnLoad: [],
   state: {} as any,
 });
 

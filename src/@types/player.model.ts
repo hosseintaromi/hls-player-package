@@ -144,7 +144,6 @@ export interface PlayerContextType {
   getVideoWrapperRef: () => HTMLDivElement | null;
   config: PlayerInstance;
   hls?: Hls;
-  listenOnLoad: (() => void)[];
   state: PlayerState;
 }
 
@@ -160,6 +159,5 @@ export type PlayerEventsType = {
   onReady: "onReady";
   onChangeSetting: "onChangeSetting";
   onActivateControls: "onActivateControls";
-  onLoaded: "OnLoaded";
   onChangeSrc: "OnChangeSrc";
 };

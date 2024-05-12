@@ -36,7 +36,6 @@ const VideoPlayer = ({
 }) => {
   const playerStateRef = useRef<PlayerState>({} as any);
   const configRef = useRef<PlayerInstance>(config || ({ src } as any));
-  const listenOnLoad = useRef<(() => void)[]>([]);
   const videoRef = useRef<HTMLVideoElement>();
   const videoWrapperRef = useRef<HTMLDivElement>(null);
 
@@ -55,7 +54,6 @@ const VideoPlayer = ({
         getVideoRef,
         setVideoRef,
         config: configRef.current,
-        listenOnLoad: listenOnLoad.current,
         state: playerStateRef.current,
         getVideoWrapperRef: () => videoWrapperRef.current,
       }}
