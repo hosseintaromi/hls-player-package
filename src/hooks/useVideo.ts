@@ -144,6 +144,33 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     }
   }, [getVideoRef]);
 
+  const getMetaData = useCallback(
+    () =>
+      new Promise((res, rej) => {
+        const state = context.state;
+        if (state.metaData?.length) {
+          res(state.metaData);
+          return;
+        }
+        const url = config.src;
+        if (!url) {
+          rej(Error("not found url"));
+          return;
+        }
+        let baseUrl = url.split(".m3u8")[0];
+        const lastSlashIndex = baseUrl.lastIndexOf("/");
+        baseUrl = baseUrl.substring(0, lastSlashIndex + 1);
+        fetch(url)
+          .then((r) => r.text())
+          .then((text) => {
+            state.metaData = (text || "").split("\n");
+            res(state.metaData);
+          });
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
   const bindVideoElEvents = (el: HTMLVideoElement) => {
     if (!el) return;
     videoRefSetter(el);
@@ -172,6 +199,7 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     };
     el.onloadeddata = () => {
       call.onLoading?.(true); // so it shows loading by default
+      getMetaData();
       call.onReady?.(el);
     };
     el.ontimeupdate = () => {

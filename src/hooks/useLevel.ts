@@ -10,8 +10,12 @@ export const useLevel = () => {
   const { getCurrentTime } = useTime();
   const {
     config: { qualities, src },
+    state,
     loadVideo,
-  } = useVideo();
+  } = useVideo({
+    onReady: () => {},
+  });
+
   const levelState = useUpdate(
     context.hls?.currentLevel,
     "level",
@@ -26,6 +30,35 @@ export const useLevel = () => {
 
   const initLevels = useCallback(() => {
     const state = context.state;
+    const qualities: any = [];
+    const lines = state.metaData;
+    if (!lines || !src) return;
+    let baseUrl = src.split(".m3u8")[0];
+    const lastSlashIndex = baseUrl.lastIndexOf("/");
+    baseUrl = baseUrl.substring(0, lastSlashIndex + 1);
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const len = qualities.length;
+      if (line.indexOf("#EXT-X-STREAM-INF") === 0) {
+        try {
+          const resolution: string[] = line
+            .split(",")
+            .filter(
+              (param) => param.toUpperCase().indexOf("RESOLUTION=") === 0,
+            );
+          if (resolution.length === 1) {
+            qualities[len] = {
+              level: resolution[0].split("=")[1].split("x")[1],
+            };
+          }
+        } catch (exp) {
+          break;
+        }
+      } else if (qualities[len - 1] && !qualities[len - 1].url) {
+        qualities[len - 1].url = baseUrl + line;
+      }
+    }
+    state.levels = qualities;
     if (!context.hls) {
       levelsState.update(
         state.levels?.map((level) => ({ level: level.level })) || [],
@@ -47,58 +80,6 @@ export const useLevel = () => {
       initLevels();
     },
   });
-
-  const getQualities = useCallback(
-    () =>
-      new Promise((res, rej) => {
-        const state = context.state;
-        if (state.levels) {
-          res(state.levels);
-          return;
-        }
-        const url = src;
-        if (!url) {
-          rej(Error("not found url"));
-          return;
-        }
-        const qualities: any = [];
-        let baseUrl = url.split(".m3u8")[0];
-        const lastSlashIndex = baseUrl.lastIndexOf("/");
-        baseUrl = baseUrl.substring(0, lastSlashIndex + 1);
-        fetch(url)
-          .then((r) => r.text())
-          .then((text) => {
-            const lines = (text || "").split("\n");
-            for (let i = 0; i < lines.length; i++) {
-              const line = lines[i];
-              const len = qualities.length;
-              if (line.indexOf("#EXT-X-STREAM-INF") === 0) {
-                try {
-                  const resolution: string[] = line
-                    .split(",")
-                    .filter(
-                      (param) =>
-                        param.toUpperCase().indexOf("RESOLUTION=") === 0,
-                    );
-                  if (resolution.length === 1) {
-                    qualities[len] = {
-                      level: resolution[0].split("=")[1].split("x")[1],
-                    };
-                  }
-                } catch (exp) {
-                  rej(exp);
-                  break;
-                }
-              } else if (qualities[len - 1] && !qualities[len - 1].url) {
-                qualities[len - 1].url = baseUrl + line;
-              }
-            }
-            state.levels = qualities;
-            res(qualities);
-          });
-      }),
-    [context.state, src],
-  );
 
   const getCurrentLevel = useCallback(
     () => ({
@@ -123,11 +104,6 @@ export const useLevel = () => {
     }
     levelState.update(index);
   };
-
-  useEffect(() => {
-    getQualities();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return {
     levels: $levels,

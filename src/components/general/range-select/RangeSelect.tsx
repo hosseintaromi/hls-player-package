@@ -19,14 +19,17 @@ const RangeSelect = ({
   onMouseDown,
   onMouseUp,
 }: RangePropsType) => {
+  console.log(3, value);
   const [rangeValue, setRangeValue] = useState(value);
 
   const change = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(4, e.target.value);
     setRangeValue(+e.target.value);
     onChange?.(+e.target.value);
   };
 
   useEffect(() => {
+    console.log(5, value);
     setRangeValue(value);
   }, [value]);
 

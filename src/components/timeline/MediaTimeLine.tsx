@@ -17,7 +17,7 @@ const TimeLine = () => {
     getIsPlay,
     config: { startTime },
   } = useVideo();
-
+  console.log(1, startTime);
   const [rangeValue, setRangeValue] = useState<number>(startTime || 0);
 
   const isPlay = useRef(getIsPlay());
@@ -26,6 +26,7 @@ const TimeLine = () => {
   const { changeTime, getDuration } = useTime();
   useVideo({
     onUpdateTime: (e: OnUpdateTimeType) => {
+      console.log(2, e.percentage);
       setRangeValue(+e.percentage);
     },
   });
