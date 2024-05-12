@@ -9,7 +9,6 @@ export const ThumbCursor = styled.div({
   transform: "translateY(-50%)",
   zIndex: "3",
   display: "none",
-
 });
 export const GeneralStyleForRange = styled.div({
   position: "relative",
@@ -42,12 +41,9 @@ export const Bubble = styled.output({
   bottom: "30px;",
   display: "none",
 
-
   span: {
     marginTop: "3px",
   },
-
-
 
   ":after": {
     content: '""',
