@@ -9,8 +9,8 @@ export const RingWrapper = styled.div(({ theme }) => ({
   height: "72px",
   position: "absolute",
   zIndex: 1,
-  top: "50%",
-  left: "50%",
+  top: "calc(50% + 2px)",
+  left: "calc(50% + 4px)",
   transform: "translate(-50%, -50%)",
 
   div: {
