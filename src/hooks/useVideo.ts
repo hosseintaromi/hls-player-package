@@ -171,6 +171,21 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     [],
   );
 
+  const setTime = (el: HTMLVideoElement) => {
+    if (Number.isNaN(el.duration)) return;
+    const currentTime = el.currentTime;
+    if (currentTime !== timeRef.current) {
+      timeRef.current = currentTime;
+      const percentage = (currentTime / el.duration) * 100;
+      checkBuffer();
+      call.onUpdateTime?.({
+        time: timeRef.current,
+        duration: el.duration,
+        percentage,
+      });
+    }
+  };
+
   const bindVideoElEvents = (el: HTMLVideoElement) => {
     if (!el) return;
     videoRefSetter(el);
@@ -200,20 +215,11 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     el.onloadeddata = () => {
       call.onLoading?.(true); // so it shows loading by default
       getMetaData();
+      setTime(el);
       call.onReady?.(el);
     };
     el.ontimeupdate = () => {
-      const currentTime = el.currentTime;
-      if (currentTime !== timeRef.current) {
-        timeRef.current = currentTime;
-        const percentage = (currentTime / el.duration) * 100;
-        checkBuffer();
-        call.onUpdateTime?.({
-          time: timeRef.current,
-          duration: el.duration,
-          percentage,
-        });
-      }
+      setTime(el);
     };
   };
 

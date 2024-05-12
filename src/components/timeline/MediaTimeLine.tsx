@@ -11,25 +11,18 @@ import { OnUpdateTimeType } from "../../@types";
 import { useSensitiveArea } from "../../hooks/useSensitiveArea";
 
 const TimeLine = () => {
+  const [rangeValue, setRangeValue] = useState<number>(0);
   const sensitiveRef = useSensitiveArea();
-  const {
-    changePlayPause,
-    getIsPlay,
-    config: { startTime },
-  } = useVideo();
-  console.log(1, startTime);
-  const [rangeValue, setRangeValue] = useState<number>(startTime || 0);
+  const { changeTime, getDuration } = useTime();
+  const { changePlayPause, getIsPlay } = useVideo({
+    onUpdateTime: (e: OnUpdateTimeType) => {
+      setRangeValue(+e.percentage);
+    },
+  });
 
   const isPlay = useRef(getIsPlay());
 
   const { call } = useContextEvents<TimeLineEventType>(VideoPlayerContext);
-  const { changeTime, getDuration } = useTime();
-  useVideo({
-    onUpdateTime: (e: OnUpdateTimeType) => {
-      console.log(2, e.percentage);
-      setRangeValue(+e.percentage);
-    },
-  });
 
   const onChange = (value: number) => {
     const videoDuration = getDuration?.();
