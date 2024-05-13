@@ -248,6 +248,7 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     state,
     loadVideo,
     config,
+    setTime,
     isPlay: playState.subject,
     togglePlayPause,
     ...others,

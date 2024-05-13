@@ -1,42 +1,35 @@
-import { useCallback } from "react";
 import { useBuffer } from "./useBuffer";
 import { useVideo } from "./useVideo";
+import { useFn } from "./useFn";
 
 export const useTime = () => {
   const { checkBuffer } = useBuffer();
-  const { getVideoRef } = useVideo();
+  const { getVideoRef, setTime } = useVideo();
 
-  const changeTime = useCallback(
-    (time: number) => {
-      const el = getVideoRef();
-      if (el) el.currentTime = time;
-      checkBuffer(true);
-    },
-    [checkBuffer, getVideoRef],
-  );
+  const changeTime = useFn((time: number) => {
+    const el = getVideoRef();
+    if (el) {
+      el.currentTime = time;
+      setTime(el);
+    }
+  });
 
-  const increaseTime = useCallback(
-    (time: number) => {
-      const el = getVideoRef();
-      if (el) el.currentTime += time;
-      checkBuffer(true);
-    },
-    [checkBuffer, getVideoRef],
-  );
+  const increaseTime = useFn((time: number) => {
+    const el = getVideoRef();
+    if (el) el.currentTime += time;
+    checkBuffer(true);
+  });
 
-  const decreaseTime = useCallback(
-    (time: number) => {
-      const el = getVideoRef();
-      if (el) el.currentTime -= time;
-      checkBuffer(true);
-    },
-    [checkBuffer, getVideoRef],
-  );
+  const decreaseTime = useFn((time: number) => {
+    const el = getVideoRef();
+    if (el) el.currentTime -= time;
+    checkBuffer(true);
+  });
 
-  const getDuration = useCallback(() => {
+  const getDuration = useFn(() => {
     const el = getVideoRef();
     return el?.duration;
-  }, [getVideoRef]);
+  });
 
   const getCurrentTime = () => {
     const el = getVideoRef();
