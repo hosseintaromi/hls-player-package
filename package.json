@@ -7,7 +7,7 @@
     "test": "jest",
     "sb": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "pb": "npm version patch && rollup -c && npm publish",
+    "pb": "npm version patch && rollup -c && npm publish --access public",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },
