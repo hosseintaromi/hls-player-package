@@ -31,7 +31,7 @@ const Snapshot = ({ snapshots, time }: SnapshotPropsType) => {
 
   return (
     <>
-      {snapshot && (
+      {snapshot ? (
         <div
           className="controlled-tool"
           id="snapshot"
@@ -40,6 +40,16 @@ const Snapshot = ({ snapshots, time }: SnapshotPropsType) => {
             width: `${snapshot.location[2]}px`,
             height: `${snapshot.location[3]}px`,
             backgroundPosition: `-${snapshot.location[0]}px -${snapshot.location[1]}px `,
+          }}
+        />
+      ) : (
+        <div
+          className="controlled-tool"
+          id="snapshot"
+          style={{
+            width: `120px`,
+            height: `67px`,
+            backgroundColor: "#000",
           }}
         />
       )}

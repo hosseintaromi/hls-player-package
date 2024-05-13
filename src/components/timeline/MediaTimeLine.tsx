@@ -48,11 +48,11 @@ const TimeLine = () => {
         onTouchMove={(e) => {
           call.onTimeLineTouchMove?.(e);
         }}
-        onMouseEnter={(e) => {
-          call.onTimeLineMouseEnter?.(e);
+        onEnter={(e) => {
+          call.onTimeLineEnter?.(e);
         }}
-        onMouseLeave={(e) => {
-          call.onTimeLineMouseLeave?.(e);
+        onLeave={(e) => {
+          call.onTimeLineLeave?.(e);
         }}
         onMouseDown={() => {
           isPlay.current = getIsPlay();

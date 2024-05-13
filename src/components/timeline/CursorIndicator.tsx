@@ -7,15 +7,16 @@ const CursorIndicator = () => {
 
   let timeOut: ReturnType<typeof setTimeout>;
 
-  const setBubble = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+  const setBubble = (e: any) => {
     const event: any = e.nativeEvent;
     if (!event.target) return;
 
     const bubbleCursorEl = snapShotBoxCursor.current;
     if (!bubbleCursorEl) return;
+    const containerWidth = e.target.clientWidth;
     bubbleCursorEl.style.left = `${Math.max(
       -1,
-      Math.min(event.offsetX, event.target.clientWidth) + -1,
+      Math.min((e.progress * containerWidth) / 100, containerWidth) + -1,
     )}px `;
   };
 
@@ -33,10 +34,10 @@ const CursorIndicator = () => {
     onTimeLineMouseMove: (e) => {
       setBubble(e);
     },
-    onTimeLineMouseEnter: () => {
+    onTimeLineEnter: () => {
       changeShowBubble(true);
     },
-    onTimeLineMouseLeave: () => {
+    onTimeLineLeave: () => {
       changeShowBubble(false);
     },
     onTimeLineTouchMove: (e) => {
@@ -45,9 +46,6 @@ const CursorIndicator = () => {
       timeOut = setTimeout(() => {
         changeShowBubble(false);
       }, 2000);
-      const rect = (e.target as any).getBoundingClientRect();
-      (e as any).offsetX =
-        e.touches[0].clientX - window.pageXOffset - rect.left;
       setBubble(e);
     },
   });
