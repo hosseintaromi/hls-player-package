@@ -1,5 +1,5 @@
 {
-  "name": "@hosseintaromi/video_player",
+  "name": "@pouyan/video_player",
   "version": "0.1.230",
   "description": "Easily play any type of video by customizing the appearance",
   "scripts": {
@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },
-  "author": "Hossein Taromi",
+  "author": "Pouyan",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.22.17",
