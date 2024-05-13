@@ -9,6 +9,7 @@ import VideoPlayerContext from "../../contexts/VideoPlayerContext";
 import { useTime, useVideo } from "../../hooks";
 import { OnUpdateTimeType } from "../../@types";
 import { useSensitiveArea } from "../../hooks/useSensitiveArea";
+import { useDisableSelection } from "../../hooks/useDisableSelection";
 
 const TimeLine = () => {
   const [rangeValue, setRangeValue] = useState<number>(0);
@@ -19,6 +20,7 @@ const TimeLine = () => {
       setRangeValue(+e.percentage);
     },
   });
+  useDisableSelection();
 
   const isPlay = useRef(getIsPlay());
 
@@ -48,11 +50,11 @@ const TimeLine = () => {
         onTouchMove={(e) => {
           call.onTimeLineTouchMove?.(e);
         }}
-        onMouseEnter={(e) => {
-          call.onTimeLineMouseEnter?.(e);
+        onEnter={(e) => {
+          call.onTimeLineEnter?.(e);
         }}
-        onMouseLeave={(e) => {
-          call.onTimeLineMouseLeave?.(e);
+        onLeave={(e) => {
+          call.onTimeLineLeave?.(e);
         }}
         onMouseDown={() => {
           isPlay.current = getIsPlay();

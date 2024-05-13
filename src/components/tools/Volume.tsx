@@ -87,8 +87,7 @@ const Volume = memo(() => {
           step={1}
           min={0}
           max={100}
-          defaultValue={100}
-          updateKey="volume-range"
+          value={volume}
           onChange={changeVol}
         />
       </RangeSelectWrapper>
