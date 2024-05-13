@@ -1,6 +1,6 @@
 {
   "name": "@pouyan/video_player",
-  "version": "0.1.231",
+  "version": "0.1.232",
   "description": "Easily play any type of video by customizing the appearance",
   "scripts": {
     "rollup": "rollup -c",
