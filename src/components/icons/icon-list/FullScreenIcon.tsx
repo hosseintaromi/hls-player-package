@@ -1,5 +1,3 @@
-import React from "react";
-
 const FullScreenIcon = () => (
   <svg
     width="24"

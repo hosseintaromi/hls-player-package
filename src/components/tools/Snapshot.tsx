@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { formatDuration } from "../../utils/player-utils";
+import { useState, useEffect, useCallback } from "react";
+import { loadSnapshotImage } from "../../utils/snapshots";
 
 export interface SnapshotModel {
   img: string;
@@ -11,34 +11,15 @@ interface SnapshotPropsType {
   snapshots: SnapshotModel[];
   time: any;
 }
-const cashedImages: any = {};
-
-const loadSnapshotImage = (src: string, loaded: () => void) => {
-  let cashedImage = cashedImages[src];
-  if (!cashedImage) {
-    cashedImages[src] = cashedImage = { loaded: false, listeners: [] };
-    const image = new Image();
-    image.src = src;
-    image.onload = () => {
-      cashedImage.loaded = true;
-      cashedImage.listeners.forEach((listener: () => void) => {
-        listener();
-      });
-      cashedImage.listeners = [];
-    };
-  }
-  if (cashedImage.loaded) {
-    loaded();
-  } else {
-    cashedImage.listeners.push(loaded);
-  }
-};
 
 const Snapshot = ({ snapshots, time }: SnapshotPropsType) => {
   const [snapshot, setSnapshot] = useState<SnapshotModel>();
 
-  const findSnapshot = (time: number) =>
-    snapshots.find((x) => x.startTime < time && x.endTime >= time);
+  const findSnapshot = useCallback(
+    (time: number) =>
+      snapshots.find((x) => x.startTime < time && x.endTime >= time),
+    [snapshots],
+  );
 
   useEffect(() => {
     const found = findSnapshot(time);
@@ -46,25 +27,31 @@ const Snapshot = ({ snapshots, time }: SnapshotPropsType) => {
     loadSnapshotImage(found.img, () => {
       setSnapshot(found);
     });
-  }, [time]);
+  }, [findSnapshot, time]);
 
   return (
     <>
-      {snapshot && (
-        <>
-          <div
-            id="snapshot"
-            style={{
-              backgroundImage: `url("${snapshot.img}")`,
-              width: `${snapshot.location[2]}px`,
-              height: `${snapshot.location[3]}px`,
-              backgroundPosition: `-${snapshot.location[0]}px -${snapshot.location[1]}px `,
-            }}
-          />
-          <div style={{ marginTop: '5px' }}>
-            {formatDuration(time)}
-          </div>
-        </>
+      {snapshot ? (
+        <div
+          className="controlled-tool"
+          id="snapshot"
+          style={{
+            backgroundImage: `url("${snapshot.img}")`,
+            width: `${snapshot.location[2]}px`,
+            height: `${snapshot.location[3]}px`,
+            backgroundPosition: `-${snapshot.location[0]}px -${snapshot.location[1]}px `,
+          }}
+        />
+      ) : (
+        <div
+          className="controlled-tool"
+          id="snapshot"
+          style={{
+            width: `120px`,
+            height: `67px`,
+            backgroundColor: "#000",
+          }}
+        />
       )}
     </>
   );

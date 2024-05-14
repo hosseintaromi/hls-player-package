@@ -2,10 +2,21 @@ import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { PlayerEventsType } from "../@types";
 import { useVideo } from "./useVideo";
 import { useContextEvents } from "./useContextEvents";
+import { useUpdate } from "./useUpdate";
 
 export const useVolume = () => {
-  const { getVideoRef } = useVideo();
+  const { getVideoRef, config } = useVideo();
   const { call } = useContextEvents<PlayerEventsType>(VideoPlayerContext);
+  const muteState = useUpdate(
+    getVideoRef()?.muted === undefined ? config.muted : getVideoRef()?.muted,
+    "mute",
+    VideoPlayerContext,
+  );
+  const volumeState = useUpdate(
+    getVideoRef()?.volume,
+    "volume",
+    VideoPlayerContext,
+  );
 
   const getVolume = () => {
     const videoRef = getVideoRef();
@@ -16,6 +27,7 @@ export const useVolume = () => {
     const videoRef = getVideoRef();
     if (videoRef) videoRef.muted = e;
     call.onChangeMute?.(e);
+    muteState.update(e);
   };
 
   const changeVolume = (newVolume: number) => {
@@ -24,11 +36,19 @@ export const useVolume = () => {
       call.onChangeVolume?.(newVolume);
       if (videoRef.muted) {
         call.onChangeMute?.(false);
+        muteState.update(false);
         videoRef.muted = false;
       }
       videoRef.volume = newVolume;
+      volumeState.update(newVolume);
     }
   };
 
-  return { getVolume, changeMute, changeVolume };
+  return {
+    getVolume,
+    changeMute,
+    changeVolume,
+    isMute: muteState.subject,
+    currentVolume: volumeState.subject,
+  };
 };

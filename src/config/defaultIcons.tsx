@@ -1,4 +1,3 @@
-import React from "react";
 import { IconsType } from "../@types/player.model";
 import ArrowRight from "../components/icons/icon-list/ArrowRight";
 import AudioIcon from "../components/icons/icon-list/AudioIcon";

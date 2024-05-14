@@ -1,5 +1,3 @@
-import React from "react";
-
 const PlayArrow = () => (
   <svg
     width="25"

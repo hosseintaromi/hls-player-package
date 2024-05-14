@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   SettingItemWrapper,
   SettingLeftSection,
   SettingRightSection,
   TimeCounter,
   ToolbarWrapper,
-} from "../toolbar/ToolbarStyle";
+} from "./ToolbarStyle";
 import { ToolBarPlayIcon } from "../player/VideoPlayerStyle";
 import Play from "../tools/Play";
 import Time from "../tools/Time";
@@ -16,35 +16,36 @@ import Speed from "../setting/blue/Speed";
 import Subtitle from "../setting/blue/SubTitle";
 import Mic from "../setting/blue/Mic";
 import Quality from "../setting/blue/Quality";
-import Mute from "../tools/Mute";
 import SensitiveArea from "../player/SensitiveArea";
 import Skip from "../tools/SkipAd";
 import { useLevel } from "../../hooks/useLevel";
 import { useSubTitle } from "../../hooks";
 import { useAudio } from "../../hooks/useAudio";
 import { useVideo } from "../../hooks/useVideo";
+import Volume from "../tools/Volume";
 
-const BlueToolbar = ({ isFaded }: { isFaded: boolean }) => {
+const BlueToolbar = () => {
   const [isShowQ, setIsShowQ] = useState<any>();
   const [isShowS, setIsShowS] = useState<any>();
   const [isShowA, setIsShowA] = useState<any>();
+  const { levels } = useLevel();
+  const { getSubtitle } = useSubTitle();
+  const { getAudioTracks } = useAudio();
+
   const loadLevels = () => {
-    setIsShowQ(getLevels() !== undefined);
+    setIsShowQ(levels !== undefined);
     setIsShowS(getSubtitle() !== undefined);
     setIsShowA(getAudioTracks() !== undefined);
   };
-  const { getLevels } = useLevel();
-  const { getSubtitle } = useSubTitle();
-  const { getAudioTracks } = useAudio();
   useVideo({
-    onLoaded: loadLevels,
+    onReady: loadLevels,
   });
 
   return (
     <SensitiveArea>
       <Skip />
-      <ToolbarWrapper isFaded={isFaded}>
-        <TimeCounter className="blue-counter">
+      <ToolbarWrapper>
+        <TimeCounter className="blue-counter controlled-tool">
           <Time type="Current" />
           <Time type="Total" />
         </TimeCounter>
@@ -54,7 +55,7 @@ const BlueToolbar = ({ isFaded }: { isFaded: boolean }) => {
             <ToolBarPlayIcon>
               <Play />
             </ToolBarPlayIcon>
-            <Mute />
+            <Volume />
           </SettingLeftSection>
           <SettingRightSection>
             {isShowA && <Mic />}

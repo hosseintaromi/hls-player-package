@@ -40,8 +40,10 @@ export const useAds = (events?: GenericEvents<AdsEventType>) => {
       }
     },
     onEnd: () => {
-      call.onEndAd?.(state.currentPlayingAd?.startTime);
-      state.currentPlayingAd = undefined;
+      if (state.isPlaying) {
+        call.onEndAd?.(state.currentPlayingAd?.startTime);
+        state.currentPlayingAd = undefined;
+      }
     },
   });
 

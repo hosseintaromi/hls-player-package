@@ -4,6 +4,7 @@ import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { GenericEvents, PlayerEventsType } from "../@types/player.model";
 import { useContextEvents } from "./useContextEvents";
 import { useBuffer } from "./useBuffer";
+import { useUpdate } from "./useUpdate";
 
 const isSupportedPlatform = Hls.isSupported();
 
@@ -12,48 +13,48 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     config,
     setVideoRef: videoRefSetter,
     getVideoRef,
-    listenOnLoad,
     state,
+    ...others
   } = useContext(VideoPlayerContext);
   const context = useContext(VideoPlayerContext);
   const { checkBuffer } = useBuffer();
+  const playState = useUpdate(
+    state.isPlaying || false,
+    "play",
+    VideoPlayerContext,
+  );
 
   const timeRef = useRef<number>(0);
 
   const { listen, call } =
     useContextEvents<PlayerEventsType>(VideoPlayerContext);
 
-  const loadMP4Video = useCallback((src: string, startTime?: number) => {
-    const currentStartTime = startTime || config.startTime || 0;
+  const loadMP4Video = useCallback(
+    (src: string, startTime?: number) => {
+      const currentStartTime = startTime || config.startTime || 0;
 
-    // Clear the onloadeddata event listener if a hls has played before
-    context.hls?.destroy();
+      // Clear the onloadeddata event listener if a hls has played before
+      context.hls?.destroy();
 
-    const videoEl = getVideoRef();
-    if (!videoEl) return;
-    videoEl.src = src;
-    videoEl.load();
-    videoEl.onloadeddata = () => {
+      const videoEl = getVideoRef();
+      if (!videoEl) return;
+      videoEl.src = src;
+      videoEl.load();
       videoEl.currentTime = currentStartTime;
-      listenOnLoad.forEach((listener) => {
-        listener();
-      });
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    },
+    [config.startTime, context.hls, getVideoRef],
+  );
 
   const loadHlsVideo = useCallback((src: string, startTime?: number) => {
     const currentStartTime = startTime || config.startTime || 0;
     const videoEl = getVideoRef();
     if (!videoEl) return;
 
-    // Clear the onloadeddata event listener if a mp4 has played before
-    videoEl.onloadeddata = null;
-
     const hls = (context.hls = new Hls({
       enableWorker: false,
       startPosition: currentStartTime,
     }));
+
     hls.attachMedia(videoEl);
 
     hls.on(Hls.Events.MEDIA_ATTACHED, () => {
@@ -63,15 +64,26 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
         videoEl.src = src;
       }
     });
+
+    hls.on(Hls.Events.LEVEL_SWITCHED, () => {
+      videoEl.onplaying = () => {
+        call.onLoading?.(false);
+      };
+      // bindVideoElEvents(videoEl);
+    });
+
     hls.on(Hls.Events.ERROR, (event, data) => {
+      // eslint-disable-next-line no-console
       if (data) console.log(JSON.stringify(data));
       if (data.fatal) {
         switch (data.type) {
           case Hls.ErrorTypes.MEDIA_ERROR:
+            // eslint-disable-next-line no-console
             console.log("MEDIA_ERROR");
             hls.recoverMediaError();
             break;
           case Hls.ErrorTypes.NETWORK_ERROR:
+            // eslint-disable-next-line no-console
             console.error("fatal network error encountered", data);
             // All retries and media options have been exhausted.
             // Immediately trying to restart loading could cause loop loading.
@@ -84,11 +96,6 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
             break;
         }
       }
-    });
-    hls.on(Hls.Events.LEVEL_LOADED, () => {
-      listenOnLoad.forEach((listener) => {
-        listener();
-      });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -106,6 +113,14 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     [],
   );
 
+  const setSrc = useCallback(
+    (src: string, type?: string, startTime?: number) => {
+      call.onChangeSrc?.({ src, type, startTime });
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
   const changePlayPause = (play: boolean) => {
     const videoRef = getVideoRef();
     if (videoRef) {
@@ -117,61 +132,112 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     }
   };
 
-  const getIsPlay = () => {
+  const togglePlayPause = useCallback(() => {
+    changePlayPause(!state.isPlaying);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const getIsPlay = useCallback(() => {
     const videoRef = getVideoRef();
     if (videoRef) {
       return !videoRef.paused;
     }
-  };
+  }, [getVideoRef]);
 
-  const setVideoRef = useCallback(
-    (el?: HTMLVideoElement) => {
-      if (!el) return;
-      videoRefSetter(el);
-      el.onwaiting = () => {
-        call.onLoading?.(true);
-      };
-      el.oncanplay = () => {
-        call.onLoading?.(false);
-      };
-      el.onplay = () => {
-        call.onPlayPause?.(true);
-      };
-      el.onpause = () => {
-        call.onPlayPause?.(false);
-      };
-      el.onended = () => {
-        call.onEnd?.();
-      };
-      el.onloadeddata = () => {
-        call.onReady?.(el);
-      };
-      el.ontimeupdate = () => {
-        const currentTime = el.currentTime;
-        if (currentTime !== timeRef.current) {
-          timeRef.current = currentTime;
-          const percentage = (currentTime / el.duration) * 100;
-          checkBuffer();
-          call.onUpdateTime?.({
-            time: timeRef.current,
-            duration: el.duration,
-            percentage,
-          });
+  const getMetaData = useCallback(
+    () =>
+      new Promise((res, rej) => {
+        const state = context.state;
+        if (state.metaData?.length) {
+          res(state.metaData);
+          return;
         }
-      };
-    },
-    [call, checkBuffer, videoRefSetter],
+        const url = config.src;
+        if (!url) {
+          rej(Error("not found url"));
+          return;
+        }
+        let baseUrl = url.split(".m3u8")[0];
+        const lastSlashIndex = baseUrl.lastIndexOf("/");
+        baseUrl = baseUrl.substring(0, lastSlashIndex + 1);
+        fetch(url)
+          .then((r) => r.text())
+          .then((text) => {
+            state.metaData = (text || "").split("\n");
+            res(state.metaData);
+          });
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
   );
 
-  useEffect(() => {
-    listen(events);
-    if (events?.onLoaded) {
-      listenOnLoad.push(events?.onLoaded);
+  const setTime = (el: HTMLVideoElement) => {
+    if (Number.isNaN(el.duration)) return;
+    const currentTime = el.currentTime;
+    if (currentTime !== timeRef.current) {
+      timeRef.current = currentTime;
+      const percentage = (currentTime / el.duration) * 100;
+      checkBuffer();
+      call.onUpdateTime?.({
+        time: timeRef.current,
+        duration: el.duration,
+        percentage,
+      });
     }
+  };
+
+  const bindVideoElEvents = (el: HTMLVideoElement) => {
+    if (!el) return;
+    videoRefSetter(el);
+    el.onwaiting = () => {
+      call.onLoading?.(true);
+    };
+    el.oncanplay = () => {
+      call.onLoading?.(false);
+    };
+    el.onplaying = () => {
+      call.onLoading?.(false);
+    };
+    el.onplay = () => {
+      state.isPlaying = true;
+      playState.update(true);
+      call.onPlayPause?.(true);
+    };
+    el.onpause = () => {
+      state.isPlaying = false;
+      playState.update(false);
+      call.onLoading?.(false);
+      call.onPlayPause?.(false);
+    };
+    el.onended = () => {
+      // call.onEnd?.();
+    };
+    el.onloadeddata = () => {
+      call.onLoading?.(true); // so it shows loading by default
+      getMetaData();
+      setTime(el);
+      call.onReady?.(el);
+    };
+    el.ontimeupdate = () => {
+      setTime(el);
+    };
+  };
+
+  const setVideoRef = useCallback((el?: HTMLVideoElement) => {
+    if (!el) return;
+    videoRefSetter(el);
+    bindVideoElEvents(el);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  config.loadVideo = loadVideo;
+  useEffect(() => {
+    listen(events);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {});
+
+  config.loadVideo = setSrc;
 
   return {
     hls: context.hls,
@@ -179,9 +245,12 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     getVideoRef,
     changePlayPause,
     getIsPlay,
-    listenOnLoad,
     state,
     loadVideo,
     config,
+    setTime,
+    isPlay: playState.subject,
+    togglePlayPause,
+    ...others,
   };
 };

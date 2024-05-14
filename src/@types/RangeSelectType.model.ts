@@ -1,12 +1,20 @@
 export type RangePropsType = {
   min: number;
   max: number;
-  controllerRef?: any;
-  onChangeCallback?: any;
   step: number;
-  onMouseEnter?: any;
-  onMouseLeave?: any;
-  onRangeMove?: (e: any) => void;
-  onRangeStart?: (e: any) => void;
-  onRangeEnd?: (e: any) => void;
+  value?: number;
+  onChange?: (value: number) => void;
+  onMouseMove?: (e: React.MouseEvent<HTMLInputElement>) => void;
+  onTouchMove?: (e: React.TouchEvent<HTMLInputElement>) => void;
+  onEnter?: (e: React.MouseEvent<HTMLInputElement>) => void;
+  onLeave?: (e: React.MouseEvent<HTMLInputElement>) => void;
+  onMouseDown?: (e: React.MouseEvent<HTMLInputElement>) => void;
+  onMouseUp?: (e: React.MouseEvent<HTMLInputElement>) => void;
+};
+
+export type TimeLineEventType = {
+  onTimeLineMouseMove: "onTimeLineMouseMove";
+  onTimeLineTouchMove: "onTimeLineTouchMove";
+  onTimeLineLeave: "onTimeLineLeave";
+  onTimeLineEnter: "onTimeLineEnter";
 };

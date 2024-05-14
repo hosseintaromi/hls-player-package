@@ -1,5 +1,3 @@
-import React from "react";
-
 const HighVolume = () => (
   <svg
     width="24"

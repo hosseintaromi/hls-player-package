@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import styled from "@emotion/styled";
 import { useVideo } from "../../hooks/useVideo";
+import { useTime } from "../../hooks";
 
 const VideoTag = styled.video({
   width: "100%",
@@ -28,10 +29,32 @@ const SubtitleTag = styled.div({
 const Video = () => {
   const {
     setVideoRef,
-    config: { autoPlay, muted },
+    togglePlayPause,
+    config: { autoPlay, muted, keyControl },
   } = useVideo();
+  const { increaseTime, decreaseTime } = useTime();
 
   const videoElRef = useRef<HTMLVideoElement>(null);
+
+  const onKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (!keyControl) return;
+      if (e.key === "ArrowRight") increaseTime(10);
+      if (e.key === "ArrowLeft") decreaseTime(10);
+      if (e.key === "Enter") {
+        togglePlayPause();
+      }
+    },
+    [decreaseTime, increaseTime, keyControl, togglePlayPause],
+  );
+
+  useEffect(() => {
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [onKeyDown]);
 
   useEffect(() => {
     setVideoRef?.(videoElRef.current!);
@@ -44,7 +67,6 @@ const Video = () => {
         autoPlay={autoPlay}
         playsInline
         muted={muted}
-        id="video_player"
         crossOrigin="anonymous"
       />
       <SubtitleTag className="subtitle">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { PlayerLocaleType } from "../../@types/player.model";
 import { useLocale } from "../../hooks/useLocale";
 

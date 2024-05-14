@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import SettingItem from "./SettingItem";
 import { SettingMenu } from "../../general/SettingMenu";
 import Locale from "../../locale/Locale";
@@ -14,6 +14,7 @@ import { useLevel } from "../../../hooks/useLevel";
 import { useSubTitle } from "../../../hooks";
 import { useAudio } from "../../../hooks/useAudio";
 import { useVideo } from "../../../hooks/useVideo";
+import { useSignal } from "../../../hooks/useSignal";
 
 type SettingListType = {
   changePage: (newPageName: pageName, dir: pageDir) => void;
@@ -57,15 +58,16 @@ const SettingList = ({ changePage, myRef, currentPage }: SettingListType) => {
     const track = getAudioTrack();
     if (track) setCurrentAudioTrack(audioTracks?.[track].name);
 
-    setCurrentLevels(getLevels());
+    setCurrentLevels(levels);
   };
-  const { speed } = useSpeed();
+  const { currentSpeed, getSpeeds } = useSpeed();
+  const $currentSpeed = useSignal(currentSpeed);
 
-  const { getCurrentLevel, getLevels } = useLevel();
+  const { getCurrentLevel, levels } = useLevel();
   const { getCurrentSubtitle, getSubtitle } = useSubTitle();
   const { getAudioTrack, getAudioTracks } = useAudio();
   useVideo({
-    onLoaded: loadLevels,
+    onReady: loadLevels,
   });
 
   useEffect(() => {
@@ -84,7 +86,9 @@ const SettingList = ({ changePage, myRef, currentPage }: SettingListType) => {
           startIcon={<Icon isClickable type="speed" />}
           text={<Locale localeKey="setting_menu_change_speed_title" />}
         >
-          <SettingItemArrowSpan>{speed?.key}</SettingItemArrowSpan>
+          <SettingItemArrowSpan>
+            {getSpeeds()?.[$currentSpeed].key}
+          </SettingItemArrowSpan>
           <Icon isClickable type="arrow" />
         </SettingItem>
       </div>

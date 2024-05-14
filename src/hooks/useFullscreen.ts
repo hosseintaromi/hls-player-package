@@ -1,29 +1,32 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
+import { useUpdate } from "./useUpdate";
+import VideoPlayerContext from "../contexts/VideoPlayerContext";
 
-export const useFullscreen = (
-  changed: (isFullscreen: boolean) => void,
+interface DocumentWithFullscreen extends Document {
+  webkitIsFullScreen?: boolean;
+  mozFullScreen?: boolean;
+  msFullscreenElement?: Element | null;
+}
+
+interface ElementWithFullscreen extends HTMLElement {
+  webkitEnterFullScreen?: () => void;
+  webkitRequestFullscreen?: () => void;
+  msRequestFullscreen?: () => void;
+}
+
+interface DocumentWithExitFullscreen extends Document {
+  mozCancelFullScreen?: () => void;
+  webkitExitFullscreen?: () => void;
+  msExitFullscreen?: () => void;
+}
+
+export const useFullScreen = (
   elRef: HTMLElement | null,
   videoTagRef: HTMLElement | null,
 ) => {
-  const [userAgent, setUserAgent] = useState("");
+  const checkFullScreen = () => {
+    const doc: DocumentWithFullscreen = document;
 
-  useEffect(() => {
-    const userAgent = window.navigator.userAgent;
-    setUserAgent(userAgent);
-  }, []);
-
-  const checkElement = () => {
-    if (elRef && videoTagRef) {
-      if (userAgent.search("iPhone") < 0) {
-        return elRef;
-      }
-      return videoTagRef;
-    }
-    return document.getElementsByTagName("body")[0];
-  };
-  const checkFullscreen = () => {
-    // TODO: how to fix this any
-    const doc: any = document;
     return (
       doc.webkitIsFullScreen ||
       doc.mozFullScreen ||
@@ -31,9 +34,25 @@ export const useFullscreen = (
         doc.msFullscreenElement !== undefined)
     );
   };
-  const fullscreen = () => {
-    // TODO: how to fix this any
-    const el: any = checkElement();
+
+  const isFullScreenState = useUpdate(
+    checkFullScreen(),
+    "FullScreen",
+    VideoPlayerContext,
+  );
+
+  const checkElement = useCallback(() => {
+    if (elRef && videoTagRef) {
+      if (window.navigator.userAgent.search("iPhone") < 0) {
+        return elRef;
+      }
+      return videoTagRef;
+    }
+    return document.getElementsByTagName("body")[0];
+  }, [elRef, videoTagRef]);
+
+  const FullScreen = () => {
+    const el: ElementWithFullscreen = checkElement();
 
     if (!el) return;
     if (el.requestFullscreen) {
@@ -46,9 +65,9 @@ export const useFullscreen = (
       el.msRequestFullscreen();
     }
   };
-  const exitFullscreen = () => {
-    // TODO: how to fix this any
-    const doc: any = document;
+
+  const exitFullScreen = () => {
+    const doc: DocumentWithExitFullscreen = document;
 
     if (doc.mozCancelFullScreen) {
       doc.mozCancelFullScreen();
@@ -61,40 +80,44 @@ export const useFullscreen = (
     }
   };
 
-  const toggleFullscreen = () => {
-    if (checkFullscreen()) {
-      exitFullscreen();
-      changed(false);
+  const toggleFullScreen = () => {
+    if (checkFullScreen()) {
+      exitFullScreen();
+      isFullScreenState.update(false);
     } else {
-      fullscreen();
-      changed(true);
+      FullScreen();
+      isFullScreenState.update(true);
     }
   };
-  const changedFullscreen = () => {
-    changed(checkFullscreen());
-  };
-  const el = checkElement();
-  const addEventListener = () => {
+
+  const changedFullScreen = useCallback(() => {
+    isFullScreenState.update(checkFullScreen());
+  }, [isFullScreenState]);
+
+  const addEventListener = useCallback(() => {
+    const el = checkElement();
     if (!el) return;
-    el.addEventListener("fullscreenchange", changedFullscreen);
-    el.addEventListener("mozfullscreenchange", changedFullscreen);
-    el.addEventListener("MSFullscreenChange", changedFullscreen);
-    el.addEventListener("webkitfullscreenchange", changedFullscreen);
-  };
+    el.addEventListener("fullscreenchange", changedFullScreen);
+    el.addEventListener("mozfullscreenchange", changedFullScreen);
+    el.addEventListener("MSFullscreenChange", changedFullScreen);
+    el.addEventListener("webkitfullscreenchange", changedFullScreen);
+  }, [changedFullScreen, checkElement]);
+
   useEffect(() => {
+    const el = checkElement();
     addEventListener();
     return () => {
       if (!el) return;
-      el.removeEventListener("fullscreenchange", changedFullscreen);
-      el.removeEventListener("mozfullscreenchange", changedFullscreen);
-      el.removeEventListener("MSFullscreenChange", changedFullscreen);
-      el.removeEventListener("webkitfullscreenchange", changedFullscreen);
+      el.removeEventListener("fullscreenchange", changedFullScreen);
+      el.removeEventListener("mozfullscreenchange", changedFullScreen);
+      el.removeEventListener("MSFullscreenChange", changedFullScreen);
+      el.removeEventListener("webkitfullscreenchange", changedFullScreen);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [addEventListener, changedFullScreen, checkElement]);
 
   return {
-    toggleFullscreen,
-    checkFullscreen,
+    toggleFullScreen,
+    checkFullscreen: checkFullScreen,
+    isFullscreen: isFullScreenState.subject,
   };
 };

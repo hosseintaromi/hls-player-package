@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PlayerEventsType } from "../../@types/player.model";
 import VideoPlayerContext from "../../contexts/VideoPlayerContext";
 import { useContextEvents } from "../../hooks/useContextEvents";

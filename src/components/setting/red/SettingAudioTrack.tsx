@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import SettingItem from "./SettingItem";
 import { SettingMenu } from "../../general/SettingMenu";
 import SettingHeader from "./SettingHeader";
@@ -24,7 +24,7 @@ const SettingAudioTrack = ({ changePage, myRef }: SettingAudioTrackType) => {
     setAudioTracks(getAudioTracks() || []);
   };
   const { getAudioTrack, getAudioTracks, changeAudioTrack } = useAudio();
-  useVideo({ onLoaded: loadLevels });
+  useVideo({ onReady: loadLevels });
 
   useEffect(() => {
     loadLevels();

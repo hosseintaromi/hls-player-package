@@ -1,96 +1,115 @@
-import React, {
-  memo,
-  useCallback,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
-import {
-  GeneralStyleForRange,
-  ProgressBar,
-  Slider,
-  Thumb,
-  TimeLine,
-} from "./RangeSelectStyle";
+import { memo, useEffect, useRef, useState } from "react";
+import { GeneralStyleForRange, Slider, TimeLine } from "./RangeSelectStyle";
 import { RangePropsType } from "../../../@types/RangeSelectType.model";
+import SeekThumb from "./SeekThumb";
+import ProgressBar from "./ProgressBar";
+import { useFn } from "../../../hooks/useFn";
+import { useInit } from "../../../hooks/useInit";
 
 const TimeLineMemo = memo(() => <TimeLine className="timeline" />);
 
 const RangeSelect = ({
   min,
   max,
-  controllerRef,
-  onChangeCallback,
   step,
-  onRangeMove,
-  onRangeEnd,
-  onRangeStart,
+  value = 0,
+  onChange,
+  onMouseMove,
+  onTouchMove,
+  onEnter,
+  onLeave,
+  onMouseDown,
+  onMouseUp,
 }: RangePropsType) => {
-  const [currentValue, setCurrentValue] = useState<number>(0);
-  const selectorRef = useRef<HTMLDivElement>(null);
-  const progressBarRef = useRef<HTMLDivElement>(null);
+  const [rangeValue, setRangeValue] = useState(value);
+  const rangeRef = useRef<any>(null);
+  const mouseDownRef = useRef<boolean>(false);
 
-  const toggleThumb = () => {
-    if (selectorRef.current) {
-      const preDisplay = selectorRef.current.style.display;
-      selectorRef.current.style.display =
-        preDisplay === "block" ? "none" : "block";
+  const getProgress = useFn((e: any) => {
+    const bounds = rangeRef.current.getBoundingClientRect();
+    const touch = e.touches?.[e.touches.length - 1];
+    const x = (e.clientX || touch.clientX) - bounds.left;
+    const value = (x / bounds.width) * 100;
+    e.progress = Math.max(0, Math.min(100, Math.ceil(value * 10) / 10));
+    return e.progress;
+  });
+
+  const setMove = useFn((e: any) => {
+    const progress = getProgress(e);
+    if (mouseDownRef.current) {
+      setRangeValue(progress);
+      onChange?.(progress);
     }
+  });
+
+  const onTouchEnd = (e: any) => {
+    const progress = getProgress(e);
+    setRangeValue(progress);
+    onChange?.(progress);
   };
 
-  const calcInputVal = useCallback(
-    (e: number, updateParent: boolean) => {
-      if (updateParent && onChangeCallback) onChangeCallback(e);
-      setCurrentValue(+e);
-      if (selectorRef.current && progressBarRef.current) {
-        selectorRef.current.style.left = `calc(${e}% - 9px)`;
-        progressBarRef.current.style.width = `calc(${e}%)`;
-      }
-    },
-    [onChangeCallback],
-  );
+  useInit(() => {
+    const setMouseUp = () => {
+      mouseDownRef.current = false;
+    };
+    window.addEventListener("mouseup", setMouseUp);
+    window.addEventListener("touchend", setMouseUp);
+    return () => {
+      window.removeEventListener("mouseup", setMouseUp);
+      window.removeEventListener("touchend", setMouseUp);
+    };
+  });
 
-  useImperativeHandle(controllerRef, () => ({
-    calcInputVal,
-    toggleThumb,
-  }));
-
-  const calcThrottle = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      calcInputVal(+e.target.value, true);
-    },
-    [calcInputVal],
-  );
-
-  const onTouchMove = (e: React.TouchEvent<HTMLInputElement>) => {
-    if (!onRangeMove) return;
-    const rect = (e.target as any).getBoundingClientRect();
-    (e as any).offsetX = e.touches[0].clientX - window.pageXOffset - rect.left;
-    onRangeMove(e);
-  };
+  useEffect(() => {
+    setRangeValue(value);
+  }, [value]);
 
   return (
-    <GeneralStyleForRange>
-      <Slider
-        type="range"
-        step={step}
-        min={min}
-        max={max}
-        value={currentValue}
-        onChange={calcThrottle}
-        onMouseMove={onRangeMove}
-        onTouchMove={onTouchMove}
-        onTouchStart={onRangeStart}
-        onTouchEnd={onRangeEnd}
-        onMouseDown={onRangeStart}
-        onMouseUp={onRangeEnd}
-      />
-      <ProgressBar className="vp-progress" ref={progressBarRef} />
-
-      <Thumb className="vp-thumb" ref={selectorRef} />
-
-      <TimeLineMemo />
-    </GeneralStyleForRange>
+    <>
+      <GeneralStyleForRange>
+        <Slider
+          ref={rangeRef}
+          type="range"
+          step={step}
+          min={min}
+          max={max}
+          defaultValue={value}
+          onMouseMove={(e) => {
+            setMove?.(e);
+            onMouseMove?.(e);
+          }}
+          onTouchMove={(e) => {
+            setMove?.(e);
+            onTouchMove?.(e);
+          }}
+          onMouseEnter={(e) => {
+            onEnter?.(e);
+          }}
+          onMouseLeave={(e) => {
+            onLeave?.(e);
+          }}
+          onMouseDown={(e) => {
+            mouseDownRef.current = true;
+            onMouseDown?.(e);
+          }}
+          onMouseUp={(e) => {
+            onTouchEnd(e);
+            onMouseUp?.(e);
+          }}
+          onTouchEnd={(e) => {
+            onTouchEnd(e);
+            onMouseUp?.(e as any);
+          }}
+          onTouchStart={(e) => {
+            mouseDownRef.current = true;
+            onMouseDown?.(e as any);
+          }}
+        />
+        <TimeLineMemo />
+        <SeekThumb value={rangeValue} />
+        <ProgressBar value={rangeValue} />
+      </GeneralStyleForRange>
+    </>
   );
 };
 

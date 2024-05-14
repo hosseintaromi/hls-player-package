@@ -7,7 +7,7 @@ export const GeneralStyleForRange = styled.div({
   width: "100%",
 });
 
-export const ProgressBar = styled.div(({ theme }) => ({
+export const ProgressBarStyle = styled.div(({ theme }) => ({
   /* @noflip */
   width: "0%",
   height: "3px",

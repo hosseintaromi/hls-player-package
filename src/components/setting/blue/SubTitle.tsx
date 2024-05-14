@@ -1,29 +1,18 @@
-import React, { useCallback, useState } from "react";
 import { useSubTitle } from "../../../hooks/useSubTitle";
 import SettingModal from "./SettingModal";
+import { useSignal } from "../../../hooks/useSignal";
 
 const Subtitle = () => {
-  const [selectedIndex, setSelectedIndex] = useState<number | undefined>(-1);
-
-  const { getSubtitles, changeSubtitle } = useSubTitle();
+  const { getSubtitles, changeSubtitle, currentSubtitle } = useSubTitle();
+  const $currentSubtitle = useSignal(currentSubtitle);
 
   const setSubtitle = (index: number) => {
     changeSubtitle(index);
-    setSelectedIndex(index);
   };
-
-  const loadSubtitles = useCallback(() => {
-    const subtitles = getSubtitles();
-    const selectedIndex = subtitles.findIndex((x) => x.is_selected);
-    if (selectedIndex >= 0) {
-      setSelectedIndex(selectedIndex);
-    }
-  }, [getSubtitles]);
 
   return (
     <SettingModal
-      onLoadedFunction={loadSubtitles}
-      currentItem={selectedIndex}
+      currentItem={$currentSubtitle}
       setItem={setSubtitle}
       title="زیرنویس"
       items={[...getSubtitles()?.map((item) => item.title), -1]}

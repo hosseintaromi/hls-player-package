@@ -16,5 +16,5 @@ export { default as SkipAd } from "./tools/SkipAd";
 
 export {
   CustomPlayWrapper,
-  CustomVideoWrapper,
+  VideoWrapperStyle as CustomVideoWrapper,
 } from "./player/VideoPlayerStyle";

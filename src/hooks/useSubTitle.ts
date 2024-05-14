@@ -3,10 +3,17 @@ import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { SubTitle } from "../@types/player.model";
 import toWebVTT from "../utils/srt-to-vtt";
 import { useVideo } from "./useVideo";
+import { useUpdate } from "./useUpdate";
 
 export const useSubTitle = () => {
   const { getVideoRef, state, config } = useVideo();
   const context = useContext(VideoPlayerContext);
+
+  const subtitleState = useUpdate(
+    state.subTitles?.findIndex((x) => x.is_selected),
+    "subtitle",
+    VideoPlayerContext,
+  );
 
   const getSubtitle = () =>
     context.hls?.subtitleTracks.filter((item) =>
@@ -72,6 +79,7 @@ export const useSubTitle = () => {
     const nextSubtitle = titles[index];
     if (!nextSubtitle) {
       state.currentSubtitle = undefined;
+      subtitleState.update(index);
       if (subEl) {
         subEl.classList.remove("on");
       }
@@ -89,6 +97,7 @@ export const useSubTitle = () => {
     }
     if (nextTrack) {
       state.currentSubtitle = nextSubtitle;
+      subtitleState.update(index);
       nextSubtitle.is_selected = true;
       nextTrack.mode = "hidden";
       nextTrack.oncuechange = () => {
@@ -136,5 +145,6 @@ export const useSubTitle = () => {
     getSubtitle,
     getCurrentSubtitle,
     removeSubtitle,
+    currentSubtitle: subtitleState.subject,
   };
 };

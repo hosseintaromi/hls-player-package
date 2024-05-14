@@ -135,13 +135,16 @@ export type PlayerState = {
   prevSubtitle?: number;
   prevSpeed?: number;
   currentPlayingAd?: AdType;
+  levels?: any[];
+  isPlaying?: boolean;
+  metaData?: string[];
 };
 export interface PlayerContextType {
   setVideoRef: (ref: HTMLVideoElement) => void;
   getVideoRef: () => HTMLVideoElement | undefined;
+  getVideoWrapperRef: () => HTMLDivElement | null;
   config: PlayerInstance;
   hls?: Hls;
-  listenOnLoad: (() => void)[];
   state: PlayerState;
 }
 
@@ -157,5 +160,5 @@ export type PlayerEventsType = {
   onReady: "onReady";
   onChangeSetting: "onChangeSetting";
   onActivateControls: "onActivateControls";
-  onLoaded: "OnLoaded";
+  onChangeSrc: "OnChangeSrc";
 };

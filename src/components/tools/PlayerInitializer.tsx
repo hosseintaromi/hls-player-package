@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import VideoPlayerContext from "../../contexts/VideoPlayerContext";
 import { useLocale } from "../../hooks/useLocale";
 import { useSubTitle } from "../../hooks/useSubTitle";
@@ -10,7 +10,6 @@ import { AdType } from "../../@types";
 const PlayerInitializer = () => {
   const context = useContext(VideoPlayerContext);
 
-  const { loadVideo, config, state } = useVideo();
   const { changeLocale } = useLocale({});
   const { initSubtitle, changeSubtitle, getSubtitles, removeSubtitle } =
     useSubTitle();
@@ -20,6 +19,14 @@ const PlayerInitializer = () => {
     initSpeeds();
     initSubtitle();
   };
+
+  const { loadVideo, config, state } = useVideo({
+    onChangeSrc(data) {
+      context.hls?.destroy();
+      loadVideo(data.src, data.type, data.startTime);
+      initConfig();
+    },
+  });
 
   const loadOriginalVideo = (startTime: number) => {
     if (!config.src) return;

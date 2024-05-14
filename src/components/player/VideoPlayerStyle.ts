@@ -141,20 +141,17 @@ export const ToolBarPlayIcon = styled.div({
   height: "100%",
 });
 
-export const Gradient = styled.div(
-  ({ theme }) => ({
-    transition: "opacity .25s cubic-bezier(0,0,.2,1)",
-    paddingTop: "37px",
-    bottom: 0,
-    zIndex: 24,
-    width: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    background: `${theme.toolbarBg}`,
-    height: "211px",
-  }),
-  ({ isFaded }: { isFaded: boolean }) => ({ opacity: isFaded ? 0 : 1 }),
-);
+export const Gradient = styled.div(({ theme }) => ({
+  transition: "opacity .25s cubic-bezier(0,0,.2,1)",
+  paddingTop: "37px",
+  bottom: 0,
+  zIndex: 24,
+  width: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  background: `${theme.toolbarBg}`,
+  height: "211px",
+}));
 
 export const MobileVideoWrapper = styled.div({
   width: "100%",
@@ -172,39 +169,20 @@ export const MobileVideoWrapper = styled.div({
   },
 });
 
-export const MobileGradient = styled.div(
-  ({ theme }) => ({
-    transition: "opacity .25s cubic-bezier(0,0,.2,1)",
-    top: 0,
-    bottom: 0,
-    zIndex: 24,
-    width: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    background: `${theme.toolbarBg}`,
-  }),
-  ({ isFaded }: { isFaded: boolean }) => ({ opacity: isFaded ? 0 : 1 }),
-);
+export const MobileGradient = styled.div(({ theme }) => ({
+  transition: "opacity .25s cubic-bezier(0,0,.2,1)",
+  top: 0,
+  bottom: 0,
+  zIndex: 24,
+  width: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  background: `${theme.toolbarBg}`,
+}));
 
-export const CustomVideoWrapper = styled.div({
+export const VideoWrapperStyle = styled.div({
   width: "100%",
-  height: "100%",
-  position: "relative",
-  overflow: "hidden",
-  boxSizing: "border-box",
-  "> *": {
-    boxSizing: "border-box",
-  },
-  ":before": {
-    boxSizing: "border-box",
-  },
-  ":after": {
-    boxSizing: "border-box",
-  },
-});
-export const VideoWrapperBlue = styled.div({
-  width: "100%",
-  height: "100%",
+  height: window.innerWidth < 768 ? "unset" : "100%",
   position: "relative",
   overflow: "hidden",
   boxSizing: "border-box",
@@ -241,27 +219,24 @@ export const CustomPlayWrapper = styled.div(
   ({ isFaded }: { isFaded: boolean }) => ({ opacity: isFaded ? 0 : 1 }),
 );
 
-export const PlayJumpIconWrapper = styled.div(
-  {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    zIndex: "300",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    transition: "opacity .25s cubic-bezier(0,0,.2,1)",
-    width: "100%",
-    maxWidth: "350px",
+export const PlayJumpIconWrapper = styled.div({
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  zIndex: "300",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  transition: "opacity .25s cubic-bezier(0,0,.2,1)",
+  width: "100%",
+  maxWidth: "350px",
 
-    svg: {
-      width: "40px",
-      height: "auto",
-    },
+  svg: {
+    width: "40px",
+    height: "auto",
   },
-  ({ isFaded }: { isFaded: boolean }) => ({ opacity: isFaded ? 0 : 1 }),
-);
+});
 
 export const PlayJumpIcon = styled.div(
   {

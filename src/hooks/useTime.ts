@@ -1,31 +1,35 @@
 import { useBuffer } from "./useBuffer";
 import { useVideo } from "./useVideo";
+import { useFn } from "./useFn";
 
 export const useTime = () => {
   const { checkBuffer } = useBuffer();
-  const { getVideoRef } = useVideo();
+  const { getVideoRef, setTime } = useVideo();
 
-  const changeTime = (time: number) => {
+  const changeTime = useFn((time: number) => {
     const el = getVideoRef();
-    if (el) el.currentTime = time;
-    checkBuffer(true);
-  };
+    if (el) {
+      el.currentTime = time;
+      setTime(el);
+    }
+  });
 
-  const increaseTime = (time: number) => {
+  const increaseTime = useFn((time: number) => {
     const el = getVideoRef();
     if (el) el.currentTime += time;
     checkBuffer(true);
-  };
-  const decreaseTime = (time: number) => {
+  });
+
+  const decreaseTime = useFn((time: number) => {
     const el = getVideoRef();
     if (el) el.currentTime -= time;
     checkBuffer(true);
-  };
+  });
 
-  const getDuration = () => {
+  const getDuration = useFn(() => {
     const el = getVideoRef();
     return el?.duration;
-  };
+  });
 
   const getCurrentTime = () => {
     const el = getVideoRef();

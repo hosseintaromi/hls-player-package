@@ -1,24 +1,24 @@
-import React, { useState } from 'react'
-import Icon from '../icons/Icon'
-import { useFullscreen } from '../../hooks/useFullscreen';
+import Icon from "../icons/Icon";
+import { useFullScreen } from "../../hooks/useFullScreen";
+import { useSignal } from "../../hooks/useSignal";
+import { useVideo } from "../../hooks";
 
 const Fullscreen = () => {
-    const video_wrapper_id = document.getElementById("video_wrapper_id");
-    const video_player = document.getElementById("video_player");
-    const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+  const { getVideoRef, getVideoWrapperRef } = useVideo();
+  const { toggleFullScreen, isFullscreen } = useFullScreen(
+    getVideoWrapperRef(),
+    getVideoRef() || null,
+  );
+  const $isFullScreen = useSignal(isFullscreen);
 
-    const { toggleFullscreen } = useFullscreen((e) => {
-        setIsFullscreen(e);
-    }, video_wrapper_id, video_player);
+  return (
+    <Icon
+      className="vp-icon-fullscreen controlled-tool"
+      isClickable
+      onClick={() => toggleFullScreen()}
+      type={!$isFullScreen ? "fullScreen" : "unFullScreen"}
+    />
+  );
+};
 
-    return (
-        <Icon className='vp-icon-fullscreen' isClickable={true} onClick={() => toggleFullscreen()} type={!isFullscreen ?
-            "fullScreen"
-            :
-            "unFullScreen"
-        }
-        />
-    )
-}
-
-export default Fullscreen
+export default Fullscreen;

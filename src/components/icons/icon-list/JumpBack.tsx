@@ -1,5 +1,3 @@
-import React from "react";
-
 const JumpBack = () => (
   <svg
     width="32"

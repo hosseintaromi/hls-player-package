@@ -1,13 +1,13 @@
 {
   "name": "@hosseintaromi/video_player",
-  "version": "0.1.220",
+  "version": "0.1.232",
   "description": "Easily play any type of video by customizing the appearance",
   "scripts": {
     "rollup": "rollup -c",
     "test": "jest",
     "sb": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "pb": "npm version patch && rollup -c && npm publish",
+    "pb": "npm version patch && rollup -c && npm publish --access public",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { ReactNode, useState } from "react";
+import { useState } from "react";
 import { useAds } from "../../hooks/useAds";
 import { formatDuration } from "../../utils/player-utils";
 import { OnUpdateTimeType } from "../../@types";
@@ -25,7 +25,7 @@ const SkipStyle = styled.div<SkipStylePropType>((props) => ({
   },
 }));
 
-const Skip = ({ children }: { children?: ReactNode }) => {
+const Skip = () => {
   const { isPlayingAd, currentAd, skipCurrentAd } = useAds();
   const [remainDuration, setRemainDuration] = useState(0);
 
@@ -57,7 +57,7 @@ const Skip = ({ children }: { children?: ReactNode }) => {
               <span>
                 <Locale localeKey="can_skip_text" />
               </span>
-              <Icon isClickable={true} type="playArrow" />
+              <Icon isClickable type="playArrow" />
             </>
           )}
         </>
@@ -66,7 +66,7 @@ const Skip = ({ children }: { children?: ReactNode }) => {
           <span>
             <Locale localeKey="skip_text" />
           </span>
-          <Icon isClickable={true} type="playArrow" />
+          <Icon isClickable type="playArrow" />
         </>
       )}
     </SkipStyle>
