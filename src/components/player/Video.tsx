@@ -70,7 +70,7 @@ const Video = () => {
         crossOrigin="anonymous"
       />
       <SubtitleTag className="subtitle">
-        <div className="text" />
+        <div dir="auto" className="text" />
       </SubtitleTag>
     </>
   );
