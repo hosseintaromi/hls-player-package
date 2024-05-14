@@ -33,26 +33,49 @@ export const useSubTitle = () => {
     }
   };
 
-  const loadTrack = async (subtitle: SubTitle) => {
-    try {
-      const res = await fetch(subtitle.url);
-      const blob = await res.blob();
-      const vttUrl = await toWebVTT(blob);
+  const addTrack = (
+    videoEl: HTMLVideoElement,
+    subtitle: SubTitle,
+    vttUrl: string,
+  ) => {
+    return new Promise<any>((resolve, reject) => {
       const track = document.createElement("track");
       track.kind = "captions";
       track.label = subtitle.title;
       track.id = subtitle.code;
       track.srclang = subtitle.code;
       track.src = vttUrl;
+      track.addEventListener("load", () => {
+        resolve(track);
+      });
+      track.addEventListener("error", () => {
+        reject(track);
+      });
+      videoEl.appendChild(track);
+      const tracks = videoEl.textTracks;
+      let nextTrack = getTrackById(subtitle.code, tracks);
+      if (nextTrack) {
+        nextTrack.mode = "hidden";
+      }
+    });
+  };
+
+  const loadTrack = async (videoEl: HTMLVideoElement, subtitle: SubTitle) => {
+    try {
+      const res = await fetch(subtitle.url);
+      const blob = await res.blob();
+      const vttUrl = await toWebVTT(blob);
+      const track = await addTrack(videoEl, subtitle, vttUrl);
       return track;
-    } catch {
+    } catch (exp) {
+      console.log(exp);
       return null;
     }
   };
 
   const changeSubtitle = async (index: number) => {
-    const videoRef = getVideoRef();
-    if (!videoRef) {
+    const videoEl = getVideoRef();
+    if (!videoEl) {
       return;
     }
 
@@ -61,9 +84,9 @@ export const useSubTitle = () => {
       return;
     }
 
-    const tracks = videoRef.textTracks;
+    const tracks = videoEl.textTracks;
     const preSubtitle = titles.find((x) => x.is_selected);
-    const subEl: HTMLDivElement = videoRef.nextSibling as any;
+    const subEl: HTMLDivElement = videoEl.nextSibling as any;
 
     let preTrack;
     if (preSubtitle) {
@@ -88,17 +111,10 @@ export const useSubTitle = () => {
 
     let nextTrack = getTrackById(nextSubtitle.code, tracks);
     if (!nextTrack) {
-      const newTrack = await loadTrack(nextSubtitle);
-      if (newTrack) {
-        videoRef.appendChild(newTrack);
-
-        nextTrack = tracks[tracks.length - 1];
-      }
+      await loadTrack(videoEl, nextSubtitle);
+      nextTrack = getTrackById(nextSubtitle.code, tracks);
     }
     if (nextTrack) {
-      state.currentSubtitle = nextSubtitle;
-      subtitleState.update(index);
-      nextSubtitle.is_selected = true;
       nextTrack.mode = "hidden";
       nextTrack.oncuechange = () => {
         const cues: any = nextTrack?.activeCues;
@@ -118,12 +134,16 @@ export const useSubTitle = () => {
         }
       };
     }
+    state.currentSubtitle = nextSubtitle;
+    subtitleState.update(index);
+    nextSubtitle.is_selected = true;
   };
 
   const removeSubtitle = () => {
     changeSubtitle(-1);
     const videoRef = getVideoRef();
-    if (videoRef) videoRef.innerHTML = "";
+    const tracks = videoRef?.querySelectorAll("track[kind=captions]");
+    tracks?.forEach((x) => x.remove());
   };
 
   const initSubtitle = async () => {
