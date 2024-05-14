@@ -16,8 +16,8 @@ export const findBufferIndex = (el: HTMLVideoElement) => {
 };
 
 export const formatDuration = (duration: any, milisecond?: boolean) => {
-  duration = parseInt(duration as any);
-  if (isNaN(duration)) {
+  duration = parseInt(duration as any, 10);
+  if (Number.isNaN(duration)) {
     duration = 0;
   }
 

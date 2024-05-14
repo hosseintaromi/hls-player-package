@@ -16,6 +16,7 @@ const Demo = ({ length }: DemoProps) => {
     speeds: [0.5, 1, 1.25, 1.5, 2],
     // qualities: [252, 432],
     audioTracks: ["English"],
+    loop: false,
     subTitle: [
       {
         url: "https://gotranscript.com/samples/captions-example.srt",
@@ -49,7 +50,7 @@ const Demo = ({ length }: DemoProps) => {
     //   },
     // ],
     showToolbarOnAd: false,
-    // startTime: 4,
+    startTime: 100,
     // style: {
     //   bufferBg: 'blue',
     //   dir: 'rtl',
@@ -100,7 +101,8 @@ const Demo = ({ length }: DemoProps) => {
   return (
     <VideoPlayer
       config={playerConfig}
-      src="https://cdn.bitmovin.com/content/assets/art-of-motion-dash-hls-progressive/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8"
+      src="https://cdn.bitmovin.com/content/assets/sintel/hls/playlist.m3u8"
+      // src="https://cdn.bitmovin.com/content/assets/art-of-motion-dash-hls-progressive/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8"
     />
   );
 };

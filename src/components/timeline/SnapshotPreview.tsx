@@ -21,24 +21,22 @@ const SnapshotPreview = () => {
 
   let timeOut: ReturnType<typeof setTimeout>;
 
-  const setBubble = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
-    const event: any = e.nativeEvent;
-    const offsetX = event.offsetX;
-    if (!event.target) return;
-
+  const setBubble = (e: any) => {
     const bubbleEl = snapShotBox.current;
-
     if (!bubbleEl) return;
+
     const halfBubbleWidth = bubbleEl.offsetWidth / 2;
+    const containerWidth = e.target.clientWidth;
+    bubbleEl.style.marginLeft = `-${halfBubbleWidth}px `;
     bubbleEl.style.left = `${Math.max(
       halfBubbleWidth,
-      Math.min(offsetX, event.target.clientWidth - halfBubbleWidth),
+      Math.min(
+        (e.progress * containerWidth) / 100,
+        containerWidth - halfBubbleWidth,
+      ),
     )}px`;
-    bubbleEl.style.marginLeft = `-${65}px `;
-
-    const val = (offsetX / event.target.clientWidth) * 100 || 0;
     const duration = getDuration();
-    if (duration) setHoverValue((val * duration) / 100);
+    if (duration) setHoverValue((e.progress * duration) / 100);
   };
 
   const changeShowBubble = (e: boolean) => {
@@ -56,10 +54,10 @@ const SnapshotPreview = () => {
     onTimeLineMouseMove: (e) => {
       setBubble(e);
     },
-    onTimeLineMouseEnter: () => {
+    onTimeLineEnter: () => {
       changeShowBubble(true);
     },
-    onTimeLineMouseLeave: () => {
+    onTimeLineLeave: () => {
       changeShowBubble(false);
     },
     onTimeLineTouchMove: (e) => {
@@ -68,9 +66,9 @@ const SnapshotPreview = () => {
       timeOut = setTimeout(() => {
         changeShowBubble(false);
       }, 2000);
-      const rect = (e.target as any).getBoundingClientRect();
-      (e as any).offsetX =
-        e.touches[0].clientX - window.pageXOffset - rect.left;
+      // const rect = (e.target as any).getBoundingClientRect();
+      // (e as any).offsetX =
+      //   e.touches[0].clientX - window.pageXOffset - rect.left;
       setBubble(e);
     },
   });
@@ -87,7 +85,9 @@ const SnapshotPreview = () => {
         <>
           <Bubble ref={snapShotBox} className="bubble">
             <Snapshot snapshots={snapshots.current} time={hoverValue} />
-            <div style={{ marginTop: "5px" }}>{formatDuration(hoverValue)}</div>
+            <div style={{ marginTop: "5px" }}>
+              {formatDuration(Math.ceil(Number(hoverValue)))}
+            </div>
           </Bubble>
           <CursorIndicator />
         </>

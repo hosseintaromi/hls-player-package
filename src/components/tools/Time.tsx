@@ -12,15 +12,16 @@ const Time = ({ type }: { type: "Current" | "Total" | "Remain" }) => {
 
   useVideo({
     onReady: () => {
-      if (type === "Total") setTime(formatDuration(getDuration() || 0));
+      if (type === "Total")
+        setTime(formatDuration(Math.ceil(getDuration() || 0)));
     },
     onUpdateTime: (e: OnUpdateTimeType) => {
       switch (type) {
         case "Current":
-          setTime(formatDuration(e.time));
+          setTime(formatDuration(Math.ceil(e.time)));
           break;
         case "Remain":
-          setTime(formatDuration(e.duration - e.time));
+          setTime(formatDuration(Math.ceil(e.duration - e.time)));
           break;
       }
     },
