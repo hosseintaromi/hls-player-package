@@ -31,7 +31,7 @@ export const useLevel = () => {
     const lines = state.metaData;
     if (!src) return;
     if (!context.hls) {
-      if (lines) {
+      if (lines && !state.levels) {
         let baseUrl = src.split(".m3u8")[0];
         const lastSlashIndex = baseUrl.lastIndexOf("/");
         baseUrl = baseUrl.substring(0, lastSlashIndex + 1);
@@ -62,7 +62,7 @@ export const useLevel = () => {
           state.levels?.map((level) => ({ level: level.level })) || [],
         );
       }
-    } else {
+    } else if (!$levels || !$levels.length) {
       levelsState.update(
         context.hls?.levels
           .filter((item) =>
