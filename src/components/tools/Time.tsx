@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useVideo } from "../../hooks/useVideo";
 import { OnUpdateTimeType } from "../../@types/player.model";
 import { TimeCounter } from "../toolbar/ToolbarStyle";
@@ -8,20 +8,32 @@ import { useTime } from "../../hooks/useTime";
 const Time = ({ type }: { type: "Current" | "Total" | "Remain" }) => {
   const [time, setTime] = useState<string>("00:00:00");
 
+  const durationRef = useRef<number>();
+
   const { getDuration } = useTime();
+
+  const formatTime = (time?: number) => {
+    setTime(formatDuration(Math.ceil(time || 0)));
+  };
 
   useVideo({
     onReady: () => {
-      if (type === "Total")
-        setTime(formatDuration(Math.ceil(getDuration() || 0)));
+      if (type === "Total") {
+        formatTime(getDuration());
+      }
     },
     onUpdateTime: (e: OnUpdateTimeType) => {
+      if (type === "Total") {
+        if (e.duration !== durationRef.current) {
+          formatTime(e.duration);
+        }
+      }
       switch (type) {
         case "Current":
-          setTime(formatDuration(Math.ceil(e.time)));
+          formatTime(e.time);
           break;
         case "Remain":
-          setTime(formatDuration(Math.ceil(e.duration - e.time)));
+          formatTime(e.duration - e.time);
           break;
       }
     },

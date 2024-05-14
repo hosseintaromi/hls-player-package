@@ -182,7 +182,7 @@ export const MobileGradient = styled.div(({ theme }) => ({
 
 export const VideoWrapperStyle = styled.div({
   width: "100%",
-  height: window.innerWidth < 768 ? "unset" : "100%",
+  height: "100%",
   position: "relative",
   overflow: "hidden",
   boxSizing: "border-box",

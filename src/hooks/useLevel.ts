@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect } from "react";
+import { useCallback, useContext } from "react";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { useVideo } from "./useVideo";
 import { useUpdate } from "./useUpdate";
@@ -9,12 +9,9 @@ export const useLevel = () => {
   const context = useContext(VideoPlayerContext);
   const { getCurrentTime } = useTime();
   const {
-    config: { qualities, src },
-    state,
+    config: { src },
     loadVideo,
-  } = useVideo({
-    onReady: () => {},
-  });
+  } = useVideo();
 
   const levelState = useUpdate(
     context.hls?.currentLevel,
@@ -32,38 +29,40 @@ export const useLevel = () => {
     const state = context.state;
     const qualities: any = [];
     const lines = state.metaData;
-    if (!lines || !src) return;
-    let baseUrl = src.split(".m3u8")[0];
-    const lastSlashIndex = baseUrl.lastIndexOf("/");
-    baseUrl = baseUrl.substring(0, lastSlashIndex + 1);
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-      const len = qualities.length;
-      if (line.indexOf("#EXT-X-STREAM-INF") === 0) {
-        try {
-          const resolution: string[] = line
-            .split(",")
-            .filter(
-              (param) => param.toUpperCase().indexOf("RESOLUTION=") === 0,
-            );
-          if (resolution.length === 1) {
-            qualities[len] = {
-              level: resolution[0].split("=")[1].split("x")[1],
-            };
-          }
-        } catch (exp) {
-          break;
-        }
-      } else if (qualities[len - 1] && !qualities[len - 1].url) {
-        qualities[len - 1].url = baseUrl + line;
-      }
-    }
-    state.levels = qualities;
+    if (!src) return;
     if (!context.hls) {
-      levelsState.update(
-        state.levels?.map((level) => ({ level: level.level })) || [],
-      );
-    } else {
+      if (lines && !state.levels) {
+        let baseUrl = src.split(".m3u8")[0];
+        const lastSlashIndex = baseUrl.lastIndexOf("/");
+        baseUrl = baseUrl.substring(0, lastSlashIndex + 1);
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+          const len = qualities.length;
+          if (line.indexOf("#EXT-X-STREAM-INF") === 0) {
+            try {
+              const resolution: string[] = line
+                .split(",")
+                .filter(
+                  (param) => param.toUpperCase().indexOf("RESOLUTION=") === 0,
+                );
+              if (resolution.length === 1) {
+                qualities[len] = {
+                  level: resolution[0].split("=")[1].split("x")[1],
+                };
+              }
+            } catch (exp) {
+              break;
+            }
+          } else if (qualities[len - 1] && !qualities[len - 1].url) {
+            qualities[len - 1].url = baseUrl + line;
+          }
+        }
+        state.levels = qualities;
+        levelsState.update(
+          state.levels?.map((level) => ({ level: level.level })) || [],
+        );
+      }
+    } else if (!$levels || !$levels.length) {
       levelsState.update(
         context.hls?.levels
           .filter((item) =>

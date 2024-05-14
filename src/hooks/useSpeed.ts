@@ -3,14 +3,17 @@ import { KeyValue } from "../@types";
 import { useVideo } from "./useVideo";
 import { useUpdate } from "./useUpdate";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
+import { useFn } from "./useFn";
 
 export const useSpeed = () => {
   const { config, state, getVideoRef } = useVideo();
   const speedState = useUpdate(
-    state.subTitles?.findIndex((x) => x.is_selected),
+    state.speeds?.findIndex((sp) => sp.value === 1),
     "speed",
     VideoPlayerContext,
   );
+
+  const getCurrentSpeed = () => state.currentSpeed;
 
   const getSpeeds = useCallback(() => state.speeds, [state.speeds]);
 
@@ -20,6 +23,7 @@ export const useSpeed = () => {
       const speeds = getSpeeds();
       if (speeds) {
         videoRef.playbackRate = speeds[index].value;
+        state.currentSpeed = speeds[index];
         speedState.update(index);
       }
     }
@@ -47,6 +51,7 @@ export const useSpeed = () => {
       state.currentSpeed = speeds.find(
         (x: KeyValue) => x.value === videoEl?.playbackRate,
       );
+      speedState.update(speeds.findIndex((sp: KeyValue) => sp.value === 1));
     }
   };
 
@@ -55,5 +60,6 @@ export const useSpeed = () => {
     changeSpeed,
     getSpeeds,
     currentSpeed: speedState.subject,
+    getCurrentSpeed,
   };
 };

@@ -39,7 +39,9 @@ const RangeSelect = ({
 
   const getProgress = useFn((e: any) => {
     const bounds = rangeRef.current.getBoundingClientRect();
-    const touch = e.touches?.[e.touches.length - 1];
+    const touch =
+      e.touches?.[e.touches.length - 1] ||
+      e.changedTouches?.[e.changedTouches?.length - 1];
     const x = (e.clientX || touch.clientX) - bounds.left;
     const value = (x / bounds.width) * 100;
     e.progress = Math.max(0, Math.min(100, Math.ceil(value * 10) / 10));

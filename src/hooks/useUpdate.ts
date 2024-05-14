@@ -41,12 +41,5 @@ export const useUpdate = <T>(
     };
   };
 
-  useEffect(
-    () => () => {
-      delete eventContext.__states[key];
-    },
-    [eventContext.__states, key],
-  );
-
   return { subject: { onUpdate, value }, update };
 };
