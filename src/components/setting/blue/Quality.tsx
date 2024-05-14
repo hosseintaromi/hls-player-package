@@ -6,7 +6,7 @@ const Quality = () => {
   const { levels, changeLevel, currentLevel } = useLevel();
 
   const $currentLevel = useSignal(currentLevel);
-  console.log(levels);
+
   const setQuality = (index: number) => {
     changeLevel(index);
   };
