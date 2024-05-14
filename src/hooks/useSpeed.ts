@@ -7,7 +7,7 @@ import VideoPlayerContext from "../contexts/VideoPlayerContext";
 export const useSpeed = () => {
   const { config, state, getVideoRef } = useVideo();
   const speedState = useUpdate(
-    state.subTitles?.findIndex((x) => x.is_selected),
+    state.speeds?.findIndex((sp) => sp.value === 1),
     "speed",
     VideoPlayerContext,
   );
@@ -47,6 +47,7 @@ export const useSpeed = () => {
       state.currentSpeed = speeds.find(
         (x: KeyValue) => x.value === videoEl?.playbackRate,
       );
+      speedState.update(speeds.findIndex((sp: KeyValue) => sp.value === 1));
     }
   };
 
