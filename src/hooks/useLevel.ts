@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect } from "react";
+import { useCallback, useContext } from "react";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { useVideo } from "./useVideo";
 import { useUpdate } from "./useUpdate";
@@ -9,12 +9,9 @@ export const useLevel = () => {
   const context = useContext(VideoPlayerContext);
   const { getCurrentTime } = useTime();
   const {
-    config: { qualities, src },
-    state,
+    config: { src },
     loadVideo,
-  } = useVideo({
-    onReady: () => {},
-  });
+  } = useVideo();
 
   const levelState = useUpdate(
     context.hls?.currentLevel,

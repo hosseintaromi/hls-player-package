@@ -5,7 +5,8 @@ export const useSignal = <T>(subject: SubjectType<T>) => {
   const [signal, setSignal] = useState<T>(subject.value);
 
   useEffect(() => {
-    subject.onUpdate((newValue) => setSignal(newValue));
+    const updateFun = subject.onUpdate((newValue) => setSignal(newValue));
+    return () => updateFun();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
