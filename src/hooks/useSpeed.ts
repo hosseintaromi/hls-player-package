@@ -3,6 +3,7 @@ import { KeyValue } from "../@types";
 import { useVideo } from "./useVideo";
 import { useUpdate } from "./useUpdate";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
+import { useFn } from "./useFn";
 
 export const useSpeed = () => {
   const { config, state, getVideoRef } = useVideo();
@@ -12,6 +13,8 @@ export const useSpeed = () => {
     VideoPlayerContext,
   );
 
+  const getCurrentSpeed = useFn(() => state.currentSpeed);
+
   const getSpeeds = useCallback(() => state.speeds, [state.speeds]);
 
   const changeSpeed = (index: number) => {
@@ -20,6 +23,7 @@ export const useSpeed = () => {
       const speeds = getSpeeds();
       if (speeds) {
         videoRef.playbackRate = speeds[index].value;
+        state.currentSpeed = speeds[index];
         speedState.update(index);
       }
     }
@@ -56,5 +60,6 @@ export const useSpeed = () => {
     changeSpeed,
     getSpeeds,
     currentSpeed: speedState.subject,
+    getCurrentSpeed,
   };
 };
