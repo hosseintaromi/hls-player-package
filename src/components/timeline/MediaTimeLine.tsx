@@ -13,30 +13,21 @@ import { useDisableSelection } from "../../hooks/useDisableSelection";
 import { useRangeSelect } from "../../hooks/useRangeSelect";
 
 const TimeLine = () => {
-
   useDisableSelection();
 
   const sensitiveRef = useSensitiveArea();
-
   const { changeTime, getDuration } = useTime();
-
+  const { changePlayPause, getIsPlay } = useVideo();
   const { call } = useContextEvents<TimeLineEventType>(VideoPlayerContext);
+
+  const isPlay = useRef(getIsPlay());
 
   const onChange = (value: number) => {
     const videoDuration = getDuration?.();
     if (videoDuration) {
-      console.log(value);
       changeTime((value * videoDuration) / 100);
     }
   };
-
-  const { changePlayPause, getIsPlay } = useVideo({
-    onUpdateTime: (e: OnUpdateTimeType) => {
-      rangeConfig.setRange(+e.percentage);
-    },
-  });
-
-  const isPlay = useRef(getIsPlay());
 
   const rangeConfig = useRangeSelect({
     max: 100,
@@ -61,6 +52,12 @@ const TimeLine = () => {
       changePlayPause(false);
     },
     onMouseUp: () => changePlayPause(!!isPlay.current),
+  });
+
+  useVideo({
+    onUpdateTime: (e: OnUpdateTimeType) => {
+      rangeConfig.setRange(+e.percentage);
+    },
   });
 
   return (
