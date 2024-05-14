@@ -24,7 +24,7 @@ export const useLevel = () => {
     VideoPlayerContext,
   );
   const $levels = useSignal(levelsState.subject);
-
+  console.log(27, $levels);
   const initLevels = useCallback(() => {
     const state = context.state;
     const qualities: any = [];
@@ -60,8 +60,20 @@ export const useLevel = () => {
       levelsState.update(
         state.levels?.map((level) => ({ level: level.level })) || [],
       );
+      console.log(
+        63,
+        state.levels?.map((level) => ({ level: level.level })) || [],
+      );
     } else {
       levelsState.update(
+        context.hls?.levels
+          .filter((item) =>
+            qualities.length ? qualities.includes(item.height) : true,
+          )
+          .map((level) => ({ level: level.height })) || [],
+      );
+      console.log(
+        75,
         context.hls?.levels
           .filter((item) =>
             qualities.length ? qualities.includes(item.height) : true,
