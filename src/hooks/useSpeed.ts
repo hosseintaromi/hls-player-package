@@ -13,7 +13,7 @@ export const useSpeed = () => {
     VideoPlayerContext,
   );
 
-  const getCurrentSpeed = useFn(() => state.currentSpeed);
+  const getCurrentSpeed = () => state.currentSpeed;
 
   const getSpeeds = useCallback(() => state.speeds, [state.speeds]);
 
