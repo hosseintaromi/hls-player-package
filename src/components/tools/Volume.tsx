@@ -5,8 +5,7 @@ import { VolumeWrapper } from "../toolbar/ToolbarStyle";
 import Icon from "../icons/Icon";
 import { useVolume } from "../../hooks/useVolume";
 import { useSignal } from "../../hooks/useSignal";
-import { useUpdate } from "../../hooks/useUpdate";
-import VideoPlayerContext from "../../contexts/VideoPlayerContext";
+import { useRangeSelect } from "../../hooks/useRangeSelect";
 
 const VolumeComponent = ({
   volume,
@@ -55,23 +54,28 @@ const Volume = memo(() => {
   const [volumeVisibility, setVolumeVisibility] = useState<boolean>(false);
 
   const { changeVolume, changeMute, isMute, currentVolume } = useVolume();
-  const rangeValue = useUpdate(100, "volume-range", VideoPlayerContext);
   const $isMute = useSignal(isMute);
   const $currentVolume = useSignal(currentVolume);
 
   const volume = $currentVolume !== undefined ? $currentVolume * 100 : 100;
 
+  const rangeConfig = useRangeSelect({
+    step: 1,
+    min: 0,
+    max: 100,
+    value: volume,
+    onChange: (value) => {
+      changeVolume(value / 100);
+    },
+  });
+
   const mute = () => {
     changeMute(!$isMute);
     if (!$isMute) {
-      rangeValue.update(0);
+      rangeConfig.setRange(0);
     } else {
-      rangeValue.update(volume);
+      rangeConfig.setRange(volume);
     }
-  };
-
-  const changeVol = (e: number) => {
-    changeVolume(e / 100);
   };
 
   return (
@@ -83,13 +87,7 @@ const Volume = memo(() => {
     >
       <VolumeComponent handleClick={mute} isMute={$isMute} volume={volume} />
       <RangeSelectWrapper visible={volumeVisibility}>
-        <RangeSelect
-          step={1}
-          min={0}
-          max={100}
-          value={volume}
-          onChange={changeVol}
-        />
+        <RangeSelect config={rangeConfig} />
       </RangeSelectWrapper>
     </VolumeWrapper>
   );

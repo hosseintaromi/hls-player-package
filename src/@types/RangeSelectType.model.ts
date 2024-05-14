@@ -10,6 +10,7 @@ export type RangePropsType = {
   onLeave?: (e: React.MouseEvent<HTMLInputElement>) => void;
   onMouseDown?: (e: React.MouseEvent<HTMLInputElement>) => void;
   onMouseUp?: (e: React.MouseEvent<HTMLInputElement>) => void;
+  setRange: (value: number) => void;
 };
 
 export type TimeLineEventType = {

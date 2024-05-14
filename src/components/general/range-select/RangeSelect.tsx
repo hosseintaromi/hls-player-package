@@ -1,29 +1,41 @@
-import { memo, useEffect, useRef, useState } from "react";
-import { GeneralStyleForRange, Slider, TimeLine } from "./RangeSelectStyle";
+import { memo, useEffect, useRef } from "react";
+import {
+  GeneralStyleForRange,
+  ProgressBarStyle,
+  Slider,
+  Thumb,
+  TimeLine,
+} from "./RangeSelectStyle";
 import { RangePropsType } from "../../../@types/RangeSelectType.model";
-import SeekThumb from "./SeekThumb";
-import ProgressBar from "./ProgressBar";
 import { useFn } from "../../../hooks/useFn";
 import { useInit } from "../../../hooks/useInit";
+import { setRefStyle } from "../../../utils/ui-utils";
 
 const TimeLineMemo = memo(() => <TimeLine className="timeline" />);
 
 const RangeSelect = ({
-  min,
-  max,
-  step,
-  value = 0,
-  onChange,
-  onMouseMove,
-  onTouchMove,
-  onEnter,
-  onLeave,
-  onMouseDown,
-  onMouseUp,
-}: RangePropsType) => {
-  const [rangeValue, setRangeValue] = useState(value);
+  config,
+}: {
+  config: Exclude<RangePropsType, "setRange">;
+}) => {
+  const {
+    min,
+    max,
+    step,
+    value = 0,
+    onChange,
+    onMouseMove,
+    onTouchMove,
+    onEnter,
+    onLeave,
+    onMouseDown,
+    onMouseUp,
+    setRange,
+  } = config;
   const rangeRef = useRef<any>(null);
   const mouseDownRef = useRef<boolean>(false);
+  const progressBarRef = useRef<HTMLDivElement>(null);
+  const thumbRef = useRef<HTMLDivElement>(null);
 
   const getProgress = useFn((e: any) => {
     const bounds = rangeRef.current.getBoundingClientRect();
@@ -33,6 +45,11 @@ const RangeSelect = ({
     e.progress = Math.max(0, Math.min(100, Math.ceil(value * 10) / 10));
     return e.progress;
   });
+
+  const setRangeValue = (value: number) => {
+    setRefStyle(thumbRef, { left: `calc(${value}% - 4.5px)` });
+    setRefStyle(progressBarRef, { width: `calc(${value}%)` });
+  };
 
   const setMove = useFn((e: any) => {
     const progress = getProgress(e);
@@ -49,6 +66,9 @@ const RangeSelect = ({
   };
 
   useInit(() => {
+    config.setRange = (value) => {
+      setRangeValue(value);
+    };
     const setMouseUp = () => {
       mouseDownRef.current = false;
     };
@@ -59,10 +79,6 @@ const RangeSelect = ({
       window.removeEventListener("touchend", setMouseUp);
     };
   });
-
-  useEffect(() => {
-    setRangeValue(value);
-  }, [value]);
 
   return (
     <>
@@ -106,8 +122,8 @@ const RangeSelect = ({
           }}
         />
         <TimeLineMemo />
-        <SeekThumb value={rangeValue} />
-        <ProgressBar value={rangeValue} />
+        <Thumb ref={thumbRef} />
+        <ProgressBarStyle ref={progressBarRef} />
       </GeneralStyleForRange>
     </>
   );
