@@ -37,8 +37,8 @@ export const useSubTitle = () => {
     videoEl: HTMLVideoElement,
     subtitle: SubTitle,
     vttUrl: string,
-  ) => {
-    return new Promise<any>((resolve, reject) => {
+  ) =>
+    new Promise<any>((resolve, reject) => {
       const track = document.createElement("track");
       track.kind = "captions";
       track.label = subtitle.title;
@@ -58,7 +58,6 @@ export const useSubTitle = () => {
         nextTrack.mode = "hidden";
       }
     });
-  };
 
   const loadTrack = async (videoEl: HTMLVideoElement, subtitle: SubTitle) => {
     try {
