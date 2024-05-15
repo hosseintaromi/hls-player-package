@@ -83,14 +83,17 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
             console.log("MEDIA_ERROR");
             hls.recoverMediaError();
             break;
-          case Hls.ErrorTypes.NETWORK_ERROR:
+          case Hls.ErrorTypes.NETWORK_ERROR: {
             // eslint-disable-next-line no-console
-            console.error("fatal network error encountered", data);
+            const time = videoEl.currentTime;
+            hls.recoverMediaError();
+            videoEl.currentTime = time;
             // All retries and media options have been exhausted.
             // Immediately trying to restart loading could cause loop loading.
             // Consider modifying loading policies to best fit your asset and network
             // conditions (manifestLoadPolicy, playlistLoadPolicy, fragLoadPolicy).
             break;
+          }
           default:
             // cannot recover
             hls.destroy();
@@ -148,6 +151,7 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
   const getMetaData = useCallback(
     () =>
       new Promise((res, rej) => {
+        if (context.hls) res(true);
         const state = context.state;
         if (state.metaData?.length) {
           res(state.metaData);
