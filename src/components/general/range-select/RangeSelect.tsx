@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef } from "react";
+import { memo, useRef } from "react";
 import {
   GeneralStyleForRange,
   ProgressBarStyle,

@@ -3,7 +3,6 @@ import SettingItem from "./SettingItem";
 import { SettingMenu } from "../../general/SettingMenu";
 import Locale from "../../locale/Locale";
 import {
-  LevelType,
   MediaPlaylistType,
 } from "../../../@types/UseVideoHlsType.model";
 import Icon from "../../icons/Icon";
@@ -24,7 +23,7 @@ type SettingListType = {
 
 const SettingList = ({ changePage, myRef, currentPage }: SettingListType) => {
   const [currentLevel, setCurrentLevel] = useState<number>(-1);
-  const [currentLevels, setCurrentLevels] = useState<LevelType | undefined>();
+  const [currentLevels, setCurrentLevels] = useState<any | undefined>();
 
   const [currentSubtitle, setCurrentSubtitle] = useState<string | ReactNode>();
   const [subtitles, setSubtitles] = useState<MediaPlaylistType | undefined>();
@@ -35,6 +34,13 @@ const SettingList = ({ changePage, myRef, currentPage }: SettingListType) => {
   const [currentAudioTrack, setCurrentAudioTrack] = useState<
     number | ReactNode
   >();
+
+  const { currentSpeed, getSpeeds } = useSpeed();
+  const $currentSpeed = useSignal(currentSpeed);
+
+  const { getCurrentLevel, levels } = useLevel();
+  const { getCurrentSubtitle, getSubtitle } = useSubTitle();
+  const { getAudioTrack, getAudioTracks } = useAudio();
 
   const loadLevels = () => {
     const curlvl = getCurrentLevel().isAuto
@@ -60,15 +66,11 @@ const SettingList = ({ changePage, myRef, currentPage }: SettingListType) => {
 
     setCurrentLevels(levels);
   };
-  const { currentSpeed, getSpeeds } = useSpeed();
-  const $currentSpeed = useSignal(currentSpeed);
 
-  const { getCurrentLevel, levels } = useLevel();
-  const { getCurrentSubtitle, getSubtitle } = useSubTitle();
-  const { getAudioTrack, getAudioTracks } = useAudio();
   useVideo({
     onReady: loadLevels,
   });
+
 
   useEffect(() => {
     loadLevels();
@@ -87,7 +89,7 @@ const SettingList = ({ changePage, myRef, currentPage }: SettingListType) => {
           text={<Locale localeKey="setting_menu_change_speed_title" />}
         >
           <SettingItemArrowSpan>
-            {getSpeeds()?.[$currentSpeed].key}
+            {getSpeeds()?.[$currentSpeed||0].key}
           </SettingItemArrowSpan>
           <Icon isClickable type="arrow" />
         </SettingItem>

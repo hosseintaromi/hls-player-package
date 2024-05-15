@@ -1,10 +1,10 @@
-import { useEffect } from "react";
 import { AdType, GenericEvents, OnUpdateTimeType } from "../@types";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { useVideo } from "./useVideo";
 import { useContextEvents } from "./useContextEvents";
 import { AdsEventType } from "../@types/ads.model";
 import { useTime } from "./useTime";
+import { useInit } from "./useInit";
 
 export const useAds = (events?: GenericEvents<AdsEventType>) => {
   const { config, state } = useVideo();
@@ -59,10 +59,10 @@ export const useAds = (events?: GenericEvents<AdsEventType>) => {
     }
   };
 
-  useEffect(() => {
+  useInit(() => {
     listen(events);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   return {
     isPlayingAd: () => !!state.currentPlayingAd,

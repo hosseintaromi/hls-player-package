@@ -1,10 +1,11 @@
-import { useCallback, useContext, useEffect, useRef } from "react";
+import { useCallback, useContext, useRef } from "react";
 import Hls from "hls.js";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { GenericEvents, PlayerEventsType } from "../@types/player.model";
 import { useContextEvents } from "./useContextEvents";
 import { useBuffer } from "./useBuffer";
 import { useUpdate } from "./useUpdate";
+import { useInit } from "./useInit";
 
 const isSupportedPlatform = Hls.isSupported();
 
@@ -230,12 +231,10 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
+  useInit(() => {
     listen(events);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {});
+  });
 
   config.loadVideo = setSrc;
 

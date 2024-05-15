@@ -52,8 +52,7 @@ export const useSubTitle = () => {
         reject(track);
       });
       videoEl.appendChild(track);
-      const tracks = videoEl.textTracks;
-      let nextTrack = getTrackById(subtitle.code, tracks);
+      let nextTrack = getTrackById(subtitle.code, videoEl.textTracks);
       if (nextTrack) {
         nextTrack.mode = "hidden";
       }

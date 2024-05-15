@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 export type UseUpdateSubjectType<T> = {
   onUpdate: (listener: (newValue: T) => void) => () => void;
   value: T;

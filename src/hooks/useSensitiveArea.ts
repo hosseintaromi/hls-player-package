@@ -1,7 +1,8 @@
-import { MutableRefObject, useCallback, useEffect, useRef } from "react";
+import { MutableRefObject, useEffect, useRef } from "react";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { PlayerEventsType } from "../@types/player.model";
 import { useContextEvents } from "./useContextEvents";
+import { useFn } from "./useFn";
 
 export const useSensitiveArea = (enabled: boolean = true) => {
   const elementRef: MutableRefObject<any> = useRef();
@@ -10,32 +11,32 @@ export const useSensitiveArea = (enabled: boolean = true) => {
 
   const { call } = useContextEvents<PlayerEventsType>(VideoPlayerContext);
 
-  const onMouseEnter = useCallback(
-    (enter: boolean) => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
+  const onMouseEnter = useFn((enter: boolean) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      if (mouseEnterRef.current !== enter) {
+        mouseEnterRef.current = enter;
+        call.onActivateControls?.(enter);
       }
-      timeoutRef.current = setTimeout(() => {
-        if (mouseEnterRef.current !== enter) {
-          mouseEnterRef.current = enter;
-          call.onActivateControls?.(enter);
-        }
-      }, 500);
-    },
-    [call],
-  );
+    }, 500);
+  });
 
   useEffect(() => {
-    if (!enabled) return;
     const ref = elementRef.current;
     if (!ref) return;
-    ref.onmouseenter = () => onMouseEnter(true);
-    ref.onmouseleave = () => onMouseEnter(false);
+    ref.onmouseenter = () => {
+      onMouseEnter(true);
+    };
+    ref.onmouseleave = () => {
+      if (enabled) onMouseEnter(false);
+    };
     return () => {
       ref.onmouseenter = null;
       ref.onmouseleave = null;
     };
-  }, [enabled, onMouseEnter]);
+  }, [enabled]);
 
   return elementRef;
 };

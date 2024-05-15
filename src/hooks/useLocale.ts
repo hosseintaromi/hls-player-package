@@ -1,8 +1,8 @@
-import { useEffect } from "react";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { useContextEvents } from "./useContextEvents";
 import { PlayerEventsType, PlayerLocaleType } from "../@types/player.model";
 import { useVideo } from "./useVideo";
+import { useInit } from "./useInit";
 
 export const useLocale = ({
   onChangeLocale,
@@ -19,10 +19,9 @@ export const useLocale = ({
     call.onChangeLocale?.(locale);
   };
 
-  useEffect(() => {
+  useInit(() => {
     listen({ onChangeLocale });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   return {
     locale,
