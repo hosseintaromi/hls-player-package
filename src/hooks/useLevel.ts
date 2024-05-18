@@ -9,7 +9,7 @@ export const useLevel = () => {
   const context = useContext(VideoPlayerContext);
   const { getCurrentTime } = useTime();
   const {
-    config: { src },
+    config: { src, qualities },
     loadVideo,
   } = useVideo();
 
@@ -74,6 +74,21 @@ export const useLevel = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const getLevels = () => {
+    if (!context.hls) {
+      return (
+        context.state.levels?.map((level) => ({ level: level.level })) || []
+      );
+    }
+    return (
+      context.hls?.levels
+        .filter((item) =>
+          qualities.length ? qualities.includes(item.height) : true,
+        )
+        .map((level) => ({ level: level.height })) || []
+    );
+  };
+
   useVideo({
     onReady: () => {
       initLevels();
@@ -106,6 +121,7 @@ export const useLevel = () => {
 
   return {
     levels: $levels,
+    getLevels,
     getCurrentLevel,
     changeLevel,
     currentLevel: levelState.subject,

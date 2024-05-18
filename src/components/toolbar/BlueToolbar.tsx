@@ -28,12 +28,12 @@ const BlueToolbar = () => {
   const [isShowQ, setIsShowQ] = useState<any>();
   const [isShowS, setIsShowS] = useState<any>();
   const [isShowA, setIsShowA] = useState<any>();
-  const { levels } = useLevel();
+  const { levels, getLevels } = useLevel();
   const { getSubtitle } = useSubTitle();
   const { getAudioTracks } = useAudio();
 
   const loadLevels = () => {
-    setIsShowQ(levels !== undefined);
+    setIsShowQ(getLevels() !== undefined && getLevels().length > 0);
     setIsShowS(getSubtitle() !== undefined);
     setIsShowA(getAudioTracks() !== undefined);
   };
