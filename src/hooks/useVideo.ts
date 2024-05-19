@@ -148,34 +148,29 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     }
   }, [getVideoRef]);
 
-  const getMetaData = useCallback(
-    () =>
-      new Promise((res, rej) => {
-        if (context.hls) res(true);
-        const state = context.state;
-        if (state.metaData?.length) {
-          res(state.metaData);
-          return;
-        }
-        const url = config.src;
-        if (!url) {
-          rej(Error("not found url"));
-          return;
-        }
-        let baseUrl = url.split(".m3u8")[0];
-        const lastSlashIndex = baseUrl.lastIndexOf("/");
-        baseUrl = baseUrl.substring(0, lastSlashIndex + 1);
-        fetch(url)
-          .then((r) => r.text())
-          .then((text) => {
-            state.metaData = (text || "").split("\n");
-            res(state.metaData);
-          });
-      }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
-
+  const setMetaData = async () =>
+    new Promise((res, rej) => {
+      if (context.hls) res(true);
+      const state = context.state;
+      if (state.metaData) {
+        res(state.metaData);
+        return;
+      }
+      const url = config.src;
+      if (!url) {
+        rej(Error("not found url"));
+        return;
+      }
+      let baseUrl = url.split(".m3u8")[0];
+      const lastSlashIndex = baseUrl.lastIndexOf("/");
+      baseUrl = baseUrl.substring(0, lastSlashIndex + 1);
+      fetch(url)
+        .then((r) => r.text())
+        .then((text) => {
+          state.metaData = (text || "").split("\n");
+          res(true);
+        });
+    });
   const setTime = (el: HTMLVideoElement) => {
     if (Number.isNaN(el.duration)) return;
     const currentTime = el.currentTime;
@@ -217,9 +212,9 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     el.onended = () => {
       // call.onEnd?.();
     };
-    el.onloadeddata = () => {
+    el.onloadeddata = async () => {
       call.onLoading?.(true); // so it shows loading by default
-      getMetaData();
+      await setMetaData();
       setTime(el);
       call.onReady?.(el);
     };

@@ -3,7 +3,7 @@ import SettingModal from "./SettingModal";
 import { useSignal } from "../../../hooks/useSignal";
 
 const Quality = () => {
-  const { levels, changeLevel, currentLevel } = useLevel();
+  const { getLevels, changeLevel, currentLevel } = useLevel();
 
   const $currentLevel = useSignal(currentLevel);
 
@@ -16,7 +16,9 @@ const Quality = () => {
       currentItem={$currentLevel}
       setItem={setQuality}
       title="کیفیت پخش"
-      items={levels?.map((item) => item.level).concat(-1)}
+      items={getLevels()
+        ?.map((item) => item.level)
+        .concat(-1)}
       iconType="setting"
       lastItemLocale="setting_menu_quality_list_item_auto"
     />
