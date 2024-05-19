@@ -167,10 +167,14 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
       fetch(url)
         .then((r) => r.text())
         .then((text) => {
-          state.metaData = (text || "").split("\n");
+          state.metaData = {
+            lines: (text || "").split("\n"),
+            baseUrl,
+          };
           res(true);
         });
     });
+
   const setTime = (el: HTMLVideoElement) => {
     if (Number.isNaN(el.duration)) return;
     const currentTime = el.currentTime;

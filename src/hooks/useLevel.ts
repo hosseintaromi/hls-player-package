@@ -28,11 +28,10 @@ export const useLevel = () => {
   const initLevels = useCallback(() => {
     const state = context.state;
     const qualities: any = [];
-    const lines = state.metaData;
-    if (!src) return;
-    if (!context.hls) {
+    if (!context.hls && state.metaData) {
+      const lines = state.metaData.lines;
       if (lines && !state.levels) {
-        let baseUrl = src.split(".m3u8")[0];
+        let baseUrl = state.metaData.baseUrl;
         const lastSlashIndex = baseUrl.lastIndexOf("/");
         baseUrl = baseUrl.substring(0, lastSlashIndex + 1);
         for (let i = 0; i < lines.length; i++) {
@@ -45,9 +44,13 @@ export const useLevel = () => {
                 .filter(
                   (param) => param.toUpperCase().indexOf("RESOLUTION=") === 0,
                 );
+              const audio: string[] = line
+                .split(",")
+                .filter((param) => param.toUpperCase().indexOf("AUDIO=") === 0);
               if (resolution.length === 1) {
                 qualities[len] = {
                   level: resolution[0].split("=")[1].split("x")[1],
+                  audio: audio[0].split("=")[1].slice(1, -1),
                 };
               }
             } catch (exp) {
@@ -114,6 +117,7 @@ export const useLevel = () => {
     if (context.hls) {
       context.hls.currentLevel = index;
     } else if (state.levels?.[index]) {
+      state.currentLevelIndex = index;
       loadVideo((state.levels?.[index]).url, "HLS", getCurrentTime());
     }
     levelState.update(index);

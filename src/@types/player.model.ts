@@ -75,6 +75,13 @@ export type SubTitle = {
   is_selected: boolean;
 };
 
+export type AudioType = {
+  name: string;
+  url: string;
+  groupId: string;
+  lang: string;
+};
+
 export type AdType = {
   src: string;
   startTime: number;
@@ -137,8 +144,10 @@ export type PlayerState = {
   prevSpeed?: number;
   currentPlayingAd?: AdType;
   levels?: any[];
+  currentLevelIndex?: number;
   isPlaying?: boolean;
-  metaData?: string[];
+  metaData?: { lines: string[]; baseUrl: string };
+  audioTracks?: AudioType[];
 };
 export interface PlayerContextType {
   setVideoRef: (ref: HTMLVideoElement) => void;

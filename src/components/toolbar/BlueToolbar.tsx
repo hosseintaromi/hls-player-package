@@ -28,7 +28,7 @@ const BlueToolbar = () => {
   const [isShowQ, setIsShowQ] = useState<any>();
   const [isShowS, setIsShowS] = useState<any>();
   const [isShowA, setIsShowA] = useState<any>();
-  const { levels, getLevels } = useLevel();
+  const { getLevels } = useLevel();
   const { getSubtitle } = useSubTitle();
   const { getAudioTracks } = useAudio();
 
