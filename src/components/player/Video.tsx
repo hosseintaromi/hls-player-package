@@ -32,7 +32,7 @@ const Video = () => {
   const {
     setVideoRef,
     togglePlayPause,
-    config: { autoPlay, muted, keyControl },
+    config: { autoPlay, muted, keyControl, videoTogglePlay },
   } = useVideo();
 
   const { increaseTime, decreaseTime } = useTime();
@@ -54,8 +54,18 @@ const Video = () => {
     }
   });
 
+  const onClick = useFn(() => {
+    if (videoElRef.current && videoTogglePlay) {
+      videoElRef.current.onclick = () => {
+        togglePlayPause();
+      };
+    }
+  });
+
   useInit(() => {
     setVideoRef?.(videoElRef.current!);
+    onClick();
+    window.addEventListener("keydown", onKeyDown);
     window.addEventListener("keydown", onKeyDown);
 
     return () => {

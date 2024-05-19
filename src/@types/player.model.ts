@@ -110,6 +110,7 @@ export interface PlayerConfigType {
   showToolbarOnAd?: boolean;
   showAdsAgain?: boolean;
   startTime?: number;
+  videoTogglePlay?: boolean;
   onUpdateTime?: (e: OnUpdateTimeType) => void;
   // FIXME: we should fix this types
   onEnd?: (e: OnUpdateTimeType) => void;
