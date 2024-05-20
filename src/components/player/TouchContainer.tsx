@@ -30,10 +30,13 @@ const TouchContainer = ({ children }: { children: ReactNode }) => {
     if (show !== isShowRef.current) {
       isShowRef.current = show;
       const videoWrapperRef = getVideoWrapperRef();
+      if (!videoWrapperRef) return;
       if (show) {
-        videoWrapperRef?.classList.remove("hide-tools");
+        videoWrapperRef.classList.remove("hide-tools");
+        videoWrapperRef.style.cursor = "unset";
       } else {
-        videoWrapperRef?.classList.add("hide-tools");
+        videoWrapperRef.classList.add("hide-tools");
+        videoWrapperRef.style.cursor = "none";
       }
     }
   };
