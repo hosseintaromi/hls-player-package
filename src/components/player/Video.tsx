@@ -1,7 +1,9 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useRef } from "react";
 import styled from "@emotion/styled";
 import { useVideo } from "../../hooks/useVideo";
 import { useTime } from "../../hooks";
+import { useFn } from "../../hooks/useFn";
+import { useInit } from "../../hooks/useInit";
 
 const VideoTag = styled.video({
   width: "100%",
@@ -30,35 +32,46 @@ const Video = () => {
   const {
     setVideoRef,
     togglePlayPause,
-    config: { autoPlay, muted, keyControl },
+    config: { autoPlay, muted, keyControl, videoTogglePlay },
   } = useVideo();
+
   const { increaseTime, decreaseTime } = useTime();
 
   const videoElRef = useRef<HTMLVideoElement>(null);
 
-  const onKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (!keyControl) return;
-      if (e.key === "ArrowRight") increaseTime(10);
-      if (e.key === "ArrowLeft") decreaseTime(10);
-      if (e.key === "Enter") {
+  const onKeyDown = useFn((e: KeyboardEvent) => {
+    if (!keyControl) return;
+    switch (e.key) {
+      case " ":
         togglePlayPause();
-      }
-    },
-    [decreaseTime, increaseTime, keyControl, togglePlayPause],
-  );
+        break;
+      case "ArrowRight":
+        increaseTime(10);
+        break;
+      case "ArrowLeft":
+        decreaseTime(10);
+        break;
+    }
+  });
 
-  useEffect(() => {
+  const onClick = useFn(() => {
+    if (videoElRef.current && videoTogglePlay) {
+      videoElRef.current.onclick = () => {
+        togglePlayPause();
+      };
+    }
+  });
+
+  useInit(() => {
+    setVideoRef?.(videoElRef.current!);
+    onClick();
+    window.addEventListener("keydown", onKeyDown);
     window.addEventListener("keydown", onKeyDown);
 
     return () => {
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [onKeyDown]);
-
-  useEffect(() => {
-    setVideoRef?.(videoElRef.current!);
-  }, [setVideoRef]);
+  });
 
   return (
     <>
@@ -68,9 +81,22 @@ const Video = () => {
         playsInline
         muted={muted}
         crossOrigin="anonymous"
-      />
+      >
+        <source
+          src="https://cdn.theoplayer.com/video/elephants-dream/en/chunklist_w370587926_b160000_ao_slen_t64RW5nbGlza"
+          type="audio/ogg"
+        />
+        <source
+          src="https://cdn.theoplayer.com/video/elephants-dream/sp/chunklist_w370587926_b160000_ao_slsp_t64U3Bhbmlza"
+          type="audio/ogg"
+        />
+        <source
+          src="https://cdn.theoplayer.com/video/elephants-dream/com/chunklist_w370587926_b160000_ao_slen_t64Q29tbWVudGFyeSAoZW5nK"
+          type="audio/ogg"
+        />
+      </VideoTag>
       <SubtitleTag className="subtitle">
-        <div className="text" />
+        <div dir="auto" className="text" />
       </SubtitleTag>
     </>
   );

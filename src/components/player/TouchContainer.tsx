@@ -1,6 +1,7 @@
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useRef } from "react";
 import { useVideo } from "../../hooks/useVideo";
 import { useAds } from "../../hooks/useAds";
+import { useInit } from "../../hooks/useInit";
 
 const TouchContainer = ({ children }: { children: ReactNode }) => {
   const isShowRef = useRef<boolean>();
@@ -29,10 +30,13 @@ const TouchContainer = ({ children }: { children: ReactNode }) => {
     if (show !== isShowRef.current) {
       isShowRef.current = show;
       const videoWrapperRef = getVideoWrapperRef();
+      if (!videoWrapperRef) return;
       if (show) {
-        videoWrapperRef?.classList.remove("hide-tools");
+        videoWrapperRef.classList.remove("hide-tools");
+        videoWrapperRef.style.cursor = "unset";
       } else {
-        videoWrapperRef?.classList.add("hide-tools");
+        videoWrapperRef.classList.add("hide-tools");
+        videoWrapperRef.style.cursor = "none";
       }
     }
   };
@@ -58,7 +62,7 @@ const TouchContainer = ({ children }: { children: ReactNode }) => {
     }, timeForHideEl);
   };
 
-  useEffect(() => {
+  useInit(() => {
     window.addEventListener("keydown", hideIfIdle);
     window.addEventListener("mousedown", hideIfIdle);
     window.addEventListener("touchstart ", hideIfIdle);
@@ -69,7 +73,7 @@ const TouchContainer = ({ children }: { children: ReactNode }) => {
       window.removeEventListener("touchstart", hideIfIdle);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   return (
     <div

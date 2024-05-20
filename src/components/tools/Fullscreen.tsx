@@ -1,7 +1,7 @@
 import Icon from "../icons/Icon";
-import { useFullScreen } from "../../hooks/useFullScreen";
 import { useSignal } from "../../hooks/useSignal";
 import { useVideo } from "../../hooks";
+import { useFullScreen } from "../../hooks/useFullScreen";
 
 const Fullscreen = () => {
   const { getVideoRef, getVideoWrapperRef } = useVideo();

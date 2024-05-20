@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 export type UseUpdateSubjectType<T> = {
   onUpdate: (listener: (newValue: T) => void) => () => void;
   value: T;
@@ -40,13 +38,6 @@ export const useUpdate = <T>(
       __states[key].splice(listenerIndex, 1);
     };
   };
-
-  useEffect(
-    () => () => {
-      delete eventContext.__states[key];
-    },
-    [eventContext.__states, key],
-  );
 
   return { subject: { onUpdate, value }, update };
 };

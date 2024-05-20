@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect } from "react";
+import { useCallback, useContext } from "react";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { useVideo } from "./useVideo";
 import { useUpdate } from "./useUpdate";
@@ -9,12 +9,9 @@ export const useLevel = () => {
   const context = useContext(VideoPlayerContext);
   const { getCurrentTime } = useTime();
   const {
-    config: { qualities, src },
-    state,
+    config: { src, qualities },
     loadVideo,
-  } = useVideo({
-    onReady: () => {},
-  });
+  } = useVideo();
 
   const levelState = useUpdate(
     context.hls?.currentLevel,
@@ -31,39 +28,44 @@ export const useLevel = () => {
   const initLevels = useCallback(() => {
     const state = context.state;
     const qualities: any = [];
-    const lines = state.metaData;
-    if (!lines || !src) return;
-    let baseUrl = src.split(".m3u8")[0];
-    const lastSlashIndex = baseUrl.lastIndexOf("/");
-    baseUrl = baseUrl.substring(0, lastSlashIndex + 1);
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-      const len = qualities.length;
-      if (line.indexOf("#EXT-X-STREAM-INF") === 0) {
-        try {
-          const resolution: string[] = line
-            .split(",")
-            .filter(
-              (param) => param.toUpperCase().indexOf("RESOLUTION=") === 0,
-            );
-          if (resolution.length === 1) {
-            qualities[len] = {
-              level: resolution[0].split("=")[1].split("x")[1],
-            };
+    if (!context.hls && state.metaData) {
+      const lines = state.metaData.lines;
+      if (lines && !state.levels) {
+        let baseUrl = state.metaData.baseUrl;
+        const lastSlashIndex = baseUrl.lastIndexOf("/");
+        baseUrl = baseUrl.substring(0, lastSlashIndex + 1);
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+          const len = qualities.length;
+          if (line.indexOf("#EXT-X-STREAM-INF") === 0) {
+            try {
+              const resolution: string[] = line
+                .split(",")
+                .filter(
+                  (param) => param.toUpperCase().indexOf("RESOLUTION=") === 0,
+                );
+              const audio: string[] = line
+                .split(",")
+                .filter((param) => param.toUpperCase().indexOf("AUDIO=") === 0);
+              if (resolution.length === 1) {
+                qualities[len] = {
+                  level: resolution[0].split("=")[1].split("x")[1],
+                  audio: audio[0].split("=")[1].slice(1, -1),
+                };
+              }
+            } catch (exp) {
+              break;
+            }
+          } else if (qualities[len - 1] && !qualities[len - 1].url) {
+            qualities[len - 1].url = baseUrl + line;
           }
-        } catch (exp) {
-          break;
         }
-      } else if (qualities[len - 1] && !qualities[len - 1].url) {
-        qualities[len - 1].url = baseUrl + line;
+        state.levels = qualities;
+        levelsState.update(
+          state.levels?.map((level) => ({ level: level.level })) || [],
+        );
       }
-    }
-    state.levels = qualities;
-    if (!context.hls) {
-      levelsState.update(
-        state.levels?.map((level) => ({ level: level.level })) || [],
-      );
-    } else {
+    } else if (!$levels || !$levels.length) {
       levelsState.update(
         context.hls?.levels
           .filter((item) =>
@@ -74,6 +76,21 @@ export const useLevel = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const getLevels = () => {
+    if (!context.hls) {
+      return (
+        context.state.levels?.map((level) => ({ level: level.level })) || []
+      );
+    }
+    return (
+      context.hls?.levels
+        .filter((item) =>
+          qualities.length ? qualities.includes(item.height) : true,
+        )
+        .map((level) => ({ level: level.height })) || []
+    );
+  };
 
   useVideo({
     onReady: () => {
@@ -100,6 +117,7 @@ export const useLevel = () => {
     if (context.hls) {
       context.hls.currentLevel = index;
     } else if (state.levels?.[index]) {
+      state.currentLevelIndex = index;
       loadVideo((state.levels?.[index]).url, "HLS", getCurrentTime());
     }
     levelState.update(index);
@@ -107,6 +125,7 @@ export const useLevel = () => {
 
   return {
     levels: $levels,
+    getLevels,
     getCurrentLevel,
     changeLevel,
     currentLevel: levelState.subject,
