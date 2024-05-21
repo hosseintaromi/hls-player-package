@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SettingItem from "./SettingItem";
 import { SettingMenu } from "../../general/SettingMenu";
 import SettingHeader from "./SettingHeader";
@@ -8,6 +8,7 @@ import { SettingItemWrapper } from "./SettingStyle";
 import { pageName, pageDir } from "../../../@types/setting.model";
 import { useSubTitle } from "../../../hooks/useSubTitle";
 import { SubTitle } from "../../../@types/player.model";
+import { useInit } from "../../../hooks/useInit";
 
 type SettingSubtitleType = {
   changePage: (newPageName: pageName, dir: pageDir) => void;
@@ -34,9 +35,9 @@ const SettingSubtitle = ({ changePage, myRef }: SettingSubtitleType) => {
     }
   };
 
-  useEffect(() => {
+  useInit(() => {
     loadSubtitles();
-  }, []);
+  });
 
   const subtitleListGenerator = () =>
     subtitles ? (

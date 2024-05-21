@@ -1,5 +1,6 @@
 import { useCallback, useRef } from "react";
-import { ThemeProvider } from "@emotion/react";
+import { CacheProvider, ThemeProvider } from "@emotion/react";
+import createCache from "@emotion/cache";
 import PlayerTemplate from "../templates/red/PlayerTemplate";
 import { PlayerInstance, PlayerState } from "../../@types/player.model";
 import VideoPlayerContext from "../../contexts/VideoPlayerContext";
@@ -24,6 +25,10 @@ const PlayerTemplateSelector = ({
     <PlayerTemplate />
   );
 };
+
+const cache = createCache({
+  key: "fake-cache-so-other-rtl-cache-cant-override-these-components",
+});
 
 const VideoPlayer = ({
   children,
@@ -59,17 +64,19 @@ const VideoPlayer = ({
       }}
     >
       <GlobalStyles />
-      <ThemeProvider theme={config?.style || {}}>
-        <VideoWrapperStyle ref={videoWrapperRef}>
-          <>
-            {children ? (
-              <>{children}</>
-            ) : (
-              <PlayerTemplateSelector config={config} />
-            )}
-          </>
-        </VideoWrapperStyle>
-      </ThemeProvider>
+      <CacheProvider value={cache}>
+        <ThemeProvider theme={config?.style || {}}>
+          <VideoWrapperStyle ref={videoWrapperRef}>
+            <>
+              {children ? (
+                <>{children}</>
+              ) : (
+                <PlayerTemplateSelector config={config} />
+              )}
+            </>
+          </VideoWrapperStyle>
+        </ThemeProvider>
+      </CacheProvider>
       <PlayerInitializer />
     </VideoPlayerContext.Provider>
   );

@@ -9,3 +9,5 @@ export { useLevel } from "./useLevel";
 export { useSpeed } from "./useSpeed";
 export { useTime } from "./useTime";
 export { useVolume } from "./useVolume";
+export { useSignal } from "./useSignal";
+export { useUpdate } from "./useUpdate";

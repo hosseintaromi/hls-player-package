@@ -1,5 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { GenericEvents } from "../@types/player.model";
+import { useInit } from "./useInit";
 
 export const useContextEvents = <Y extends Record<string, string>, T = any>(
   context: React.Context<T>,
@@ -41,7 +42,7 @@ export const useContextEvents = <Y extends Record<string, string>, T = any>(
     }
   };
 
-  useEffect(
+  useInit(
     () => () => {
       const __listeners = eventContext.__listeners;
       const localListeners = listenersRef.current;
@@ -52,9 +53,7 @@ export const useContextEvents = <Y extends Record<string, string>, T = any>(
           __listeners[key].splice(index, 1);
         });
       }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    }
   );
 
   return {

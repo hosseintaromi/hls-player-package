@@ -1,21 +1,38 @@
 {
   "compilerOptions": {
-    // Default
+    "types": ["node"],
     "target": "es5",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "skipLibCheck": true,
-
-    // Added
-    "module": "ESNext",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "esnext",
     "jsx": "react-jsx",
+    "strict": true,
+    "allowJs": true,
     "declaration": true,
     "declarationDir": "types",
     "sourceMap": false,
-    "outDir": "dist",
+    "skipLibCheck": true,
+    "noImplicitAny": true,
+    "importHelpers": true,
+    "noImplicitThis": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "strictNullChecks": true,
+    "resolveJsonModule": true,
     "moduleResolution": "node",
+    "emitDeclarationOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "useUnknownInCatchVariables": false,
     "allowSyntheticDefaultImports": true,
-    "emitDeclarationOnly": true
-  }
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "dist",
+    "baseUrl": "./",
+    "paths": {
+      "types": ["src/@types/_index"],
+      "components": ["src/components/_index"],
+      "hooks": ["src/hooks/_index"],
+      "utils": ["src/utils/_index"],
+      "context/*": ["src/context/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist"]
 }

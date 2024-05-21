@@ -1,53 +1,59 @@
 import styled from "@emotion/styled";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { PlayerEventsType } from "../../@types/player.model";
 import VideoPlayerContext from "../../contexts/VideoPlayerContext";
 import { useContextEvents } from "../../hooks/useContextEvents";
+import { useInit } from "../../hooks/useInit";
+import { useFn } from "../../hooks/useFn";
 
 const Wrapper = styled.div({
   position: "relative",
 });
 
 const Overlay = ({
-  children,
-  openSetting,
+  children
 }: {
   children: JSX.Element[];
   openSetting: any;
 }) => {
   const overlayContentRef = useRef<HTMLDivElement>(null);
+
   const [overlayVisible, setOverlayVisible] = useState(false);
+  
+  const { call } = useContextEvents<PlayerEventsType>(VideoPlayerContext);
+
   const Toggler = children.find(
     (child) => child.props["data-toggler"] === true,
   );
+
   const Content = children.find(
     (child) => child.props["data-content"] === true,
   );
 
-  const toggle = () => {
-    setOverlayVisible(!overlayVisible);
+  const toggleOverlay = (visible: boolean) => {
+    setOverlayVisible(visible);
+    call.onChangeSetting?.(visible);
   };
-  const clickHandler = (e: any) => {
+
+  const toggle = () => {
+    toggleOverlay(!overlayVisible);
+  };
+
+  const clickHandler = useFn((e: any) => {
     if (
       overlayContentRef.current &&
       !overlayContentRef.current.contains(e.target)
     ) {
-      setOverlayVisible(false);
+      toggleOverlay(false);
     }
-  };
-  const { call } = useContextEvents<PlayerEventsType>(VideoPlayerContext);
+  });
 
-  useEffect(() => {
-    // openSetting(pageName.settingList, pageDir.forward)
-    call.onChangeSetting?.(overlayVisible);
-  }, [call, overlayVisible]);
-
-  useEffect(() => {
+  useInit(() => {
     document.addEventListener("click", clickHandler, true);
     return () => {
       document.removeEventListener("click", clickHandler, true);
     };
-  }, []);
+  });
 
   return (
     <Wrapper className="setting" ref={overlayContentRef}>

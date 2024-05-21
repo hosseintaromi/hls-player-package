@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import VideoPlayerContext from "../../contexts/VideoPlayerContext";
 import { useLocale } from "../../hooks/useLocale";
 import { useSubTitle } from "../../hooks/useSubTitle";
@@ -6,6 +6,7 @@ import { useSpeed } from "../../hooks/useSpeed";
 import { useVideo } from "../../hooks/useVideo";
 import { useAds } from "../../hooks";
 import { AdType } from "../../@types";
+import { useInit } from "../../hooks/useInit";
 
 const PlayerInitializer = () => {
   const context = useContext(VideoPlayerContext);
@@ -54,7 +55,7 @@ const PlayerInitializer = () => {
     },
   });
 
-  useEffect(() => {
+  useInit(() => {
     if (context.config.src) {
       loadVideo(context.config.src);
     }
@@ -64,7 +65,7 @@ const PlayerInitializer = () => {
     return () => {
       context.hls?.destroy();
     };
-  }, []);
+  });
 
   return <></>;
 };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SettingItem from "./SettingItem";
 import { SettingMenu } from "../../general/SettingMenu";
 import SettingHeader from "./SettingHeader";
@@ -8,6 +8,7 @@ import Icon from "../../icons/Icon";
 import { pageDir, pageName } from "../../../@types/setting.model";
 import { useAudio } from "../../../hooks/useAudio";
 import { useVideo } from "../../../hooks/useVideo";
+import { useInit } from "../../../hooks/useInit";
 
 type SettingAudioTrackType = {
   changePage: (newPageName: pageName, dir: pageDir) => void;
@@ -26,9 +27,9 @@ const SettingAudioTrack = ({ changePage, myRef }: SettingAudioTrackType) => {
   const { getAudioTrack, getAudioTracks, changeAudioTrack } = useAudio();
   useVideo({ onReady: loadLevels });
 
-  useEffect(() => {
+  useInit(() => {
     loadLevels();
-  }, []);
+  });
 
   const setAudioTrack = (index: number) => {
     changeAudioTrack(index);

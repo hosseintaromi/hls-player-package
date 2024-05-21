@@ -1,10 +1,11 @@
-import { useCallback, useContext, useEffect, useRef } from "react";
+import { useCallback, useContext, useRef } from "react";
 import Hls from "hls.js";
 import VideoPlayerContext from "../contexts/VideoPlayerContext";
 import { GenericEvents, PlayerEventsType } from "../@types/player.model";
 import { useContextEvents } from "./useContextEvents";
 import { useBuffer } from "./useBuffer";
 import { useUpdate } from "./useUpdate";
+import { useInit } from "./useInit";
 
 const isSupportedPlatform = Hls.isSupported();
 
@@ -82,14 +83,17 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
             console.log("MEDIA_ERROR");
             hls.recoverMediaError();
             break;
-          case Hls.ErrorTypes.NETWORK_ERROR:
+          case Hls.ErrorTypes.NETWORK_ERROR: {
             // eslint-disable-next-line no-console
-            console.error("fatal network error encountered", data);
+            const time = videoEl.currentTime;
+            hls.recoverMediaError();
+            videoEl.currentTime = time;
             // All retries and media options have been exhausted.
             // Immediately trying to restart loading could cause loop loading.
             // Consider modifying loading policies to best fit your asset and network
             // conditions (manifestLoadPolicy, playlistLoadPolicy, fragLoadPolicy).
             break;
+          }
           default:
             // cannot recover
             hls.destroy();
@@ -144,32 +148,32 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     }
   }, [getVideoRef]);
 
-  const getMetaData = useCallback(
-    () =>
-      new Promise((res, rej) => {
-        const state = context.state;
-        if (state.metaData?.length) {
-          res(state.metaData);
-          return;
-        }
-        const url = config.src;
-        if (!url) {
-          rej(Error("not found url"));
-          return;
-        }
-        let baseUrl = url.split(".m3u8")[0];
-        const lastSlashIndex = baseUrl.lastIndexOf("/");
-        baseUrl = baseUrl.substring(0, lastSlashIndex + 1);
-        fetch(url)
-          .then((r) => r.text())
-          .then((text) => {
-            state.metaData = (text || "").split("\n");
-            res(state.metaData);
-          });
-      }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
+  const setMetaData = async () =>
+    new Promise((res, rej) => {
+      if (context.hls) res(true);
+      const state = context.state;
+      if (state.metaData) {
+        res(state.metaData);
+        return;
+      }
+      const url = config.src;
+      if (!url) {
+        rej(Error("not found url"));
+        return;
+      }
+      let baseUrl = url.split(".m3u8")[0];
+      const lastSlashIndex = baseUrl.lastIndexOf("/");
+      baseUrl = baseUrl.substring(0, lastSlashIndex + 1);
+      fetch(url)
+        .then((r) => r.text())
+        .then((text) => {
+          state.metaData = {
+            lines: (text || "").split("\n"),
+            baseUrl,
+          };
+          res(true);
+        });
+    });
 
   const setTime = (el: HTMLVideoElement) => {
     if (Number.isNaN(el.duration)) return;
@@ -212,9 +216,9 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     el.onended = () => {
       // call.onEnd?.();
     };
-    el.onloadeddata = () => {
+    el.onloadeddata = async () => {
       call.onLoading?.(true); // so it shows loading by default
-      getMetaData();
+      await setMetaData();
       setTime(el);
       call.onReady?.(el);
     };
@@ -230,12 +234,10 @@ export const useVideo = (events?: GenericEvents<PlayerEventsType>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
+  useInit(() => {
     listen(events);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {});
+  });
 
   config.loadVideo = setSrc;
 

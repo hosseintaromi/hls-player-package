@@ -40,7 +40,7 @@ const SettingPlaybackSpeed = ({
               key={`speedItemdd${index}`}
               onClick={() => setSpeed(index)}
               startIcon={
-                speedItem.value === getSpeeds()?.[$currentSpeed].value ? (
+                speedItem.value === getSpeeds()?.[$currentSpeed || 0].value ? (
                   <Icon isClickable type="checkMark" />
                 ) : (
                   <></>
