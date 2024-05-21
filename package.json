@@ -1,6 +1,6 @@
 {
   "name": "@pouyan-web/player",
-  "version": "0.1.252",
+  "version": "0.1.253",
   "description": "Easily play any type of video by customizing the appearance",
   "scripts": {
     "prepare": "husky install",
