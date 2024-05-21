@@ -1,5 +1,5 @@
 {
-  "name": "@hosseintaromi/video_player",
+  "name": "@pouyan-web/player",
   "version": "0.1.251",
   "description": "Easily play any type of video by customizing the appearance",
   "scripts": {
