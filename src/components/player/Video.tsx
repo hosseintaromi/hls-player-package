@@ -81,20 +81,7 @@ const Video = () => {
         playsInline
         muted={muted}
         crossOrigin="anonymous"
-      >
-        <source
-          src="https://cdn.theoplayer.com/video/elephants-dream/en/chunklist_w370587926_b160000_ao_slen_t64RW5nbGlza"
-          type="audio/ogg"
-        />
-        <source
-          src="https://cdn.theoplayer.com/video/elephants-dream/sp/chunklist_w370587926_b160000_ao_slsp_t64U3Bhbmlza"
-          type="audio/ogg"
-        />
-        <source
-          src="https://cdn.theoplayer.com/video/elephants-dream/com/chunklist_w370587926_b160000_ao_slen_t64Q29tbWVudGFyeSAoZW5nK"
-          type="audio/ogg"
-        />
-      </VideoTag>
+      />
       <SubtitleTag className="subtitle">
         <div dir="auto" className="text" />
       </SubtitleTag>
